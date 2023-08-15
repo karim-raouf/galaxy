@@ -14,10 +14,18 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         <meta name="author" content="Raouf Mostafa">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link type="text/css" rel="stylesheet" href="{% static 'css/GalaxyLanding.css' %}"/>
-        
+        <link type="text/css" rel="stylesheet" href="{% static 'css/avatar.css' %}"/>
         <script src="{% static 'js/GalaxyLanding.js' %}"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+        <style>
+            .right-align {
+                float: right;
+                top: 7.5px;
+                
+                
+            }
+        </style>
     </head>
     <body>
         <div class="topnav" id="myTopnav">
@@ -30,13 +38,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         {% if request.user.username %}      
             <a style="float: right" class="active" href="{% url 'logout' %}">Logout</a>
             <a style="float: right; color: #FFFFFF; text-decoration: none; font-family: 'Arial', sans-serif; font-size: 18px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">{{request.user.username|capfirst}}</a>
-            <div class="avatar avatar--medium active">
+            <div class="avatar avatar--medium active right-align">
                 <img src="{{request.user.avatar.url}}" />
             </div>
         {% else %}
             <a style="float: right" class="active" href="{% url 'logout' %}">Logout</a>
             <a style="float: right">{{request.user.email}}</a>
-            <div class="avatar avatar--medium active">
+            <div class="avatar avatar--medium active right-align">
                 <img src="{{request.user.avatar.url}}" />
             </div>
         {% endif %}

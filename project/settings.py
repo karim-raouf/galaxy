@@ -90,6 +90,18 @@ DATABASES = {
                 'driver': 'ODBC Driver 17 for SQL Server',
             },
         },
+    'karim_db': {
+            'ENGINE': 'sql_server.pyodbc',
+            'NAME': 'karim_db',
+            'USER': 'sa',
+            'PASSWORD': 'Ka@12?34#',
+            'HOST': 'DESKTOP-F9VA3BH\SQLEXPRESS',
+            'PORT': '',
+
+            'OPTIONS': {
+                'driver': 'ODBC Driver 17 for SQL Server',
+            },
+        },
     }
 
 
@@ -151,3 +163,6 @@ EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'karimraoufm@gmail.com'
 EMAIL_HOST_PASSWORD = 'arcbastlomavsahf' 
+
+
+
