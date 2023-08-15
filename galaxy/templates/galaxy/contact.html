@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>Contact Us</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link type="text/css" rel="stylesheet" href="{% static 'css/galaxylanding.css' %}"/>
+        <link type="text/css" rel="stylesheet" href="{% static 'css/w3.css' %}"/>
+        <script src="{% static 'js/javascript.js' %}"></script> 
+
+    </head>
+    <body>
+        <!-- Contact Section -->
+        <div  id="contact" style="COLOR:green; FONT-SIZE:15PX;font: arial">
+            <h2 >Contact Me</h2>
+            <hr >
+
+            <div >
+                <p><i ></i> Chicago, US</p>
+                <p><i></i> Phone: +00 151515</p>
+                <p><i> </i> Email: mail@mail.com</p>
+            </div><br>
+            <p>Let's get in touch. Send me a message:</p>
+
+            <form action="/action_page.php" target="_blank">
+                <p><input  class="contactInput" type="text" placeholder="Name..." required name="Name"></p>
+                <p><input  class="contactInput" type="text" placeholder="Email..." required name="Email"></p>
+                <p><input  class="contactInput" type="text" placeholder="Subject..." required name="Subject"></p>
+                <p><input  class="contactInput" type="text" placeholder="Message..." required name="Message"></p>
+                <p>
+                    <button  type="submit">
+                        <i ></i> SEND MESSAGE
+                    </button>
+                </p>
+            </form>
+            <!-- End Contact Section -->
+        </div>
+    </body>
+</html>
