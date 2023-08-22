@@ -7,7 +7,6 @@ app_name = 'galaxy'
 urlpatterns = [
     path('', views.index , name = 'index'),
     
-    path('home/', views.home , name = 'home'),
     path('pricing/', views.pricing , name = 'pricing'),
     path('about_us/', views.about_us , name = 'about_us'),
     path('contact_us/', views.contact_us , name = 'contact_us'),

@@ -22,19 +22,6 @@ def index(request):
 
 
 
-def home(request):
-    form = TestForm()
-    if request.method == 'POST':
-        form = TestForm(request.POST)
-        if form.is_valid():
-            form.save()
-            form = TestForm()
-            return redirect('galaxy:index')
-            
-    context = {'page_name' : 'Home' , 'form' : form}
-    return render(request , 'galaxy/home.html' , context)
-
-
 def about_us(request):
     
     context = {'page_name' : 'About-us'}

@@ -12,20 +12,21 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/html.html to edit this
         <link type="text/css" rel="stylesheet" href="{% static 'css/w3.css' %}"/>
         <link type="text/css" rel="stylesheet" href="{% static 'css/GalaxyLanding.css' %}"/>
         <link type="text/css" rel="stylesheet" href="{% static 'css/avatar.css' %}"/>
+        <link rel="icon" type="image/x-icon" href="{% static 'images/galaxy_home_logo.png' %}">
         <script src="{% static 'js/GalaxyLanding.js' %}"></script>
         <link type="text/css" rel="stylesheet" href="{% static 'css/dropdown_menu.css' %}"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <style>
             .right-align {
                 float: right;
-                top: 9px;
+                top: 7px;
+                right: 5px;  
             }
         </style>
     </head>
-
     <body>
-        <div class="topnav" id="myTopnav">
-            <a href="{% url 'galaxy:home' %}"  class="active">Home</a>
+        <div class="navbar" id="mynavbar">
+            <a href="{% url 'galaxy:index' %}"  class="active">Home</a>
             <a href="{% url 'galaxy:pricing' %}" >Pricing</a>
             <a href="{% url 'galaxy:contact_us' %}" >Contact</a>
             <a href="{% url 'galaxy:about_us' %}" >About</a>
@@ -33,34 +34,26 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/html.html to edit this
             <a href="{% url 'App:apphome' %}?username={{user.username}}">My System</a>
             {% endif %}
             {% if request.user.is_authenticated %}
-                {% if request.user.username %}      
-                    <a style="float: right" class="active" href="{% url 'galaxy:logout' %}">Logout</a>
-                    <div class="dropdown" style="float: right">
-                        <a style="float: right; color: #FFFFFF; text-decoration: none; font-family: 'Arial', sans-serif; font-size: 18px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">{{request.user.username|capfirst}}</a>
-                            <div class="dropdown-content" style="float: right">
-                                <div class="header">
-                                  <h4>Account Settings & more </h4>
-                                </div>   
-                                <div class="row">
-                                <div class="column">
-                                 <a href="#">Organizations</a>
-                                 <a href="#">Profile</a>
-                                 <a href="#">Password</a>
-                                </div>
+                    <div class="dropdown">
+                       
+                        <button class="dropbtn" >{{request.user.username|capfirst}} 
+                          <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-content">
                           
-                                </div>
+                          <div class="row">
+                            <div class="column">
+                              <a href="#">Organizations</a>
+                              <a href="#">Profile</a>
+                              <a style="float: left; color:red; " class="active" href="{% url 'galaxy:logout' %}"><strong>Logout</strong></a>
                             </div>
+                            
+                          </div>
+                        </div>
                     </div>
                     <div class="avatar avatar--medium active right-align">
                         <img src="{{request.user.avatar.url}}" />
                     </div>
-                {% else %}
-                    <a style="float: right" class="active" href="{% url 'galaxy:logout' %}">Logout</a>
-                    <a style="float: right">{{request.user.email}}</a>
-                    <div class="avatar avatar--medium active right-align">
-                        <img src="{{request.user.avatar.url}}" />
-                    </div>
-                {% endif %}
             {% else %}
                 <a style="float: right" class="active" href = "{% url 'galaxy:login' %}">Login</a>
             {% endif %}
