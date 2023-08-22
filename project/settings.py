@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'galaxy.apps.GalaxyConfig',
+    'App.apps.AppConfig',
+    'mssql',
+
 ]
 
 AUTH_USER_MODEL = 'galaxy.User'
@@ -73,38 +76,46 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
-
+#-------------------------------------------------------------------------------------------------------
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
+    
     'default': {
-            'ENGINE': 'sql_server.pyodbc',
-            'NAME': 'galaxy',
+            'ENGINE': 'mssql',
+            'NAME': 'Users' ,
             'USER': 'sa',
             'PASSWORD': 'Ka@12?34#',
             'HOST': 'DESKTOP-F9VA3BH\SQLEXPRESS',
             'PORT': '',
-
             'OPTIONS': {
                 'driver': 'ODBC Driver 17 for SQL Server',
+                'CLIENT_CLASS': 'django_redis.client.DefaultClient',
             },
-        },
-    'karim_db': {
-            'ENGINE': 'sql_server.pyodbc',
-            'NAME': 'karim_db',
-            'USER': 'sa',
-            'PASSWORD': 'Ka@12?34#',
-            'HOST': 'DESKTOP-F9VA3BH\SQLEXPRESS',
-            'PORT': '',
+    },
+    
+}
 
-            'OPTIONS': {
-                'driver': 'ODBC Driver 17 for SQL Server',
-            },
-        },
-    }
+    
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
+# from galaxy.models import User
 
+def get_user_database_name(username):
+    # Retrieve the user-specific database name from the User model or any other relevant model
+    # You might need to customize this based on your specific implementation
+    return username
+
+def switch_to_user_database(username):
+    # Retrieve the user-specific database name
+    db_name = get_user_database_name(username)
+
+    # Update the Django default database configuration dynamically
+    DATABASES['default']['NAME'] = db_name
+
+# DATABASE_CONNECTION_POOLING = False
+#----------------------------------------------------------------------------------------------------------
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -145,7 +156,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     BASE_DIR + '/static/',
-    "/var/www/static/",
+    # "/var/www/static/",
 ]
 
 MEDIA_URL = '/user_images/'
@@ -166,3 +177,12 @@ EMAIL_HOST_PASSWORD = 'arcbastlomavsahf'
 
 
 
+# DATABASE_ROUTERS = [
+#     'routers.db_routers.GalaxyRouter',
+#     'routers.db_routers.AppRouter',
+# ]
+
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField' 
+
+# TIME_ZONE = 'Africa/Cairo'

@@ -1,0 +1,94 @@
+{% load static %}
+<head>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/GalaxyLanding.css' %}"/>
+    <script src="{% static 'js/GalaxyLanding.js' %}"></script>
+    
+
+</head>
+<body>
+    <div onload="" id="id01" class="modal">
+        <div class="modal-content animate-zoom" style="max-width:600px">
+            <div style="text-align:center!important"><br>
+                <span onclick="document.getElementById('id01').style.display = 'none'" class="close" title="Close Modal">×</span>
+                <img src="{% static 'images/avatar.png' %}" alt="Avatar" style="width:20%;border-radius:50%;">
+            </div>
+
+            <form method='POST' >
+                {% csrf_token %}
+                <div style="padding: 20px">
+                    <label for="usr1" style="font-size: large;font-weight: bold">Email :</label>
+                    <input type="text" placeholder="Enter Email ...." name="email" id="usr1" onblur="checkCookie(this.value)" required>
+                    <p></p>
+                    <div class="password-container">
+                        <label for="loginpsw" style="font-size: large;font-weight: bold">Password :</label>
+                        <input type="password" placeholder="Enter Password ...." name="psw" id="loginpsw" required>
+                        <i class="fa-solid fa-eye" id="eye3"></i>
+                        <br>
+                        <br>
+                        {% if errors %}
+                            {% for i in errors %}
+                                <h4 style="text-align: center; margin: 0px 0px 0px; padding-left: 8px; color: red">{{ i }}</h4>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <br>
+                    <input id="loginRemember" style="margin-top:16px!important" type="checkbox" checked > Remember me for next 5 days
+                    <p></p>
+                    <span style="color:black;font-size:15px;float: right"> <a href="{% url 'galaxy:reset_password' %}">Forgot Password?</a></span>
+                    <p></p>
+                    <p></p>
+                    <button style="width: 100%" class="button loginbtn" >Login</button>
+
+{% comment %} onclick="location.href='{% url 'galaxy:index' %}' {% endcomment %}
+
+                    <br> 
+                    <div class="clearfix">
+                        <button onclick="location.href='{% url 'galaxy:signup' %}'" type="button" class="button signupbtn">Sign Up</button>
+                        <button onclick="location.href='{% url 'galaxy:index' %}'" type="button" class="button cancelbtn">Cancel</button>
+                    </div>
+                </div>
+            </form>
+
+            <div style="text-align:center!important">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        //Password eye
+        
+                        const passwordInput = document.querySelector("#psw");
+                        const eye = document.querySelector("#eye1");
+                        const passwordInput1 = document.querySelector("#psw-repeat");
+                        const eye1 = document.querySelector("#eye2");
+                        const passwordInput2 = document.querySelector("#loginpsw");
+                        const eye2 = document.querySelector("#eye3");
+        
+        
+                        eye.addEventListener("click", function () {
+                            this.classList.toggle("fa-eye-slash");
+                            const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+                            passwordInput.setAttribute("type", type);
+                        });
+                        eye1.addEventListener("click", function () {
+                            this.classList.toggle("fa-eye-slash");
+                            const type = passwordInput1.getAttribute("type") === "password" ? "text" : "password";
+                            passwordInput1.setAttribute("type", type);
+                        });
+                        eye2.addEventListener("click", function () {
+                            this.classList.toggle("fa-eye-slash");
+                            const type = passwordInput2.getAttribute("type") === "password" ? "text" : "password";
+                            passwordInput2.setAttribute("type", type);
+                        });
+        
+        
+        
+    </script>
+
+
+</body>
+

@@ -6,7 +6,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 -->
 <html>
     <head>
-        <title>GALAXY RETAIL SYSTEM</title>
+        <title>Galaxy Retail System</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="UTF-8">
         <meta name="description" content="GALAXY Retail system">
@@ -16,52 +16,75 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         <link type="text/css" rel="stylesheet" href="{% static 'css/GalaxyLanding.css' %}"/>
         <link type="text/css" rel="stylesheet" href="{% static 'css/avatar.css' %}"/>
         <script src="{% static 'js/GalaxyLanding.js' %}"></script>
+        <link type="text/css" rel="stylesheet" href="{% static 'css/dropdown_menu.css' %}"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
         <style>
             .right-align {
                 float: right;
-                top: 7.5px;
-                
-                
+                top: 7px;
+                right: 5px;  
             }
         </style>
     </head>
     <body>
-        <div class="topnav" id="myTopnav">
-  <a href="{% url 'home' %}" target="mainframe" class="active">Home</a>
-  <a href="{% url 'pricing' %}" target="mainframe">Pricing</a>
-  <a href="{% url 'contact_us' %}" target="mainframe">Contact</a>
-  <a href="{% url 'about_us' %}" target="mainframe">About</a>
-  
-    {% if request.user.is_authenticated %}
-        {% if request.user.username %}      
-            <a style="float: right" class="active" href="{% url 'logout' %}">Logout</a>
-            <a style="float: right; color: #FFFFFF; text-decoration: none; font-family: 'Arial', sans-serif; font-size: 18px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">{{request.user.username|capfirst}}</a>
-            <div class="avatar avatar--medium active right-align">
-                <img src="{{request.user.avatar.url}}" />
-            </div>
-        {% else %}
-            <a style="float: right" class="active" href="{% url 'logout' %}">Logout</a>
-            <a style="float: right">{{request.user.email}}</a>
-            <div class="avatar avatar--medium active right-align">
-                <img src="{{request.user.avatar.url}}" />
-            </div>
-        {% endif %}
-    {% else %}
-        <a style="float: right" class="active" onclick="document.getElementById('id01').style.display = 'block'">Login</a>
-    {% endif %}
-
-  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
-    <i class="fa fa-bars"></i>
-  </a>
-</div>
-        <iframe name="mainframe" class="mainframe"> </iframe>
+        <div class="navbar" id="myTopnav">
+            <a href="{% url 'galaxy:home' %}"  class="active">Home</a>
+            <a href="{% url 'galaxy:pricing' %}" >Pricing</a>
+            <a href="{% url 'galaxy:contact_us' %}" >Contact</a>
+            <a href="{% url 'galaxy:about_us' %}" >About</a>
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'App:apphome' %}?username={{user.username}}">My System</a>
+            {% endif %}
+            {% if request.user.is_authenticated %}
+                {% if request.user.username %}  
+                    <a style="float: right" class="active" href="{% url 'galaxy:logout' %}">Logout</a>
+                    <div class="dropdown">
+                       
+                        <button class="dropbtn" >{{request.user.username|capfirst}} 
+                          <i class="fa fa-caret-down"></i>
+                        
+                        </button>
+                        
+                        <div class="dropdown-content">
+                          <div class="header">
+                            <h4> Settings & more</h4>
+                          </div>   
+                          <div class="row">
+                            <div class="column">
+                              <a href="#">Organizations</a>
+                              <a href="#">Profile</a>
+                              <a href="#">Password</a>
+                            </div>
+                            
+                          </div>
+                        </div>
+                    </div>
+                    <div class="avatar avatar--medium active right-align">
+                        <img src="{{request.user.avatar.url}}" />
+                    </div>
+                    
+                {% else %}
+                    <a style="float: right" class="active" href="{% url 'galaxy:logout' %}">Logout</a>
+                    <a style="float: right">{{request.user.email}}</a>
+                    <div class="avatar avatar--medium active right-align">
+                        <img src="{{request.user.avatar.url}}" />
+                    </div>
+                {% endif %}
+            {% else %}
+                <a style="float: right" class="active" href = "{% url 'galaxy:login' %}">Login</a>
+            {% endif %}
+{% comment %} onclick="document.getElementById('id01').style.display = 'block' {% endcomment %}
+            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+                <i class="fa fa-bars"></i>
+            </a>
+        </div>
+        {% comment %} <iframe name="mainframe" class="mainframe"> </iframe> {% endcomment %}
 
 
         <!-- Login Form -------------------------------------------------------------------------------- -->
 
-        <div onload="" id="id01" class="modal">
+        {% comment %} <div onload="" id="id01" class="modal">
             <div class="modal-content animate-zoom" style="max-width:600px">
                 <div style="text-align:center!important"><br>
                     <span onclick="document.getElementById('id01').style.display = 'none'" class="close" title="Close Modal">×</span>
@@ -102,13 +125,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
             </div>
 
-        </div>
+        </div> {% endcomment %}
 
 
         <!-- SignUp Form -- -->
 
 
-        <div id="id02" class="modal">
+        {% comment %} <div id="id02" class="modal">
 
             <form class="modal-content animate-zoom" action="" method="POST">
                 {% csrf_token %}
@@ -119,6 +142,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     <hr>
                     <label for="email1"><b>Email</b></label>
                     <input type="text" placeholder="Enter Email" name="email1"  id="email1" onblur=""  required>
+
+                    <label for="user_n"><b>Username</b></label>
+                    <input type="text" placeholder="Enter Username" name="user_n"  id="user_n" onblur=""  required>
+
 
                     <div class="password-container">
                         <label for="psw"><b>Password</b></label>
@@ -156,7 +183,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 </div>
 
             </form>
-        </div>
+        </div> {% endcomment %}
             <script>
 
 //Password eye
@@ -189,7 +216,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
 
             </script>
-            <script>
+            {% comment %} <script>
 // Get the modal
 var modallogin = document.getElementById('id01');
 var modalsignup = document.getElementById('id02');
@@ -203,6 +230,6 @@ window.onclick = function(event) {
     }
 };
 
-            </script>
+            </script> {% endcomment %}
     </body>
 </html>

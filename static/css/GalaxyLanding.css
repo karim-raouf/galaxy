@@ -85,7 +85,7 @@ body {
 
 .modal{
     z-index:3;
-    display:none;
+    display:block;
     padding-top:100px;
     position:fixed;
     left:0;
