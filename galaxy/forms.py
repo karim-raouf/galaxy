@@ -1,7 +1,8 @@
 from django import forms
 from .models import *
 
-class TestForm(forms.ModelForm):
+        
+class ProfileForm(forms.ModelForm):
     class Meta:
-        model = Test
-        fields = '__all__'
+        model = User
+        fields = ['first_name' , 'last_name' , 'username' , 'avatar']

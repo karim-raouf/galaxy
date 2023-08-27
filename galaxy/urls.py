@@ -14,6 +14,17 @@ urlpatterns = [
     path('login/', views.login_page , name = 'login'),
     path('register/', views.signup_page , name = 'signup'),
     path('logout/', views.signout , name = 'logout'),
+    path('profile/', views.profile , name = 'profile'),
+    path('profile_edit/', views.profile_edit , name = 'profile_edit'),
+    
+    path('payment/<int:id>', views.payment , name = 'payment'),
+    path('organization/', views.choose_org , name = 'org_choose'),
+    path('success/', views.success , name = 'success_m'),
+    path('upgrade_success/', views.update_success , name = 'u_success_m'),
+    path('activate/<uidb64>/<token>', views.activate , name = 'activate'),
+    path('activate_link/', views.activation_msg , name = 'activate_msg'),
+    path('activate_done/', views.activation_done , name = 'activate_done'),
+    
     
     
     path('reset_password/', auth_views.PasswordResetView.as_view(template_name='galaxy/password_reset.html') , name = 'reset_password'),

@@ -1,0 +1,68 @@
+{% load static %}
+<head>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/GalaxyLanding.css' %}"/>
+    <script src="{% static 'js/GalaxyLanding.js' %}"></script>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/avatar.css' %}"/>
+    <style>
+        .form-field {
+            margin-bottom: 1em;
+        }
+    </style>
+
+</head>
+<body>
+    <div id="id02" class="modal">
+
+        <form class="modal-content animate-zoom" action="" method="POST">
+            {% csrf_token %}
+            <span onclick="location.href='{% url 'galaxy:index' %}'" class="close" title="Close Modal">&times;</span>
+            <div style="padding: 20px">
+                <h1 style = "color: black;"><center>Profile</center></h1>
+               
+                <div>
+                    <ul>
+                        <li>Avatar: <span>
+                            <div class="avatar avatar--medium active right-align">
+                            <img src="{{ request.user.avatar.url }}" />
+                            </div></span></li>
+                        <br>
+                        <li>First name: <span>{{user.first_name}}</span></li>
+                        <br>
+                        <li>Last name: <span>{{user.last_name}}</span></li>
+                        <br>
+                        <li>Username: <span>{{user.username}}</span></li>
+                        <br>
+                        <li>Email: <span>{{user.email}}</span></li>
+                        <br>
+                    </ul>
+                    
+                </div>
+                {% if messages %}
+                    {% for message in messages %}
+                        <h6 style="text-align: center; color: red;  font-size: 15px;  font-family: arial;">
+                            <em>• {{ message }}</em>
+                        </h6>
+                    {% endfor %}
+                {% endif %}
+                
+                {% if errors %}
+                    {% for i in errors %}
+                        <h4 style="text-align: center; margin: 0px 0px 0px; padding-left: 8px; color: red">{{ i }}</h4>
+                    {% endfor %}
+                {% endif %}
+                <p></p>
+
+
+                
+
+
+
+                <div class="clearfix">
+                    <button type="button" onclick="location.href='{% url 'galaxy:index' %}'" class="button cancelbtn">Back</button>
+                    <button type="submit" class="button signupbtn" onclick="location.href='{% url 'galaxy:index' %}'" >Edit Proile</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</body>

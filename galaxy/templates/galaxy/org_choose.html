@@ -1,0 +1,40 @@
+{% load static %}
+<head>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/GalaxyLanding.css' %}"/>
+    <script src="{% static 'js/GalaxyLanding.js' %}"></script>
+    
+
+</head>
+<body>
+    <div onload="" id="id01" class="modal">
+        <div class="modal-content animate-zoom" style="max-width:600px">
+            <div style="text-align:center!important"><br>
+                
+                <img src="{% static 'images/avatar.png' %}" alt="Avatar" style="width:20%;border-radius:50%;">
+            </div>
+
+            <form method='POST' >
+                {% csrf_token %}
+                <div style="padding: 20px">
+                    {% csrf_token %}
+                    <br>
+                    <label for="organization">Select organization to login to:</label>
+                    <select id="organization" name="organization">
+                        {% for organization in organizations %}
+                            <option value="{{ organization.id }}">{{ organization.OrganizationName }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <br>
+                    <p></p>
+                    <button style="width: 100%" type="submit" class="button loginbtn" onclick="location.href='/'">Choose</button>
+
+                </div>
+            </form>
+
+            <div style="text-align:center!important">
+            </div>
+
+        </div>
+
+    </div>

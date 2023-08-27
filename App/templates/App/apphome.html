@@ -11,7 +11,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/html.html to edit this
     </head>
     <body>
         <div>
-            {{username}}'s system
+            {{orgname}}'s system
             <br>
             <a href = "{% url 'App:default_db' %}">Landing page</a>
         
@@ -20,13 +20,24 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/html.html to edit this
 
                 {{form}}
             
-                <input type="submit" value="Submit" onclick="location.href='{% url 'App:apphome' %}?username={{username}}'">
+                <input type="submit" value="Submit" onclick="location.href='galaxy/?username={{username}}'">
             
 
 
             </form>
         
         </div>
+        <script>
+            window.onpopstate = function(event) {
+                // Send an AJAX request to the server
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/handle_back_button/', true);
+                xhr.send();
+            };
+        </script>
+    
     </body>
 </html>
+
+
 

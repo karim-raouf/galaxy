@@ -1,0 +1,75 @@
+{% load static %}
+<head>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/GalaxyLanding.css' %}"/>
+    <script src="{% static 'js/GalaxyLanding.js' %}"></script>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/avatar.css' %}"/>
+    <style>
+        .form-field {
+            margin-bottom: 1em;
+        }
+    </style>
+
+</head>
+<body>
+    <div id="id02" class="modal">
+
+        <form class="modal-content" action="" method="POST">
+            {% csrf_token %}
+            <span onclick="location.href='{% url 'galaxy:index' %}'" class="close" title="Close Modal">&times;</span>
+            <div style="padding: 20px">
+                <h1 style = "color: black;"><center>Edit Profile</center></h1>
+               
+                <div>
+                    <div class="avatar avatar--medium active right-align ">
+                        <img src="{{request.user.avatar.url}}" />
+                    </div>
+                    <div class="form-field">
+                        <label class="label mb-1 mt-1" for="email">Avatar:</label>
+                        {{ form.avatar }}
+                    </div>
+                    
+                </div>
+                <div class="form-field">
+                    <label class="label mb-1" for="first_name">First Name:</label>
+                    {{ form.first_name }}
+                </div>
+                
+                <div class="form-field">
+                    <label class="label mb-1 mt-1" for="last_name">Last Name:</label>
+                    {{ form.last_name }}
+                </div>
+                
+                <div class="form-field">
+                    <label class="label mb-1 mt-1" for="username">Username:</label>
+                    {{ form.username }}
+                </div>
+                
+                {% if messages %}
+                    {% for message in messages %}
+                        <h6 style="text-align: center; color: red;  font-size: 15px;  font-family: arial;">
+                            <em>• {{ message }}</em>
+                        </h6>
+                    {% endfor %}
+                {% endif %}
+                
+                {% if errors %}
+                    {% for i in errors %}
+                        <h4 style="text-align: center; margin: 0px 0px 0px; padding-left: 8px; color: red">{{ i }}</h4>
+                    {% endfor %}
+                {% endif %}
+                <p></p>
+
+
+                
+
+
+
+                <div class="clearfix">
+                    <button type="button" onclick="location.href='{% url 'galaxy:profile' %}'" class="button cancelbtn">Cancel</button>
+                    <button type="submit" class="button signupbtn" onclick="location.href='{% url 'galaxy:index' %}'" >Save Changes</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</body>

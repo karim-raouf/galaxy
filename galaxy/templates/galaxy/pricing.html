@@ -19,51 +19,62 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/html.html to edit this
         <style>
             .right-align {
                 float: right;
-                top: 7px;
-                right: 5px;  
+                top: 0px;
+                right:  -10px;  
             }
+            .dropbtn {
+                display: flex;
+                align-items: center;
+            }
+              
+           
+              
+            .button-text {
+                margin-right: 0px; /* Add spacing between the button text and avatar */
+              }
+              
+            .fa-caret-down {
+                margin-left: 20px; /* Add spacing between the avatar and caret icon */
+              }
         </style>
     </head>
     <body>
-        <div class="navbar" id="mynavbar">
+        <div class="topnav" id="myTopnav">
+            
             <a href="{% url 'galaxy:index' %}"  class="active">Home</a>
             <a href="{% url 'galaxy:pricing' %}" >Pricing</a>
             <a href="{% url 'galaxy:contact_us' %}" >Contact</a>
             <a href="{% url 'galaxy:about_us' %}" >About</a>
-            {% if request.user.is_authenticated %}
-            <a href="{% url 'App:apphome' %}?username={{user.username}}">My System</a>
+            {% if request.user.is_authenticated and subed %}
+                <a href="{% url 'App:apphome' %}?orgname={{user.OrganizationID}}">{{org|capfirst}}</a>
             {% endif %}
+            <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
             {% if request.user.is_authenticated %}
+
                     <div class="dropdown">
-                       
-                        <button class="dropbtn" >{{request.user.username|capfirst}} 
-                          <i class="fa fa-caret-down"></i>
+                        <button class="dropbtn">
+                            <span class="button-text">{{ request.user.username|capfirst }}</span>
+                            <div class="avatar avatar--medium active right-align">
+                              <img src="{{ request.user.avatar.url }}" />
+                            </div>
+                            <i class="fa fa-caret-down"></i>
                         </button>
                         <div class="dropdown-content">
-                          
-                          <div class="row">
-                            <div class="column">
-                              <a href="#">Organizations</a>
-                              <a href="#">Profile</a>
-                              <a style="float: left; color:red; " class="active" href="{% url 'galaxy:logout' %}"><strong>Logout</strong></a>
-                            </div>
-                            
-                          </div>
+                            <a href="#">Organizations</a>
+                            <a href="{% url 'galaxy:profile' %}">Profile</a>
+                            <a href="#">Accounting</a>
+                            <a href="#">Subscription</a>
+                            <a style = "color: red;" href="{% url 'galaxy:logout' %}"><strong>Logout</strong></a>
                         </div>
                     </div>
-                    <div class="avatar avatar--medium active right-align">
-                        <img src="{{request.user.avatar.url}}" />
-                    </div>
+                    
             {% else %}
                 <a style="float: right" class="active" href = "{% url 'galaxy:login' %}">Login</a>
             {% endif %}
-{% comment %} onclick="document.getElementById('id01').style.display = 'block' {% endcomment %}
-            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
-                <i class="fa fa-bars"></i>
-            </a>
+            
         </div>
         
-        
+    {% if subed and plan_1 %}
         
         <table style="width: 100%" >
 
@@ -80,7 +91,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/html.html to edit this
                             <span class="w3-opacity">per month</span>
                         </li>
                         <li class="w3-light-grey w3-padding-16">
-                            <button class="w3-button w3-white w3-padding-large w3-hover-green">Sign Up</button>
+                            <button class="w3-button w3-white w3-padding-large w3-hover-green" disabled>Subscribed</button>
                         </li>
                     </ul>
                 </td>
@@ -96,7 +107,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/html.html to edit this
                             <span class="w3-opacity">per month</span>
                         </li>
                         <li class="w3-light-grey w3-padding-16">
-                            <button class="w3-button w3-white w3-padding-large w3-hover-green">Sign Up</button>
+                            
+                            <button class="w3-button w3-white w3-padding-large w3-hover-green" onclick="location.href='/payment/2'">Upgrade</button>
+
                         </li>
                     </ul>
                 </td>
@@ -112,15 +125,205 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/html.html to edit this
                             <span class="w3-opacity">per month</span>
                         </li>
                         <li class="w3-light-grey w3-padding-16">
-                            <button class="w3-button w3-white w3-padding-large w3-hover-green">Sign Up</button>
+                            
+                            <button class="w3-button w3-white w3-padding-large w3-hover-green" onclick="location.href='/payment/3'">Upgrade</button>
+                            
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    {% elif subed and plan_2%}
+        <table style="width: 100%" >
+
+            <tr>
+                <td class="w3-ul w3-white w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom" style="margin:0 -16px;width:33%">
+                    <ul class="w3-ul w3-light-gray w3-center w3-opacity w3-hover-opacity-off">
+                        <li class="w3-dark-grey w3-xxlarge w3-padding-large">Basic</li>
+                        <li class="w3-large w3-padding-small">Web Design</li>
+                        <li class="w3-large w3-padding-small">Photography</li>
+                        <li class="w3-large w3-padding-small">5GB Storage</li>
+                        <li class="w3-large w3-padding-small">Mail Support</li>
+                        <li class="w3-large w3-padding-small">
+                            <h2>$ 10</h2>
+                            <span class="w3-opacity">per month</span>
+                        </li>
+                        <li class="w3-light-grey w3-padding-16">
+                            
+                            <button class="w3-button w3-white w3-padding-large w3-hover-green" disabled>Subscribe</button>
+
+                        </li>
+                    </ul>
+                </td>
+                <td class="w3-ul w3-white w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom" style="width:33%">
+                    <ul class="w3-ul w3-light-gray w3-center w3-opacity w3-hover-opacity-off">
+                        <li class="w3-dark-grey w3-xxlarge w3-padding-large">Recommended</li>
+                        <li class="w3-large w3-padding-small">Web Design</li>
+                        <li class="w3-large w3-padding-small">Photography</li>
+                        <li class="w3-large w3-padding-small">5GB Storage</li>
+                        <li class="w3-large w3-padding-small">Mail Support</li>
+                        <li class="w3-large w3-padding-small">
+                            <h2>$ 15</h2>
+                            <span class="w3-opacity">per month</span>
+                        </li>
+                        <li class="w3-light-grey w3-padding-16">
+                            
+                            <button class="w3-button w3-white w3-padding-large w3-hover-green" disabled>Subscribed</button>
+                            
+                        </li>
+                    </ul>
+                </td>
+                <td class="w3-ul w3-white w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom" style="width:33%">
+                    <ul class="w3-ul w3-light-grey w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom">
+                        <li class="w3-large w3-dark-grey w3-xxlarge w3-padding-large">Pro</li>
+                        <li class="w3-large w3-padding-small">Web Design</li>
+                        <li class="w3-large w3-padding-small">Photography</li>
+                        <li class="w3-large w3-padding-small">50GB Storage</li>
+                        <li class="w3-large w3-padding-small">Endless Support</li>
+                        <li class="w3-large w3-padding-small">
+                            <h2>$ 25</h2>
+                            <span class="w3-opacity">per month</span>
+                        </li>
+                        <li class="w3-light-grey w3-padding-16">
+                           
+                            <button class="w3-button w3-white w3-padding-large w3-hover-green" onclick="location.href='/payment/3'">Upgrade</button>
+                            
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    {% elif subed and plan_3 %}
+        <table style="width: 100%" >
+
+            <tr>
+                <td class="w3-ul w3-white w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom" style="margin:0 -16px;width:33%">
+                    <ul class="w3-ul w3-light-gray w3-center w3-opacity w3-hover-opacity-off">
+                        <li class="w3-dark-grey w3-xxlarge w3-padding-large">Basic</li>
+                        <li class="w3-large w3-padding-small">Web Design</li>
+                        <li class="w3-large w3-padding-small">Photography</li>
+                        <li class="w3-large w3-padding-small">5GB Storage</li>
+                        <li class="w3-large w3-padding-small">Mail Support</li>
+                        <li class="w3-large w3-padding-small">
+                            <h2>$ 10</h2>
+                            <span class="w3-opacity">per month</span>
+                        </li>
+                        <li class="w3-light-grey w3-padding-16">
+                            
+                            <button class="w3-button w3-white w3-padding-large w3-hover-green" disabled>Subscribe</button>
+                            
+                        </li>
+                    </ul>
+                </td>
+                <td class="w3-ul w3-white w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom" style="width:33%">
+                    <ul class="w3-ul w3-light-gray w3-center w3-opacity w3-hover-opacity-off">
+                        <li class="w3-dark-grey w3-xxlarge w3-padding-large">Recommended</li>
+                        <li class="w3-large w3-padding-small">Web Design</li>
+                        <li class="w3-large w3-padding-small">Photography</li>
+                        <li class="w3-large w3-padding-small">5GB Storage</li>
+                        <li class="w3-large w3-padding-small">Mail Support</li>
+                        <li class="w3-large w3-padding-small">
+                            <h2>$ 15</h2>
+                            <span class="w3-opacity">per month</span>
+                        </li>
+                        <li class="w3-light-grey w3-padding-16">
+                            
+                            <button class="w3-button w3-white w3-padding-large w3-hover-green" disabled>Subscribe</button>
+                            
+                        </li>
+                    </ul>
+                </td>
+                <td class="w3-ul w3-white w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom" style="width:33%">
+                    <ul class="w3-ul w3-light-grey w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom">
+                        <li class="w3-large w3-dark-grey w3-xxlarge w3-padding-large">Pro</li>
+                        <li class="w3-large w3-padding-small">Web Design</li>
+                        <li class="w3-large w3-padding-small">Photography</li>
+                        <li class="w3-large w3-padding-small">50GB Storage</li>
+                        <li class="w3-large w3-padding-small">Endless Support</li>
+                        <li class="w3-large w3-padding-small">
+                            <h2>$ 25</h2>
+                            <span class="w3-opacity">per month</span>
+                        </li>
+                        <li class="w3-light-grey w3-padding-16">
+                            
+                            <button class="w3-button w3-white w3-padding-large w3-hover-green" disabled>Subscribed</button>
+                            
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    {% else %}
+        <table style="width: 100%" >
+
+            <tr>
+                <td class="w3-ul w3-white w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom" style="margin:0 -16px;width:33%">
+                    <ul class="w3-ul w3-light-gray w3-center w3-opacity w3-hover-opacity-off">
+                        <li class="w3-dark-grey w3-xxlarge w3-padding-large">Basic</li>
+                        <li class="w3-large w3-padding-small">Web Design</li>
+                        <li class="w3-large w3-padding-small">Photography</li>
+                        <li class="w3-large w3-padding-small">5GB Storage</li>
+                        <li class="w3-large w3-padding-small">Mail Support</li>
+                        <li class="w3-large w3-padding-small">
+                            <h2>$ 10</h2>
+                            <span class="w3-opacity">per month</span>
+                        </li>
+                        <li class="w3-light-grey w3-padding-16">
+                            {% if request.user.is_authenticated %}
+                                <button class="w3-button w3-white w3-padding-large w3-hover-green" onclick="location.href='/payment/1'">Subscribe</button>
+                            {% else %}
+                                <button class="w3-button w3-white w3-padding-large w3-hover-green" onclick="location.href='/login'">Subscribe</button>
+                            {% endif %}
+                        </li>
+                    </ul>
+                </td>
+                <td class="w3-ul w3-white w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom" style="width:33%">
+                    <ul class="w3-ul w3-light-gray w3-center w3-opacity w3-hover-opacity-off">
+                        <li class="w3-dark-grey w3-xxlarge w3-padding-large">Recommended</li>
+                        <li class="w3-large w3-padding-small">Web Design</li>
+                        <li class="w3-large w3-padding-small">Photography</li>
+                        <li class="w3-large w3-padding-small">5GB Storage</li>
+                        <li class="w3-large w3-padding-small">Mail Support</li>
+                        <li class="w3-large w3-padding-small">
+                            <h2>$ 15</h2>
+                            <span class="w3-opacity">per month</span>
+                        </li>
+                        <li class="w3-light-grey w3-padding-16">
+                            {% if request.user.is_authenticated %}
+                                <button class="w3-button w3-white w3-padding-large w3-hover-green" onclick="location.href='/payment/2'">Subscribe</button>
+                            {% else %}
+                                <button class="w3-button w3-white w3-padding-large w3-hover-green" onclick="location.href='/login'">Subscribe</button>
+                            {% endif %}
+                            
+                        </li>
+                    </ul>
+                </td>
+                <td class="w3-ul w3-white w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom" style="width:33%">
+                    <ul class="w3-ul w3-light-grey w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom">
+                        <li class="w3-large w3-dark-grey w3-xxlarge w3-padding-large">Pro</li>
+                        <li class="w3-large w3-padding-small">Web Design</li>
+                        <li class="w3-large w3-padding-small">Photography</li>
+                        <li class="w3-large w3-padding-small">50GB Storage</li>
+                        <li class="w3-large w3-padding-small">Endless Support</li>
+                        <li class="w3-large w3-padding-small">
+                            <h2>$ 25</h2>
+                            <span class="w3-opacity">per month</span>
+                        </li>
+                        <li class="w3-light-grey w3-padding-16">
+                           
+                            {% if request.user.is_authenticated %}
+                                <button class="w3-button w3-white w3-padding-large w3-hover-green" onclick="location.href='/payment/3'">Subscribe</button>
+                            {% else %}
+                                <button class="w3-button w3-white w3-padding-large w3-hover-green" onclick="location.href='/login'">Subscribe</button>
+                            {% endif %}
+                            
                         </li>
                     </ul>
                 </td>
             </tr>
         </table>
 
-
-
+    {% endif %}
         <!-- End Grid/Pricing tables -->
 
     </body>

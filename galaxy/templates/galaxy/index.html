@@ -23,57 +23,98 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         <style>
             .right-align {
                 float: right;
-                top: 7px;
-                right: 5px;  
+                top: 0px;
+                right:  -10px;  
             }
+            .dropbtn {
+                display: flex;
+                align-items: center;
+            }
+              
+           
+              
+            .button-text {
+                margin-right: 0px; /* Add spacing between the button text and avatar */
+              }
+              
+            .fa-caret-down {
+                margin-left: 20px; /* Add spacing between the avatar and caret icon */
+              }
         </style>
+        
+        
     </head>
     <body>
         
-        <div class="navbar" id="mynavbar">
-           
-            <a href="{% url 'galaxy:index' %}"  class="active">Home</a>
-            <a href="{% url 'galaxy:pricing' %}" >Pricing</a>
-            <a href="{% url 'galaxy:contact_us' %}" >Contact</a>
-            <a href="{% url 'galaxy:about_us' %}" >About</a>
-            {% if request.user.is_authenticated %}
-            <a href="{% url 'App:apphome' %}?username={{user.username}}">My System</a>
-            {% endif %}
-            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
-                <i class="fa fa-bars"></i>
-            </a>
-            {% if request.user.is_authenticated %}
-  
-                    
-                    <div class="dropdown">
-                       
-                        <button class="dropbtn" >{{request.user.username|capfirst}} 
-                          <i class="fa fa-caret-down"></i>
-                        
-                        </button>
-                        
-                        <div class="dropdown-content">
-                          <div class="row">
-                            <div class="column">
-                              <a href="#">Organizations</a>
-                              <a href="#">Profile</a>
-                              <a style="float: left; color:red; " class="active" href="{% url 'galaxy:logout' %}"><strong>Logout</strong></a>
-                            </div>
-                            
-                          </div>
-                        </div>
-                    </div>
-                    <div class="avatar avatar--medium active right-align">
-                        <img src="{{request.user.avatar.url}}" />
-                    </div>
-                    
-                
-            {% else %}
-                <a style="float: right" class="active" href = "{% url 'galaxy:login' %}">Login</a>
-            {% endif %}
-{% comment %} onclick="document.getElementById('id01').style.display = 'block' {% endcomment %}
+            <div class="topnav" id="myTopnav">
             
-        </div>
+                <a href="{% url 'galaxy:index' %}"  class="active">Home</a>
+                <a href="{% url 'galaxy:pricing' %}" >Pricing</a>
+                <a href="{% url 'galaxy:contact_us' %}" >Contact</a>
+                <a href="{% url 'galaxy:about_us' %}" >About</a>
+                {% if request.user.is_authenticated and subed %}
+                    <a href="{% url 'App:apphome' %}?orgname={{user.OrganizationID}}_{{request.user.id}}">{{org|capfirst}}</a>
+                {% endif %}
+                {% if org_num > 1 %}
+                    <a href = "{% url 'galaxy:org_choose' %}">Switch Organization</a>
+                {% endif %}        
+                <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
+                {% if request.user.is_authenticated %}
+                        <div class="cart">
+                            <button class="cartbtn dropbtn"><span class="price" style="color:black"><img src="static/images/cart-orange.png" alt="Girl in a jacket" width="20" height="25"> </span> <p style="color:white">3</p> 
+                              <i class="fa fa-caret-down"></i>
+                            </button>
+                            <div class="cart-content">
+                              <div class="header">
+                                <div><h2>Total Cart 30$</h2></div>
+                                <div > <input id="checkout" type="submit" value="Continue to checkout" class="btn"></div>
+                              </div>   
+
+                              <div class="row">
+                                <div class="column">
+                                  <h3>Products</h3>
+                                  <a href="#Item">Product 1</a>
+                                  <a href="#Item">Product 2</a>
+                                  <a href="#Item">Product 3</a>
+                                </div>
+                                <div class="column">
+                                  <h3>Quantity</h3>
+                                  <a> 1</a>
+                                  <a >2</a>
+                                  <a >3</a>
+                                </div>
+                                <div class="column">
+                                  <h3>Unit Price</h3>
+                                  <a href="#">5$</a>
+                                  <a href="#">5$</a>
+                                  <a href="#">5$</a>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button class="dropbtn">
+                                <span class="button-text">{{ request.user.username|capfirst }}</span>
+                                <div class="avatar avatar--medium active right-align">
+                                  <img src="{{ request.user.avatar.url }}" />
+                                </div>
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                            <div class="dropdown-content">
+                                <a href="#">Organizations</a>
+                                <a href="{% url 'galaxy:profile' %}">Profile</a>
+                                <a href="#">Accounting</a>
+                                <a href="#">Subscription</a>
+                                <a style = "color: red;" href="{% url 'galaxy:logout' %}"><strong>Logout</strong></a>
+                            </div>
+                        </div>
+                        
+                {% else %}
+                    <a style="float: right" class="active" href = "{% url 'galaxy:login' %}">Login</a>
+                {% endif %}
+                
+            </div>
+            
         
         {% comment %} <iframe name="mainframe" class="mainframe"> </iframe> {% endcomment %}
 
