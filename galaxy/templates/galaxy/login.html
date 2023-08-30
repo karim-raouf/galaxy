@@ -9,7 +9,7 @@
     <div onload="" id="id01" class="modal">
         <div class="modal-content animate-zoom" style="max-width:600px">
             <div style="text-align:center!important"><br>
-                <span onclick="document.getElementById('id01').style.display = 'none'" class="close" title="Close Modal">×</span>
+                <span onclick="location.href='/'" class="close" title="Close Modal">×</span>
                 <img src="{% static 'images/avatar.png' %}" alt="Avatar" style="width:20%;border-radius:50%;">
             </div>
 
@@ -44,7 +44,7 @@
                     <br> 
                     <div class="clearfix">
                         <button onclick="location.href='{% url 'galaxy:signup' %}'" type="button" class="button signupbtn">Sign Up</button>
-                        <button onclick="location.href='{% url 'galaxy:index' %}'" type="button" class="button cancelbtn">Cancel</button>
+                        <button onclick="location.href='{{request.META.HTTP_REFERER}}'" type="button" class="button cancelbtn">Cancel</button>
                     </div>
                 </div>
             </form>
@@ -86,7 +86,7 @@
                         });
         
         
-        
+                       
     </script>
 
 

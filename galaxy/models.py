@@ -3,6 +3,15 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 
+SUBTYPE = (
+    ('Monthly' , 'Monthly'),
+    ('Annually' , 'Annually'),
+)
+BUNTYPE = (
+    ('Basic' , 'Basic'),
+    ('Add-Ones' , 'Add-Ones'),
+)
+
 class User(AbstractUser):
     email = models.EmailField(unique = True)
     avatar = models.ImageField(null = True , default = 'avatar.svg')
@@ -30,12 +39,13 @@ class Subscription(models.Model):
     Status = models.BooleanField()
     StartDate = models.DateField(verbose_name="Start Date")
     EndDate = models.DateField(verbose_name="End Date")
-    PlanID = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(3)])
+    ProductID = models.ForeignKey('Product' , on_delete=models.SET_NULL , null=True)
     AutoRenew = models.BooleanField()
-    OrganizationID = models.ForeignKey(Organization , on_delete=models.SET_NULL , null = True)
+    Type = models.CharField(max_length=20 , choices=SUBTYPE , null=True)
+    Bundle_T = models.CharField(max_length=20 , choices=BUNTYPE , null=True)
     
     def __str__(self):
-        return self.UserID.email
+        return str(self.ProductID)+'-'+str(self.UserID)
     
     
 
@@ -48,12 +58,30 @@ class Account(models.Model):
         return self.UserID.email
     
     
+class Product(models.Model):
+    Name = models.CharField(max_length=50)
+    Type = models.CharField(max_length=20 , choices=SUBTYPE , null=True)
+    Price = models.IntegerField()
+    Bundle_T = models.CharField(max_length=20 , choices=BUNTYPE , null=True)
+    Code = models.IntegerField(null=True)
+    
+    def __str__(self):
+        return (self.Name)+'-'+(self.Type)
+    
+
 class Cart(models.Model):
     UserID = models.ForeignKey(User , on_delete=models.SET_NULL , null=True)
-    ItemID = 
-    Qty = 
-    UnitPrice = 
-    AddedDate = models.DateField(verbose_name="Added Date")
+    Qty = models.IntegerField()
+    Type = models.CharField(max_length=20 , choices=SUBTYPE , null=True)
+    ProductID = models.ForeignKey(Product , on_delete=models.SET_NULL , null=True)
+    Bundle_T = models.CharField(max_length=20 , choices=BUNTYPE , null=True)
+    
+    def __str__(self):
+        return str(self.UserID)+'-'+str(self.ProductID)
+    
+    
+      
+
     
     
 

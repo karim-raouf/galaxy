@@ -1,4 +1,8 @@
-{% load static %}
+{% extends 'galaxy/base.html' %}
+
+
+
+{% comment %} {% load static %}
 <!DOCTYPE html>
 <!--
 Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -113,7 +117,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     <a style="float: right" class="active" href = "{% url 'galaxy:login' %}">Login</a>
                 {% endif %}
                 
-            </div>
+            </div> {% endcomment %}
             
         
         {% comment %} <iframe name="mainframe" class="mainframe"> </iframe> {% endcomment %}

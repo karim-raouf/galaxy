@@ -114,15 +114,29 @@ body {margin:0;font-family:Arial}
     display: block;
     text-align: left;
   }
-  .topnav.responsive .dropdown {float: none;}
-  .topnav.responsive .dropdown-content {position: relative;}
+  .topnav.responsive .dropdown {
+    float: none;
+  }
+  
+  .topnav.responsive .dropdown-content {
+    position: relative;
+  }
+  
   .topnav.responsive .dropdown .dropbtn {
     display: block;
     width: 100%;
     text-align: left;
   }
-  .topnav.responsive .cart {float: none;}
-  .topnav.responsive .cart-content {position: relative; width: auto;}
+  
+  .topnav.responsive .cart {
+    float: none;
+  }
+  
+  .topnav.responsive .cart-content {
+    position: relative; 
+    width: auto;
+  }
+  
   .topnav.responsive .cart .cartbtn {
     display: block;
     display: flex;
@@ -171,25 +185,45 @@ body {margin:0;font-family:Arial}
   display: none;
   position: absolute;
   background-color: #f9f9f9;
-  width: 600px;
+  width: 40%;
+  height: 80%;
   right:  0;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
+  overflow: auto;
 }
 
 .cart-content .header {
   background: green;
   padding: 16px;
   color: white;
+  height: auto;
 }
 
-.cart:hover .cart-content {
+/* .cart:hover .cart-content {
   display: block;
+} */
+
+.CartDeletebtn {
+  background-color: white;
+  color: white;
+  padding: 9px;
+  margin: 5px;
+  border: none;
+  width: 50%;
+  height: auto;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: medium;
+}
+
+.CartDeletebtn:hover {
+  background-color:#45a049;
 }
 /* Create three equal columns that floats next to each other */
 .column {
   float: left;
-  width: auto;
+  /* width: 25%; */
   padding: 10px;
   background-color: white;
   height: 250px;

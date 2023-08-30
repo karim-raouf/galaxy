@@ -1,80 +1,258 @@
+{% extends 'galaxy/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/html.html to edit this template
--->
-<html>
-    <head>
-        <title>{{page_name}}</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link type="text/css" rel="stylesheet" href="{% static 'css/w3.css' %}"/>
-        <link type="text/css" rel="stylesheet" href="{% static 'css/GalaxyLanding.css' %}"/>
-        <link type="text/css" rel="stylesheet" href="{% static 'css/avatar.css' %}"/>
-        <link rel="icon" type="image/x-icon" href="{% static 'images/galaxy_home_logo.png' %}">
-        <script src="{% static 'js/GalaxyLanding.js' %}"></script>
-        <link type="text/css" rel="stylesheet" href="{% static 'css/dropdown_menu.css' %}"/>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <style>
-            .right-align {
-                float: right;
-                top: 0px;
-                right:  -10px;  
-            }
-            .dropbtn {
-                display: flex;
-                align-items: center;
-            }
-              
-           
-              
-            .button-text {
-                margin-right: 0px; /* Add spacing between the button text and avatar */
-              }
-              
-            .fa-caret-down {
-                margin-left: 20px; /* Add spacing between the avatar and caret icon */
-              }
-        </style>
-    </head>
-    <body>
-        <div class="topnav" id="myTopnav">
-            
-            <a href="{% url 'galaxy:index' %}"  class="active">Home</a>
-            <a href="{% url 'galaxy:pricing' %}" >Pricing</a>
-            <a href="{% url 'galaxy:contact_us' %}" >Contact</a>
-            <a href="{% url 'galaxy:about_us' %}" >About</a>
-            {% if request.user.is_authenticated and subed %}
-                <a href="{% url 'App:apphome' %}?orgname={{user.OrganizationID}}">{{org|capfirst}}</a>
-            {% endif %}
-            <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
-            {% if request.user.is_authenticated %}
+    {% block body %}
+    
+        <div style="text-align: center; color: black;">
+                <span style="text-align: center; font-size: xxx-large;"><strong>Pay only for what you need</strong></span>
+                <br>
+                {% comment %} <span style="text-align:center;font-size: 30px">Pay only for what you need</span> {% endcomment %}
+                <div style="text-align:center">
+                    <h2>Monthly<label class="switch"><input id="myCheckbox" type="checkbox"><span class="slider round"></span></label>Annually</h2>
+                </div>
+        </div>   
+        <div class="columns">
+            <ul class="price">
+                <li class="header" style="background-color:green ; text-align:center">Basic Bundle<hr> <a style="font-size:20px; color: white;" >Select Main Product </a> </li>
+                {% comment %} ----Monthly bundles---- {% endcomment %}
+                {% comment %} <li class="posM"> Point of Sales <button {% if request.user.is_authenticated %} onclick="location.href='/add_cart/6/Monthly'" {% else %} onclick="location.href='/login/'" {% endif %} class="button "><a style="color: white;">${{POS_M.Price}} -</a> Add to Cart</button></li> {% endcomment %}
+                <li class="posM">Point of Sales<button {% if request.user.is_authenticated %} {% if POS_M.id in p_ids or POS_A.id in p_ids %} disabled {% endif %}{% if m_pos or a_pos %}disabled{% endif %} onclick="delayedAction('/add_cart/6/Monthly/Basic')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">{% if POS_M.id in p_ids or POS_A.id in p_ids %}Item added {% elif m_pos or a_pos %}Subscribed{% else %}$ {{POS_M.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button></li></li>
+                <li class="imM">Inventory Management<button {% if request.user.is_authenticated %} {% if IM_M.id in p_ids or IM_A.id in p_ids %} disabled {% endif %}{% if m_im or a_im %}disabled{% endif %} onclick="delayedAction('/add_cart/7/Monthly/Basic')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">{% if IM_M.id in p_ids or IM_A.id in p_ids %}Item added {% elif m_im or a_im %}Subscribed{% else %}$ {{IM_M.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button></li></li>
+                <li class="crmM">CRM<button {% if request.user.is_authenticated %} {% if CRM_M.id in p_ids or CRM_A.id in p_ids %} disabled {% endif %}{% if m_crm or a_crm %}disabled{% endif %} onclick="delayedAction('/add_cart/8/Monthly/Basic')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">{% if CRM_M.id in p_ids or CRM_A.id in p_ids %}Item added {% elif m_crm or a_crm %}Subscribed{% else %}$ {{CRM_M.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button></li></li>
+                <li class="aM">Accounting<button {% if request.user.is_authenticated %} {% if A_M.id in p_ids or A_A.id in p_ids %} disabled {% endif %}{% if m_a or a_a %}disabled{% endif %} onclick="delayedAction('/add_cart/9/Monthly/Basic')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">{% if A_M.id in p_ids or A_A.id in p_ids %}Item added {% elif m_a or a_a %}Subscribed{% else %}$ {{A_M.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button></li></li>
 
-                    <div class="dropdown">
-                        <button class="dropbtn">
-                            <span class="button-text">{{ request.user.username|capfirst }}</span>
-                            <div class="avatar avatar--medium active right-align">
-                              <img src="{{ request.user.avatar.url }}" />
-                            </div>
-                            <i class="fa fa-caret-down"></i>
-                        </button>
-                        <div class="dropdown-content">
-                            <a href="#">Organizations</a>
-                            <a href="{% url 'galaxy:profile' %}">Profile</a>
-                            <a href="#">Accounting</a>
-                            <a href="#">Subscription</a>
-                            <a style = "color: red;" href="{% url 'galaxy:logout' %}"><strong>Logout</strong></a>
-                        </div>
-                    </div>
-                    
-            {% else %}
-                <a style="float: right" class="active" href = "{% url 'galaxy:login' %}">Login</a>
-            {% endif %}
-            
+                {% comment %} ----Anually bundles---- {% endcomment %}
+                <li class="posA"> Point of Sales<button {% if request.user.is_authenticated %} {% if POS_A.id in p_ids or POS_M.id in p_ids %} disabled {% endif %}{% if m_pos or a_pos %}disabled{% endif %} onclick="delayedAction('/add_cart/2/Annually/Basic')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">{% if POS_A.id in p_ids or POS_M.id in p_ids %}Item added {% elif m_pos or a_pos %}Subscribed{% else %}$ {{POS_A.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button></li></li>
+                <li class="imA">Inventory Management<button {% if request.user.is_authenticated %} {% if IM_A.id in p_ids or IM_M.id in p_ids %} disabled {% endif %}{% if m_im or a_im %}disabled{% endif %} onclick="delayedAction('/add_cart/3/Annually/Basic')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">{% if IM_A.id in p_ids or IM_M.id in p_ids %}Item added {% elif m_im or a_im %}Subscribed{% else %}$ {{IM_A.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button></li></li>
+                <li class="crmA">CRM<button {% if request.user.is_authenticated %} {% if CRM_A.id in p_ids or CRM_M.id in p_ids %} disabled {% endif %}{% if m_crm or a_crm %}disabled{% endif %} onclick="delayedAction('/add_cart/4/Annually/Basic')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">{% if CRM_A.id in p_ids or CRM_M.id in p_ids %}Item added {% elif m_crm or a_crm %}Subscribed{% else %}$ {{CRM_A.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button></li></li>
+                <li class="aA">Accounting<button {% if request.user.is_authenticated %} {% if A_A.id in p_ids or A_M.id in p_ids %} disabled {% endif %}{% if m_a or a_a %}disabled{% endif %} onclick="delayedAction('/add_cart/5/Annually/Basic')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">{% if A_A.id in p_ids or A_M.id in p_ids  %}Item added {% elif m_a or a_a %}Subscribed{% else %}$ {{A_A.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button></li></li>
+            </ul>
         </div>
+        <div class="columns">
+            <ul class="price">
+                <li class="header" style="background-color:green ;text-align:center">Add-ones <hr> <a style="font-size:20px; color: white;" >Add extra product to your bundle </a> </li>
+                {% comment %} ----Monthly Bundles---- {% endcomment %}
+            
+                <li class="oM"> 1 Organization<button {% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/17/Monthly/Add-Ones')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{O_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
+                <li class="storeM">1 Store<button {% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/18/Monthly/Add-Ones')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORE_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
+                <li class="uM">1 User<button {% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/19/Monthly/Add-Ones')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{U_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
+                <li class="rM">5 Reports<button {% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/20/Monthly/Add-Ones')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{R_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
+                <li class="tM">10,000 Transactions<button {% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/21/Monthly/Add-Ones')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{T_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
+                <li class="slaM">SLA<button {% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/22/Monthly/Add-Ones')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{SLA_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
+                <li class="storageM">10GB Storage<button {% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/23/Monthly/Add-Ones')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORAGE_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
+                {% comment %} ----Anually Bundles---- {% endcomment %}
+                <li class="oA"> 1 Organization<button {% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/10/Annually/Add-Ones')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{O_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
+                <li class="storeA">1 Store<button {% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/11/Annually/Add-Ones')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORE_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
+                <li class="uA">1 User<button {% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/12/Annually/Add-Ones')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{U_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
+                <li class="rA">5 Reports<button {% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/13/Annually/Add-Ones')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{R_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
+                <li class="tA">10,000 Transactions<button {% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/14/Annually/Add-Ones')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{T_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
+                <li class="slaA">SLA<button {% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/15/Annually/Add-Ones')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{SLA_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
+                <li class="storageA">10GB Storage<button {% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/16/Annually/Add-Ones')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORAGE_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
+            </ul>
+        </div>
+    
+    {% endblock body %}
+    {% block additional %}  
+        <Script>
+           
+
+            var checkbox = document.getElementById("myCheckbox");
+        //Monthlyy
+            //Basic---
+            var posMonthly = document.querySelector(".posM");
+            var inventoryMonthly = document.querySelector(".imM");
+            var crmMonthly = document.querySelector(".crmM");
+            var accountingMonthly = document.querySelector(".aM");
+            //Additional---
+            var organizationMonthly = document.querySelector(".oM");
+            var storeMonthly = document.querySelector(".storeM");
+            var userMonthly = document.querySelector(".uM");
+            var reportsMonthly = document.querySelector(".rM");
+            var transactionMonthly = document.querySelector(".tM");
+            var slaMonthly = document.querySelector(".slaM");
+            var storageMonthly = document.querySelector(".storageM");
+        //Anuallyy
+            //Basic---
+            var posAnually = document.querySelector(".posA");
+            var inventoryAnually = document.querySelector(".imA");
+            var crmAnually = document.querySelector(".crmA");
+            var accountingAnually = document.querySelector(".aA");
+            //Additional---
+            var organizationAnually = document.querySelector(".oA");
+            var storeAnually = document.querySelector(".storeA");
+            var userAnually = document.querySelector(".uA");
+            var reportsAnually = document.querySelector(".rA");
+            var transactionAnually = document.querySelector(".tA");
+            var slaAnually = document.querySelector(".slaA");
+            var storageAnually = document.querySelector(".storageA");
+            
+            function updateContent() {
+            if (checkbox.checked) {
+                //Basic Monthly---
+                posMonthly.style.display = "none";
+                inventoryMonthly.style.display = "none";
+                crmMonthly.style.display = "none";
+                accountingMonthly.style.display = "none";
+                //Additional Monthly---
+                organizationMonthly.style.display = "none"
+                storeMonthly.style.display = "none"
+                userMonthly.style.display = "none"
+                reportsMonthly.style.display = "none"
+                transactionMonthly.style.display = "none"
+                slaMonthly.style.display = "none"
+                storageMonthly.style.display = "none"
+                //Basic Anually---
+                posAnually.style.display = "block";
+                inventoryAnually.style.display = "block";
+                crmAnually.style.display = "block";
+                accountingAnually.style.display = "block";
+                //Additional Anually---
+                organizationAnually.style.display = "block"
+                storeAnually.style.display = "block"
+                userAnually.style.display = "block"
+                reportsAnually.style.display = "block"
+                transactionAnually.style.display = "block"
+                slaAnually.style.display = "block"
+                storageAnually.style.display = "block"
+
+            } else {
+                //Basic Monthly---
+                posMonthly.style.display = "block";
+                inventoryMonthly.style.display = "block";
+                crmMonthly.style.display = "block";
+                accountingMonthly.style.display = "block";
+                //Additional Monthly---
+                organizationMonthly.style.display = "block"
+                storeMonthly.style.display = "block"
+                userMonthly.style.display = "block"
+                reportsMonthly.style.display = "block"
+                transactionMonthly.style.display = "block"
+                slaMonthly.style.display = "block"
+                storageMonthly.style.display = "block"
+                //Basic Anually---
+                posAnually.style.display = "none";
+                inventoryAnually.style.display = "none";
+                crmAnually.style.display = "none";
+                accountingAnually.style.display = "none";
+                //Additional Anually---
+                organizationAnually.style.display = "none"
+                storeAnually.style.display = "none"
+                userAnually.style.display = "none"
+                reportsAnually.style.display = "none"
+                transactionAnually.style.display = "none"
+                slaAnually.style.display = "none"
+                storageAnually.style.display = "none"
+            }
+            }
+
+            checkbox.addEventListener("change", updateContent);
+
+            updateContent();
+
+        </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function(event) {
         
-    {% if subed and plan_1 %}
+        
+                const cartButtons = document.querySelectorAll('.cart-button');
+        
+                cartButtons.forEach(button => {
+        
+                        button.addEventListener('click',cartClick);
+        
+                });
+        
+                function cartClick(){
+                let button =this;
+                button.classList.add('clicked');
+                /* button.classList.remove('clicked');*/
+                }
+                
+                
+                
+            });
+        </script>
+        <script>
+            function delayedAction(url) {
+              // Wait for 2 seconds (2000 milliseconds)
+              setTimeout(function() {
+                // Code to be executed after the delay
+                // Replace this with your desired action
+                window.location.href = url;
+              }, 2250);
+            } 
+        </script>
+    {% endblock additional %}       
+    
+     {% comment %} var checkbox = document.getElementById("myCheckbox");
+
+            // Get the button elements
+            var button1 = document.getElementById("101");
+            var button2 = document.getElementById("102");
+            var button3 = document.getElementById("103");
+            var button4 = document.getElementById("104");
+            var button5 = document.getElementById("201");
+            var button6 = document.getElementById("202");
+            var button7 = document.getElementById("203");
+            var button8 = document.getElementById("204");
+            var button9 = document.getElementById("205");
+            var button10 = document.getElementById("206");
+            var button11 = document.getElementById("207");
+            
+            // Function to handle checkbox change event
+            function handleCheckboxChange() {
+              if (checkbox.checked) {
+                // Checkbox is checked
+                button1.innerText = "${{POS_A.Price}} -";
+                button2.innerText = "${{IM_A.Price}} -";
+                button3.innerText = "${{CRM_A.Price}} -";
+                button4.innerText = "${{A_A.Price}} -";
+                button5.innerText = "${{O_A.Price}} -";
+                button6.innerText = "${{STORE_A.Price}} -";
+                button7.innerText = "${{U_A.Price}} -";
+                button8.innerText = "${{R_A.Price}} -";
+                button9.innerText = "${{T_A.Price}} -";
+                button10.innerText = "${{SLA_A.Price}} -";
+                button11.innerText = "${{STORAGE_A.Price}} -";
+              } else {
+                // Checkbox is not checked
+                button1.innerText = "${{POS_M.Price}} -";
+                button2.innerText = "${{IM_M.Price}} -";
+                button3.innerText = "${{CRM_M.Price}} -";
+                button4.innerText = "${{A_M.Price}} -";
+                button5.innerText = "${{O_M.Price}} -";    
+                button6.innerText = "${{STORE_M.Price}} -";
+                button7.innerText = "${{U_M.Price}} -";
+                button8.innerText = "${{R_M.Price}} -";
+                button9.innerText = "${{T_M.Price}} -";
+                button10.innerText = "${{SLA_M.Price}} -";
+                button11.innerText = "${{STORAGE_M.Price}} -";
+              }
+            }
+            
+            // Add event listener to the checkbox
+            checkbox.addEventListener("change", handleCheckboxChange);
+            
+            // Call the handleCheckboxChange function initially to set the initial text
+            handleCheckboxChange(); {% endcomment %}
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+    {% comment %} {% if subed and plan_1 %}
         
         <table style="width: 100%" >
 
@@ -326,5 +504,4 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/html.html to edit this
     {% endif %}
         <!-- End Grid/Pricing tables -->
 
-    </body>
-</html>
+{% endcomment %}

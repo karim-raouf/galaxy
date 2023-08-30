@@ -1,0 +1,187 @@
+{% load static %}
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>Galaxy Retail System</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="UTF-8">
+        <meta name="description" content="GALAXY Retail system">
+        <meta name="keywords" content="pos,point,sale,inventory,management,best,first,retail,system">
+        <meta name="author" content="Raouf Mostafa">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/x-icon" href="{% static 'images/galaxy_home_logo.png' %}">
+        <link type="text/css" rel="stylesheet" href="{% static 'css/GalaxyLanding.css' %}"/>
+        <link type="text/css" rel="stylesheet" href="{% static 'css/avatar.css' %}"/>
+        <link type="text/css" rel="stylesheet" href="{% static 'css/pricing.css' %}"/>
+        <script src="{% static 'js/GalaxyLanding.js' %}"></script>
+        <link type="text/css" rel="stylesheet" href="{% static 'css/dropdown_menu.css' %}"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        
+        {% block header %}{% endblock header %}
+        <style>
+            .right-align {
+                float: right;
+                top: 0px;
+                right:  -10px;  
+            }
+            .dropbtn {
+                display: flex;
+                align-items: center;
+            }
+              
+           
+              
+            .button-text {
+                margin-right: 0px; /* Add spacing between the button text and avatar */
+              }
+              
+            .fa-caret-down {
+                margin-left: 20px; /* Add spacing between the avatar and caret icon */
+              }
+
+            .image-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 55vh;
+            }
+            
+            .image-container img {
+                width: 375px;
+                height: 350px;
+            }
+        </style>
+        
+        
+    </head>
+    <body>
+        
+            <div class="topnav" id="myTopnav">
+            
+                <a href="{% url 'galaxy:index' %}"  class="active">Home</a>
+                <a href="{% url 'galaxy:pricing' %}" >Pricing</a>
+                <a href="{% url 'galaxy:contact_us' %}" >Contact</a>
+                <a href="{% url 'galaxy:about_us' %}" >About</a>
+                {% if request.user.is_authenticated and subed %}
+                    <a href="{% url 'App:apphome' %}?orgname={{user.OrganizationID}}_{{request.user.id}}">{{org|capfirst}}</a>
+                {% endif %}
+                {% if org_num > 1 %}
+                    <a href = "{% url 'galaxy:org_choose' %}">Switch Organization</a>
+                {% endif %}        
+                <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
+                {% if request.user.is_authenticated %}
+                        <div class="cart">
+                            <button onclick="displaycartcontent()" class="cartbtn dropbtn"><span class="price" style="color:black"><img src="{% static 'images/cart-orange.png' %}" width="25" height="30"></span><p style="color:white;">{{in_cart}}</p> 
+                              <i class="fa fa-caret-down"></i>
+                            </button>
+                              <div id="cartcont" class="cart-content">
+                                <div class="header">
+                                  <div><h2>Cart Total  ${{total}}</h2></div>
+                                <div > <input {% if cart %}  {% else %} disabled {% endif %} id="checkout" onclick="location.href='{% url 'galaxy:payment' %}'" type="submit" value="Continue to checkout" class="btn"></div>
+                              </div>   
+                            {% if cart %}
+                              <div class="row">
+                                <div style="width: 45%;" class="column">
+                                  <h3><center>Products</center></h3>
+                                  {% for p in cart %}
+                                    <a style="alignment: left; font-size: medium;" href="url">{{p.ProductID.Name}}</a>
+                                  {% endfor %}
+                                </div>
+                                <div style="width: 10%;" class="column">
+                                  <h3><center>Qty</center></h3>
+                                  {% for p in cart %}
+                                    <a style="font-size: medium ;"><center>{{p.Qty}}</center></a>
+                                  {% endfor %}
+                                </div>
+                                <div style="width: 29%;" class="column">
+                                  <h3><center>Unit Price</center></h3>
+                                  {% for p in cart %}
+                                    <a style="font-size: medium ;"><center>${{p.ProductID.Price}}/{{p.ProductID.Type}}</center></a>
+                                  {% endfor %}
+                                </div>
+                                <div style="width: 16%;" class="column">
+                                  <h3><center>Action</center></h3>
+                                  {% for p in cart %}
+                                    <center><button style="background-color: white;"  type="submit" value="Remove" class="CartDeletebtn" ><span><img onclick="location.href='/delete_cart/{{p.ProductID.id}}'" src="{% static 'images/delete.png' %}" height="25"></span></center>
+                                  {% endfor %}
+                                </div>
+                              </div>
+                            {% else %}
+                            
+                            <div class='image-container'><img src="{% static 'images/empty-cart.png' %}" width="500" height="300"></div>
+                          
+                            {% endif %}
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button class="dropbtn">
+                                <span class="button-text">{{ request.user.username|capfirst }}</span>
+                                <div class="avatar avatar--medium active right-align">
+                                  <img src="{{ request.user.avatar.url }}" />
+                                </div>
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                            <div class="dropdown-content">
+                                <a href="#">Organizations</a>
+                                <a href="{% url 'galaxy:profile' %}">Profile</a>
+                                <a href="#">Accounting</a>
+                                <a href="{% url 'galaxy:my_products' %}">My Products</a>
+                                <a style = "color: red;" href="{% url 'galaxy:logout' %}"><strong>Logout</strong></a>
+                            </div>
+                        </div>
+                        
+                {% else %}
+                    <a style="float: right" class="active" href = "{% url 'galaxy:login' %}">Login</a>
+                {% endif %}
+                
+            </div>
+            <body >  {% comment %} style="background-image: url('{% static 'images/galaxy-bg.jpg' %}');" {% endcomment %}
+            {% block body %}
+            {% endblock body %}
+            </body>
+            {% block additional %}
+            {% endblock additional %}
+              
+            
+            
+            
+            
+            
+            
+            
+            {% comment %} <script>
+              $(document).ready(function() {
+                  // Get the dropdown element
+                  var dropdown = $('#cartmenu');
+              
+                  // Open the dropdown immediately
+                  dropdown.addClass('show');
+              });
+            </script> {% endcomment %}
+        
+              {% comment %} <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                  var urlParams = new URLSearchParams(window.location.search);
+                  var dropdownId = urlParams.get('dropdown');
+                  
+                  if (dropdownId) {
+                    var dropdown = document.getElementById(dropdownId);
+                    if (dropdown) {
+                      dropdown.selectedIndex = 0; // Select the first option (index 0)
+                      dropdown.classList.add('open'); // Add a CSS class to make the dropdown appear open
+                    }
+                  }
+                });
+              </script> {% endcomment %}
+
+    
+    
+    
+    </body>
+</html>
+
+              

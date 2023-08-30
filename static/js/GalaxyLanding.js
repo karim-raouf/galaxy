@@ -3,6 +3,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/javascript.js to edit this template
  */
 
+function displaycartcontent()
+{
+if(document.getElementById("cartcont").style.display === 'block')
+{
+    document.getElementById("cartcont").style.display = 'none';
+}
+else
+{
+    document.getElementById('cartcont').style.display = 'block';
+}
+}
+
 
 function myFunction() {
   var x = document.getElementById("myTopnav");
