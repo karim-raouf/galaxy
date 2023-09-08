@@ -8,7 +8,7 @@
     
 {% block body %}
 
-    <a href="{{request.META.HTTP_REFERER}}" style="padding:30px;color: green;font-size:xx-large;font-weight:bolder "  class="fa fa-step-backward"> </a><a style="padding:30px;color: green;font-size:xx-large;font-weight:bolder "> My Products</a>
+    <a href="{% url 'galaxy:index' %}" style="padding:30px;color: green;font-size:xxx-large;font-weight:bolder "  class="fa fa-arrow-left"> </a><a style="padding:30px;color: green;font-size:xxx-large;font-weight:bolder "> My Products</a>
 <div class="row">
   <div class="col-75">
     <div class="container">
@@ -29,7 +29,7 @@
 </div>
 
             <div class="col-50">
-                <a style="padding-bottom: 30px;padding-top:30px;font-size:xx-large;font-weight:bolder" class="fa fa-paperclip">&nbsp; Add-ones </a>
+                <a style="padding-bottom: 30px;padding-top:30px;font-size:xx-large;font-weight:bolder" class="fa fa-paperclip">&nbsp; Add-ons </a>
                 {% for item in sub_add %}
                     <div class="row2">
                         <div class="column" style="width:48%">
@@ -39,7 +39,7 @@
                             <a id="Pname" style="font-size:medium;">Qty: {{ item.total_qty }}</a>
                         </div>
                         <div class="column" style="width:24%;float:right">
-                            <a href="" id="Manage" style="color:green;font-size:medium;float:right">Manage</a>
+                            <a {% if item.ProductID__Code == 201 %} href="{% url 'galaxy:manage_org' %}" {% else %} href="#" {% endif %} id="Manage" style="color:green;font-size:medium;float:right">Manage</a>
                         </div>
                     </div>
                 {% endfor %}

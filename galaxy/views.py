@@ -5,7 +5,7 @@ from django.contrib import messages
 from .forms import *
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from .database_utils import create_user_database
+from .database_utils import create_user_database , delete_user_database
 from .database_configuration_utils import update_database_configuration
 from .database_connection import get_database_connection
 from.make_db_migrations import migrate_to_database
@@ -24,15 +24,20 @@ from django.utils.encoding import force_bytes , force_str
 from .tokens import account_activation_token
 from django.contrib.auth import get_user_model
 from django.db.models import Sum, Count
-
-
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+import secrets
+from urllib.parse import urlencode
 # Create your views here.
 
 def index(request):
     switch_to_user_database('Users')
-    user = request.user
-    current_date = datetime.now().date()
-    update_subscription_status(user, current_date)
+    try:
+        user = request.user
+        current_date = datetime.now().date()
+        update_subscription_status(user, current_date)
+    except:
+        pass
     # for total price in cart -----------------------------------------
     total = 0
     try:
@@ -156,6 +161,9 @@ def pricing(request):
     if cart:
         for item in cart:
             p_ids.append(item.ProductID.id)
+            
+    sub_basic = Subscription.objects.filter(Bundle_T='Basic' , Status=True)
+    cart_basic = Cart.objects.filter(Bundle_T='Basic')
         
     POS_M = Product.objects.get(id=6 , Type='Monthly')
     POS_A = Product.objects.get(id=2 , Type='Annually')
@@ -187,15 +195,38 @@ def pricing(request):
     crm_a = Product.objects.get(id=4)
     a_m = Product.objects.get(id=9)
     a_a = Product.objects.get(id=5)
-    
-    m_pos = Subscription.objects.filter( UserID=request.user , ProductID= p_m)
-    a_pos = Subscription.objects.filter( UserID=request.user , ProductID= p_a)
-    m_im = Subscription.objects.filter( UserID=request.user , ProductID= im_m)
-    a_im = Subscription.objects.filter( UserID=request.user , ProductID= im_a)
-    m_crm = Subscription.objects.filter( UserID=request.user , ProductID= crm_m)
-    a_crm = Subscription.objects.filter( UserID=request.user , ProductID= crm_a)
-    m_a = Subscription.objects.filter( UserID=request.user , ProductID= a_m)
-    a_a = Subscription.objects.filter( UserID=request.user , ProductID= a_a)
+    try:
+        m_pos = Subscription.objects.filter( UserID=request.user , ProductID= p_m)
+    except:
+        m_pos = None
+    try:    
+        a_pos = Subscription.objects.filter( UserID=request.user , ProductID= p_a)
+    except:
+        a_pos = None
+    try:    
+        m_im = Subscription.objects.filter( UserID=request.user , ProductID= im_m)
+    except:
+        m_im = None        
+    try:
+        a_im = Subscription.objects.filter( UserID=request.user , ProductID= im_a)
+    except:
+        a_im = None   
+    try:
+        m_crm = Subscription.objects.filter( UserID=request.user , ProductID= crm_m)
+    except:
+        m_crm = None   
+    try:
+        a_crm = Subscription.objects.filter( UserID=request.user , ProductID= crm_a)
+    except:
+        a_crm = None    
+    try:
+        m_a = Subscription.objects.filter( UserID=request.user , ProductID= a_m)
+    except:
+        m_a = None   
+    try:
+        a_a = Subscription.objects.filter( UserID=request.user , ProductID= a_a)
+    except:
+        a_a = None  
     
     context = {'page_name' : 'Pricing' ,
                'POS_M' : POS_M ,
@@ -232,6 +263,8 @@ def pricing(request):
                'a_crm' : a_crm,
                'm_a' : m_a,
                'a_a' : a_a,
+               'cart_basic' : cart_basic,
+               'sub_basic' : sub_basic,
                }
     return render(request , 'galaxy/pricing.html' , context)
 
@@ -281,17 +314,22 @@ def payment(request):
                     for i in range(item.Qty):
                         Subscription.objects.create( UserID = user, Status = True , ProductID= item.ProductID , AutoRenew = False , StartDate = current_date, EndDate = end_date_m , Type='Monthly' , Bundle_T='Basic')
                 
-                if item.Type == 'Monthly' and item.Bundle_T == 'Add-Ones':
+                if item.Type == 'Monthly' and item.Bundle_T == 'Add-Ons':
                     for i in range(item.Qty):
-                        Subscription.objects.create( UserID = user, Status = True , ProductID= item.ProductID , AutoRenew = False , StartDate = current_date, EndDate = end_date_m , Type='Monthly' , Bundle_T='Add-Ones')
+                        sub=Subscription.objects.create( UserID = user, Status = True , ProductID= item.ProductID , AutoRenew = False , StartDate = current_date, EndDate = end_date_m , Type='Monthly' , Bundle_T='Add-Ons')
+                        if item.ProductID.Code == 201:
+                            Organization.objects.create(UserID=user , SubscriptionID=sub , CreatedDate=current_date)
                 
                 if item.Type == 'Annually' and item.Bundle_T == 'Basic':
                     for i in range(item.Qty):
-                        Subscription.objects.create( UserID = user, Status = True , ProductID= item.ProductID , AutoRenew = False , StartDate = current_date, EndDate = end_date_m , Type='Annually' , Bundle_T='Basic')
+                        Subscription.objects.create( UserID = user, Status = True , ProductID= item.ProductID , AutoRenew = False , StartDate = current_date, EndDate = end_date_y , Type='Annually' , Bundle_T='Basic')
                 
-                if item.Type == 'Annually' and item.Bundle_T == 'Add-Ones':
+                if item.Type == 'Annually' and item.Bundle_T == 'Add-Ons':
                     for i in range(item.Qty):
-                        Subscription.objects.create( UserID = user, Status = True , ProductID= item.ProductID , AutoRenew = False , StartDate = current_date, EndDate = end_date_m , Type='Annually' , Bundle_T='Add-Ones')
+                        sub=Subscription.objects.create( UserID = user, Status = True , ProductID= item.ProductID , AutoRenew = False , StartDate = current_date, EndDate = end_date_y , Type='Annually' , Bundle_T='Add-Ons')
+                        if item.ProductID.Code == 201:
+                            Organization.objects.create(UserID=user , SubscriptionID=sub , CreatedDate=current_date)
+            
             # try:
             #     create_user_database(str(user.username)+'_'+str(user.id))
             # except:
@@ -544,10 +582,203 @@ def my_products(request):
     #----------------------------------------------------------------------------------
     
     sub_basic = Subscription.objects.filter(UserID=request.user ,  Bundle_T='Basic')
-    sub_add = Subscription.objects.filter(UserID=request.user, Bundle_T='Add-Ones').values('ProductID__Code', 'ProductID__Name').annotate(total_qty=Count('ProductID__Code'))
+    sub_add = Subscription.objects.filter(UserID=request.user, Bundle_T='Add-Ons').values('ProductID__Code', 'ProductID__Name').annotate(total_qty=Count('ProductID__Code'))
     
     context = {'sub_basic' : sub_basic,'sub_add' : sub_add ,'in_cart' : in_cart , 'cart' : cart , 'total' : total}
     return render(request , 'galaxy/my_products.html' , context)
 
         
+def manage_org(request):
+    switch_to_user_database('Users')
+    # for total price in cart -----------------------------------------
+    total = 0
+    try:
+        item_in_cart = Cart.objects.filter(UserID=request.user)
+    except:
+        item_in_cart = None
+    if item_in_cart: 
+        for item in item_in_cart:
+            total += item.ProductID.Price * item.Qty
+    # for number of object in cart -------------------------------------
+    in_cart = 0
+    
+    try:
+        cart = Cart.objects.filter(UserID=request.user)
+    except:
+        cart = None
+    if cart:
+        for p in cart:
+            in_cart += 1
+    p_ids = []
+    if cart:
+        for item in cart:
+            p_ids.append(item.ProductID.id)
+    
+    user = request.user
+    org_subs = Subscription.objects.filter(UserID=user , ProductID__Code = 201)
+    organisations = Organization.objects.filter(UserID = user)
+    current_date = datetime.now().date()
+    org = None
+    try:
+        choosed_org = request.GET.get('id')
+    except:
+        choosed_org = None
+    try:
+        org = Organization.objects.get(id=choosed_org)
+    except:
+        org = None
+    try:
+        sub_status = org.SubscriptionID.Status
+        sub_start = org.SubscriptionID.StartDate
+        sub_end = org.SubscriptionID.EndDate
+        sub_autorenew = org.SubscriptionID.AutoRenew
+    except:
+        sub_status = None 
+        sub_start = None  
+        sub_end = None  
+        sub_autorenew = None     
+    
+    
+    try:
+        sub_id = org.SubscriptionID.id
+    except:
+        sub_id = None
+    form = OrgForm(instance=org)
+    
+    try:
+        form2 = AutoRenew(instance=org.SubscriptionID)
+    except:
+        form2 = None
+    if request.method == 'POST':  
+            form_id = request.POST.get('form_id')
+            if 'save-btn' in request.POST:
+                form = OrgForm(request.POST , request.FILES , instance=org)
+                if form.is_valid():
+                    org=form.save()
+                    try:
+                        create_user_database('sub'+str(sub_id)+'_'+str(user.id))
+                    except:
+                        pass
+                    url = f'/my_products/organizations?id={choosed_org}'
+                    return redirect(url)
+            elif 'delete-btn' in request.POST:
+                code = secrets.token_hex(4)
+            # Send the email with the code
+                email=EmailMessage(
+                    'Delete Confirmation',
+                    f'Your delete confirmation code is: {code}',
+                    settings.EMAIL_HOST_USER,
+                    [request.user.email],
+                )
+                email.fail_silently = False
+                email.send()
+                # Store the code in the session
+                request.session['delete_code'] = code
+                
+                url = f'/my_products/organizations/delete_org?id={choosed_org}'
+                return redirect(url)
+            elif 'Auto-Renew' in request.POST:
+                
+                form2 = AutoRenew(request.POST , instance=org.SubscriptionID)
+                value = request.POST.get('Auto-Renew')
+                print(value)
+                if value == 'on':
+                    auto_value = "True"
+                else:
+                    print('ok')
+                    auto_value = "False"
+                   
+                org = Organization.objects.get(id = choosed_org)
+                subs = org.SubscriptionID
+                subs.AutoRenew = auto_value
+                subs.save()
+                form2 = AutoRenew(instance=subs)
+                
+                    
+                    
+                
 
+            # Redirect the user to the form page
+            
+            
+   
+    context = {'organisations' : organisations ,
+               'form' : form ,
+               'sub_status' : sub_status ,
+               'sub_start' : sub_start ,
+               'sub_end' : sub_end ,
+               'sub_autorenew' : sub_autorenew ,
+               'form2' : form2 ,
+               'choosed_org' : choosed_org ,
+               'org_subs' : org_subs ,
+               'in_cart' : in_cart,
+               'total' : total,
+               'org' : org
+               }
+    
+    
+    return render(request , 'galaxy/manage_org.html' , context)
+
+
+def delete_org(request):
+    error_message = None
+    if request.method == 'POST':
+        # Get the code entered by the user
+        user_code = request.POST.get('code')
+
+        # Get the code stored in the session
+        stored_code = request.session.get('delete_code')
+
+        if user_code == stored_code:
+            org_id = request.GET.get('id')
+            organisation = Organization.objects.get(id=org_id)
+            sub_id = organisation.SubscriptionID.id
+            organisation.OrganizationName = None
+            organisation.Com_Regm = None
+            organisation.Tax_Reg = None
+            organisation.Logo = None
+            organisation.Report_B = None
+            organisation.Report_H = None
+            organisation.Address = None
+            organisation.Country = None
+            organisation.Currency = None
+            organisation.Tax = None
+            organisation.Cost_Method = None
+            organisation.Create_Receive = False
+            organisation.Create_Issue = False
+            organisation.Terms = None
+            organisation.OrganizationEmail = None
+            organisation.WebsiteLink = None
+            organisation.WhatsappLink = None
+            organisation.FacebookLink = None
+            organisation.InstgramLink = None
+            organisation.save()
+            # Delete the stored code from the session
+            # del request.session['delete_code']
+            db_name = f'sub{sub_id}_{request.user.id}'
+            delete_user_database(db_name)
+            # Redirect the user to a success page
+            return redirect('galaxy:manage_org')
+        else:
+            error_message = 'Invalid code, please try again.'
+    
+    
+    context = {'error_message' : error_message}
+    return render(request , 'galaxy/org_delete.html' , context)
+
+
+
+
+
+
+
+
+
+# org_id = None
+    # if request.method == 'POST':
+    #     org_id = request.POST.get('org')
+        
+    
+
+# Retrieve the specific value based on the selected organization
+        #-- specific_value = get_specific_value(org_id)--  # Replace with your logic to retrieve the specific value

@@ -9,13 +9,17 @@ SUBTYPE = (
 )
 BUNTYPE = (
     ('Basic' , 'Basic'),
-    ('Add-Ones' , 'Add-Ones'),
+    ('Add-Ons' , 'Add-Ons'),
+)
+COSTMETH = (
+    ( 1 , 'Weighted average'),
+    ( 2 , 'In first - Out first'),
 )
 
 class User(AbstractUser):
     email = models.EmailField(unique = True)
-    avatar = models.ImageField(null = True , default = 'avatar.svg')
-    OrganizationID = models.ForeignKey( 'Organization' , on_delete=models.SET_NULL , null = True)
+    avatar = models.ImageField(upload_to='user_images/' , null = True , default = 'avatar.svg')
+    # OrganizationID = models.ForeignKey( 'Organization' , on_delete=models.SET_NULL , null = True)
     
     
     USERNAME_FIELD = 'email'
@@ -24,21 +28,39 @@ class User(AbstractUser):
 
 class Organization(models.Model):
     UserID = models.ForeignKey(User , on_delete=models.SET_NULL , null=True)
-    OrganizationName = models.CharField(max_length = 50 , null = True)
-    CreatedDate = models.DateField(verbose_name="Created Date")
+    SubscriptionID = models.ForeignKey('Subscription' , on_delete=models.SET_NULL , null=True)#, limit_choices_to={'ProductID': 17}
+    Com_Regm = models.FileField("Upload Commercial registration :",upload_to='file_uploads/' , null=True , blank=True)
+    Tax_Reg = models.FileField("Upload the Tax registration :",upload_to='file_uploads/' , null=True, blank=True)
+    Logo = models.ImageField("Upload the Logo :",upload_to='org_logos/', null = True, blank=True)
+    Report_B =models.ImageField("Upload Reports & Letters Bottom :",upload_to='reports_b/' ,null = True, blank=True)
+    Report_H =models.ImageField("Upload Reports & Letters Header :",upload_to='reports_h/' ,null = True, blank=True)
+    OrganizationName = models.CharField('Organization Name :',max_length = 50 , null = True)
+    OrganizationEmail = models.EmailField(unique = True , null = True, blank=True)
+    Address = models.CharField("Address :",max_length=100 , null=True, blank=True)
+    Country = models.ForeignKey('Country',verbose_name="Country :" , on_delete=models.SET_NULL , null=True, blank=True)
+    Currency = models.ForeignKey('Currency' ,verbose_name="Currency :" ,on_delete=models.SET_NULL , null=True, blank=True)
+    Tax = models.ForeignKey('Tax' ,verbose_name="Tax :" ,on_delete=models.SET_NULL , null=True, blank=True)
+    Cost_Method = models.IntegerField("Calculate item cost as :" ,choices=COSTMETH , null=True, blank=True)
+    Create_Receive = models.BooleanField("Automaticlly create inter-store receive inventory orders :")
+    Create_Issue = models.BooleanField("Automaticlly create inter-store issue inventory orders :")
+    Terms = models.TextField("Default Terms and Conditions :",null=True, blank=True) 
+    WebsiteLink = models.URLField(max_length=200 , null = True, blank=True)
+    WhatsappLink = models.URLField(max_length=200 , null = True, blank=True)
+    FacebookLink = models.URLField(max_length=200 , null = True, blank=True)
+    InstagramLink = models.URLField(max_length=200 , null = True, blank=True)
+    CreatedDate = models.DateField(verbose_name="Created Date" , null=True)
+    
     
     def __str__(self):
-        return self.OrganizationName
+        return str(self.OrganizationName)
     
-
-
 
 class Subscription(models.Model):
     
     UserID = models.ForeignKey(User , on_delete=models.SET_NULL , null=True)
-    Status = models.BooleanField()
-    StartDate = models.DateField(verbose_name="Start Date")
-    EndDate = models.DateField(verbose_name="End Date")
+    Status = models.BooleanField(null=True)
+    StartDate = models.DateField(verbose_name="Start Date",null=True)
+    EndDate = models.DateField(verbose_name="End Date",null=True)
     ProductID = models.ForeignKey('Product' , on_delete=models.SET_NULL , null=True)
     AutoRenew = models.BooleanField()
     Type = models.CharField(max_length=20 , choices=SUBTYPE , null=True)
@@ -80,7 +102,27 @@ class Cart(models.Model):
         return str(self.UserID)+'-'+str(self.ProductID)
     
     
-      
+class Country(models.Model):
+    name = models.CharField(max_length=50 , null=True)
+    
+    def __str__(self):
+        return self.name
+    
+    
+    
+class Currency(models.Model):
+    name = models.CharField(max_length=50 , null=True)
+
+    def __str__(self):
+        return self.name
+    
+    
+class Tax(models.Model):  
+    pass
+
+class UsersType(models.Model):
+    UserTypeCode = models.IntegerField(null = True)
+    UserTypeName = models.CharField(max_length=50 , null = True)
 
     
     

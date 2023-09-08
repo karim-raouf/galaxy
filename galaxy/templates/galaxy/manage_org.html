@@ -1,0 +1,322 @@
+{% extends 'galaxy/base.html' %}
+    {% load static %}
+    {% block header %}
+    <link type="text/css" rel="stylesheet" href="{% static 'css/products_managment.css' %}"/>
+    <script src="{% static 'js/products_managment.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {% endblock header %}
+    
+
+    {% block body %}
+    <div style="text-align: center;  vertical-align: middle;" class="orgrow">
+      <div >
+          <strong><span style="color:blue;" class="title" ><Strong>Organization Management</strong></span></strong>
+
+      </div>
+    </div>
+    <p></p>
+    <strong><span class="title" style="color:green;cursor:pointer" onclick="openNav()">&#9776; <Strong>Select Organization</strong></span></strong>
+    <p></p>
+      
+<div  id="myNav" class="overlay">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+
+  <div class="overlay-content">
+    {% for organisation in organisations %} 
+      <a href="{% url 'galaxy:manage_org' %}?id={{organisation.id}}"> {% if organisation.OrganizationName %}{{organisation.OrganizationName}}{% else %}Undefined Org{% endif %}</a>
+    {% endfor %} 
+    <a href="{% url 'galaxy:pricing' %}" style="font-size:xx-large;color:blue;" class="fa fa-cart-plus" ></a> 
+  </div>
+</div>
+
+<div id="orgSubscription" class="container">
+  
+  <div class="row" style="text-align: left;font-size:medium;font-weight:bold;">
+    <a id="Orgname" name="Orgname" style="font-size: large;font-weight: bold; color: blue;">{% if org.OrganizationName %}│{{org.OrganizationName}}│{% endif %}{% if org and not org.OrganizationName %}Undefined organization {% endif %}{% if not org %}Choose organization{% endif %}</a>
+  </div>
+  <div id="manage" class="orgrow" style="text-align: center;font-size:medium;font-weight:bold;">
+                <div class="col-15" style="border-bottom: solid;border-color: blue">
+                  <label for="Status">Subscription Status</label>
+                  <a id="Status" name="Status" style=" color:blue; ">{% if sub_status %}Active{% elif sub_status == 'False' %}Inactive<span style="color: black; padding-left: 10px;">│</span>{% endif %}</a>
+                </div>
+                
+                <div  class="col-15" style="border-bottom: solid;border-color: blue">
+                  <label for="StartD">│ Start Date</label>
+                  <a id="StartD" name="StartD" style=" color:blue;">{% if sub_start %}{{sub_start}}{% endif %}</a>
+                </div>
+                
+                <div class="col-15" style="border-bottom: solid;border-color: blue">
+                  <label for="EndD">│ End Date</label>
+                  <a id="EndD" name="EndD" style=" color:blue; ">{% if sub_end %}{{sub_end}}<span style="color: black; padding-left: 10px;">│</span>{% endif %}</a>
+                </div>
+                
+                <div  class="col-10" style="border-bottom: solid;border-color: blue;">
+                    <label for="AutoRenew">Auto Renew</label>
+                    <div  class="col-5" style="padding-left: 8px;">
+                      <form method="POST" id="myForm">
+                        {% csrf_token %}
+                        <div class="col-5">
+                          {% if org %}
+                            <input type="checkbox" id="autoRenewField" name="Auto-Renew" {% if form2.AutoRenew.value %} checked {% endif %} >{% comment %}  {% endcomment %}
+                          {% endif %}
+                        </div>
+                      </form>
+                    </div>
+                </div>
+                  
+                <div class="col-25" >
+                    <form method="POST">
+                      {% csrf_token %}
+                      <input type="hidden" name="form_id" value="{{choosed_org}}">
+                      {% if org.OrganizationName %}<button name="delete-btn" type="submit" style="width: 60%; float: right;" class="fa fa-remove btn"> Delete Organization</button>{% endif %}
+                    </form>
+                </div>
+
+                <div class="col-20" >
+                  {% if org %}<button id="orginfo" style="width: 60%; float: right;" class="fa fa-arrow-circle-o-down btn" onclick="orginfo()"> Organization Info</button> {% endif %}
+                </div>
+                
+  </div> 
+     
+  <form method = 'POST' action="" id="org-form" enctype="multipart/form-data">
+    {% csrf_token %}
+      
+    <div id="OrgInfo" class="subcontainer" >
+      <a id="Div1" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('Adress') ,arrowdirection(id)"> Name & Address </a>
+      <div id="Adress" class="smallcontainer">
+        <div class="orgrow">
+          <div class="col-15">
+            <label for="orgname" >Organization Name :</label>
+          </div>
+          <div class="col-35">
+            {{form.OrganizationName}}
+          </div>
+        </div>
+        <div class="orgrow">
+          <div class="col-15">
+            <label for="Address">Address :</label>
+          </div>
+          <div class="col-65">
+            {{form.Address}}
+          </div>
+        </div>
+        <div class="orgrow">
+          <div class="col-15">
+            <label for="country">Country :</label>
+          </div>
+          <div class="col-35">
+            {{form.Country}}
+          </div>
+        </div>
+        <div class="orgrow">
+          <div class="col-15">
+            <label for="OrgEmail">Organization E-mail :</label>
+          </div>
+          <div class="col-35">
+            {{form.OrganizationEmail}}
+          </div>
+        </div>
+      </div>
+      <p></p>
+      <a id="Div2" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('uploads'), arrowdirection(id)"> Uploads </a>
+      <div id="uploads" class="smallcontainer">
+              
+        <div class="row">
+                    <div class="col-35">
+                      <label for="comreg" >Upload Commercial registration :</label>
+                    </div>
+                    
+                    <div  class="col-45">
+                      
+                      {{form.Com_Regm}}
+                    </div>
+
+        </div>
+        <div class="row">
+                    <div class="col-35">
+                      <label for="taxreg" >Upload the Tax registration :</label>
+                    </div>
+                    <div  class="col-45">
+                      
+                      {{form.Tax_Reg}}
+                    </div>
+
+        </div>
+        <div class="row">
+                    <div class="col-35">
+                      <label for="logo" >Upload the Logo :</label>
+                    </div>
+                    <div  class="col-45">
+                      
+                      {{form.Logo}}
+                    </div>
+
+        </div>
+        <div class="row">
+          <div class="col-35">
+            <label for="repheader" >Upload Reports & Letters Header :</label>
+          </div>
+          <div  class="col-45">
+            
+            {{form.Report_H}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-35">
+            <label for="repbuttom" >Upload Reports & Letters Bottom :</label>
+          </div>
+          <div  class="col-45">
+            
+            {{form.Report_B}}
+          </div>
+
+        </div>
+  
+      </div>
+      <p></p>
+      <a id="Div3" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('options'), arrowdirection(id)"> Options </a>
+      <div id="options" class="smallcontainer">
+      <div class="row">
+        <div class="col-35">
+          <label for="Currency">Currency :</label>
+        </div>
+        <div class="col-10">
+          {{form.Currency}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-35">
+          <label for="tax">Tax :</label>
+        </div>
+        <div class="col-10">
+          {{form.Tax}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-35">
+          <label for="costcaculate">Calculate item cost as :</label>
+        </div>
+        <div class="col-15">
+          {{form.Cost_Method}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-35">
+          <label for="autoreceive">Automaticlly create inter-store receive inventory orders :</label>
+        </div>
+        <div class="col-5">
+          <p></p>
+          {{form.Create_Receive}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-35">
+          <label for="autoissue">Automaticlly create inter-store issue inventory orders :</label>
+        </div>
+        <div class="col-5">
+          <p></p>
+          {{form.Create_Issue}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-35">
+          <label for="Terms">Default Terms and Conditions :</label>
+        </div>
+        <div class="col-65">
+          <p></p>
+          {{form.Terms}}
+        </div>
+      </div>
+      </div> 
+      <p></p>
+      <a id="Div4" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('links') ,arrowdirection(id)"> Links </a>
+      <div id="links" class="smallcontainer">
+        <div class="orgrow">
+          <div class="col-15">
+            <label for="Website" class="fa fa-link"> Website :</label>
+          </div>
+          <div class="col-35">
+            {{form.WebsiteLink}}
+          </div>
+        </div>
+        <div class="orgrow">
+          <div class="col-15">
+            <label for="WhatsApp" class="fa fa-whatsapp"> WhatsApp :</label>
+          </div>
+          <div class="col-35">
+            {{form.WhatsappLink}}
+          </div>
+        </div>
+        <div class="orgrow">
+          <div class="col-15">
+              <label for="Facebook" class="fa fa-facebook-square"> Facebook :</label>
+          </div>
+          <div class="col-35">
+            {{form.FacebookLink}}
+          </div>
+        </div>
+        <div class="orgrow">
+          <div class="col-15">
+            <label for="Instagram" class="fa fa-instagram"> Instagram :</label>
+          </div>
+          <div class="col-35">
+            {{form.InstagramLink}}
+          </div>
+        </div>
+      </div>
+      <p></p> 
+      <div class="orgrow">
+        <button class="btn" style="float: right" id="cancel-btn" type="button">Cancel</button>
+     
+        <button class="btn" style="float: right; margin-right: 10px;" name="save-btn" type="submit" value="Save">save</button>
+      </div>
+    </div> 
+  </form>
+</div>
+
+   
+
+   
+   
+   {% endblock body %}
+   {% block additional %}
+<script>
+   $(document).ready(function() {
+    $('#autoRenewField').on('change', function() {
+      // Submit the form
+      $('#myForm').submit();
+    });
+  });
+</script>
+<script>
+  document. addEventListener('mouseup', function(e) {
+    var container = document. getElementById('myNav');
+    if (! container. contains(e. target)) {
+    container. style.width = "0%";
+    
+    }
+    });
+</script>
+   {% endblock additional %}
+
+
+   {% comment %} <div id="OrgInfo" class="subcontainer" >
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="orgrow">
+          <div class="col-35">
+            {{ field.label_tag }}
+          </div>
+            {% if field.field.choices %}
+              <div class="col-11">
+                {{ field }}
+              </div>
+            {% else %}
+              <div class="col-45">
+                {{ field }}
+              </div>
+            {% endif %}
+          
+        </div>
+        <br>
+        {% endfor %} {% endcomment %}

@@ -11,7 +11,10 @@ urlpatterns = [
     path('about_us/', views.about_us , name = 'about_us'),
     path('contact_us/', views.contact_us , name = 'contact_us'),
     path('my_products/', views.my_products , name = 'my_products'),
-    
+    path('my_products/organizations', views.manage_org , name = 'manage_org'),
+    path('my_products/organizations/delete_org', views.delete_org , name = 'delete_org'),
+
+   
     
     path('login/', views.login_page , name = 'login'),
     path('register/', views.signup_page , name = 'signup'),

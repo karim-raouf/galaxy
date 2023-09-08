@@ -160,9 +160,9 @@ STATICFILES_DIRS = [
     # "/var/www/static/",
 ]
 
-MEDIA_URL = '/user_images/'
+MEDIA_URL = '/files_images/'
 
-MEDIA_ROOT = BASE_DIR + '/static/images/user_images/'
+MEDIA_ROOT = BASE_DIR + '/static/files_images'
 
 
 
