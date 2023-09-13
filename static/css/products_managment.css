@@ -1,7 +1,49 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/css.css to edit this template
+*/
+/* 
+    Created on : Sep 9, 2023, 3:20:36 PM
+    Author     : rao_m
+*/
+
 body {
   font-family: 'Lato', sans-serif;
 }
 
+.cart1 {
+  height: 100%;
+  width: 0;
+  position: absolute;
+  z-index: 1;
+  top: 58px;
+  right: 0;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  background-color:  #e9ecef;
+  overflow-x: hidden;
+  transition: 0.5s ;
+}
+
+.cart1 a {
+  padding: 8px;
+  text-decoration: none;
+  font-size: xx-large;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.cart1 a:hover, .cart1 a:focus {
+  color: blue;
+  font-weight: bold;
+}
+
+.cart1 .closebtn {
+  position: absolute;
+  font-size: 60px;
+  right: 45px;
+  
+}
 .overlay {
   height: 100%;
   width: 0;
@@ -10,9 +52,9 @@ body {
   top: 58px;
   left: 0;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  background-color: #e9ecef;
+  background-color:  #e9ecef;
   overflow-x: hidden;
-  transition: 0.5s;
+  transition: 0.5s ;
 }
 
 .overlay-content {
@@ -21,7 +63,7 @@ body {
   text-align: center;
   margin-top: 30px;
   top: 10%;
-  color: black;
+  color:black
   
 }
 
@@ -29,7 +71,7 @@ body {
   padding: 8px;
   text-decoration: none;
   font-size: xx-large;
-  color: black;
+  color: #818181;
   display: block;
   transition: 0.3s;
 }
@@ -46,15 +88,6 @@ body {
   
 }
 
-/* @media screen and (max-height: 450px) {
-  .overlay a {font-size: 20px}
-  .overlay .closebtn {
-  font-size: small;
-  top: 15px;
-  right: 35px;
-  }
-} */
-
 input[type=text], select, textarea {
   width: 95%;
   padding: 12px;
@@ -62,6 +95,44 @@ input[type=text], select, textarea {
   border-radius: 4px;
   resize: vertical;
 }
+
+input[type=date] {
+  width: 50%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+input[type=tel] {
+  width: 50%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+input[type=email]{
+  width: 95%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+input[type=password] {
+    width: 50%;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    background-image: url('imgs/password.png');
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+}
+
 
 label {
   padding: 12px 12px 12px 0;
@@ -92,14 +163,6 @@ input[type=submit]:hover {
   background-color: #45a049;
 }
 
-input[type=email]{
-  width: 95%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  resize: vertical;
-}
-
 .container {
   border-radius: 5px;
   background-color:lightsteelblue;
@@ -107,15 +170,15 @@ input[type=email]{
 }
 
 .subcontainer {
-  border-radius: 5px;
   display: none;
+  border-radius: 5px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   background-color: lightgray;
   padding: 20px;
 }
 
 .smallcontainer {
-  display: none;
+display: none;
 border-radius: 10px;
 box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.6);
 background-color: whitesmoke;
@@ -151,6 +214,13 @@ width: auto;
   color: black;
 }
 
+.col-24 {
+  float: left;
+  width: 24%;
+  margin-top: 6px;
+  color: black;
+}
+
 .col-25 {
   float: left;
   width: 25%;
@@ -169,6 +239,13 @@ width: auto;
 .col-45 {
   float: left;
   width: 45%;
+  margin-top: 6px;
+  color: black;
+  font-size: 15px;
+}
+.col-40 {
+  float: left;
+  width: 40%;
   margin-top: 6px;
   color: black;
   font-size: 15px;
@@ -211,52 +288,89 @@ width: auto;
   display: table;
   clear: both;
 }
+
+.pagetitle {
+    text-align: center;  
+    vertical-align: middle;
+    font-size:xx-large;
+    font-weight:bolder;
+    color:blue;
+}
 .title {
-  font-size:xx-large;
-  font-weight:bolder;
+    font-size:xx-large;
+    font-weight:bolder;
 }
 
 .btn {
-background-color: green;
-color: white;
-padding: 5px;
-margin: 10px 0;
-border-style: solid;
-border-color:  black;
-border-radius: 20%;
-width: 20%;
-border-radius: 3px;
-cursor: pointer;
-font-size: 17px;
-padding-left: 10px;
+  background-color: green;
+  color: white;
+  padding: 5px;
+  margin: 10px 0;
+  border-style: solid;
+  border-color:  black;
+  border-radius: 20%;
+  width: 20%;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 17px;
+  padding-left: 10px;
 }
 
 .btn:hover {
-background-color: white;
-color : green;
+  background-color: white;
+  color : green;
 }
+
+.btn1 {
+  background-color: green;
+  color: white;
+  border-radius: 20%;
+  width: 20%;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 13px;
+  text-align: center;
+  padding : 5px
+}
+
+.btn1:hover {
+  background-color: white;
+  color : green;
+}
+.useravatar {
+  vertical-align: middle;
+  border-radius: 10%;
+}
+
+.password-container{position: relative;}
+#pswMessage,#pswMatchMsg {display:none;background: inherit;color: #000;position: relative;}
+#pswMessage p,#pswMatchMsg p {font-size: 12px;color:red;font-weight: bold;font-style: italic}
+
+
+
 
 
 /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
 @media screen and (max-width: 600px) {
-.col-100,.col-65,.col-20,.col-35,.col-25, .col-75,.col-15,.col-10,.col-5,.col-60,.col-11,.col-45 input[type=submit] 
-{
-  width: 100%;
-  margin-top: 0;
-}
-.overlay-content a {font-size: large}
-.orgrow a {font-size: medium}
-.overlay 
-{
-font-size: small;
-top: 55px;
-right: 35px;
-}
-.title {
-  font-size:x-large;
-  font-weight:bolder;
-}
+  .col-100,.col-65,.col-20,.col-35,.col-25, .col-75,.col-15,.col-10,.col-5,.col-60,.col-11,.col-45,.col-40 input[type=submit] 
+  {
+    width: 100%;
+    margin-top: 0;
+  }
+  .overlay-content a {font-size: large}
+  .orgrow a {font-size: medium}
+  .overlay 
+  {
+  font-size: small;
+  top: 55px;
+  right: 35px;
+  }
+  .title .pagetitle{
+    font-size:large;
+    font-weight:bolder;
 
+     
+}
 label {
 
   color :green;
@@ -265,6 +379,10 @@ label {
 input[type=text], select, textarea {
   font-size: small;
 }
-.orgrow a {font-size:small}
 
+input[type=password]{
+  font-size: small;
+  width: 100%;
+}
+.orgrow a {font-size:small}
 }

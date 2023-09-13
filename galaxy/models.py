@@ -15,15 +15,30 @@ COSTMETH = (
     ( 1 , 'Weighted average'),
     ( 2 , 'In first - Out first'),
 )
+GENDER = (
+    ( 1 , 'Male'),
+    ( 2 , 'Female'),
+)
+
+
 
 class User(AbstractUser):
-    email = models.EmailField(unique = True)
+    email = models.EmailField(unique = True , null = True , blank=True) 
     avatar = models.ImageField(upload_to='user_images/' , null = True , default = 'avatar.svg')
-    # OrganizationID = models.ForeignKey( 'Organization' , on_delete=models.SET_NULL , null = True)
+    user_Type = models.ForeignKey('UsersType' , on_delete=models.SET_NULL , null=True , blank=True)
+    SubscriptionID = models.ForeignKey('Subscription' , on_delete=models.SET_NULL , null=True , blank=True)
+    Language = models.ForeignKey('Language' , on_delete=models.SET_NULL , null=True , blank=True)
+    Birth_Date = models.DateField(verbose_name="Birth Date" , null=True , blank=True)
+    Gender = models.IntegerField(choices=GENDER , null=True, blank=True)
+    Telephone = models.CharField(max_length=100 , unique=True , null=True , blank=True)
     
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+    
+    def __str__(self):
+        return str(self.email)+'-'+str(self.id)
+    
     
 
 class Organization(models.Model):
@@ -41,8 +56,8 @@ class Organization(models.Model):
     Currency = models.ForeignKey('Currency' ,verbose_name="Currency :" ,on_delete=models.SET_NULL , null=True, blank=True)
     Tax = models.ForeignKey('Tax' ,verbose_name="Tax :" ,on_delete=models.SET_NULL , null=True, blank=True)
     Cost_Method = models.IntegerField("Calculate item cost as :" ,choices=COSTMETH , null=True, blank=True)
-    Create_Receive = models.BooleanField("Automaticlly create inter-store receive inventory orders :")
-    Create_Issue = models.BooleanField("Automaticlly create inter-store issue inventory orders :")
+    Create_Receive = models.BooleanField("Automaticlly create inter-store receive inventory orders :" , default=False)
+    Create_Issue = models.BooleanField("Automaticlly create inter-store issue inventory orders :", default=False)
     Terms = models.TextField("Default Terms and Conditions :",null=True, blank=True) 
     WebsiteLink = models.URLField(max_length=200 , null = True, blank=True)
     WhatsappLink = models.URLField(max_length=200 , null = True, blank=True)
@@ -52,7 +67,7 @@ class Organization(models.Model):
     
     
     def __str__(self):
-        return str(self.OrganizationName)
+        return str(self.UserID)+'-'+str(self.OrganizationName)
     
 
 class Subscription(models.Model):
@@ -67,7 +82,7 @@ class Subscription(models.Model):
     Bundle_T = models.CharField(max_length=20 , choices=BUNTYPE , null=True)
     
     def __str__(self):
-        return str(self.ProductID)+'-'+str(self.UserID)
+        return str(self.ProductID)+'-'+str(self.UserID)+'_'+str(self.id)
     
     
 
@@ -123,14 +138,15 @@ class Tax(models.Model):
 class UsersType(models.Model):
     UserTypeCode = models.IntegerField(null = True)
     UserTypeName = models.CharField(max_length=50 , null = True)
-
+    
+    def __str__(self):
+        return self.UserTypeName
     
     
-
-
-
-
+class Language(models.Model):
+    language = models.CharField(max_length=50 , unique=True)
     
-
+    def __str__(self):
+        return self.language
     
-
+    

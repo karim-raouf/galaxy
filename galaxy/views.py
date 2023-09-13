@@ -32,6 +32,9 @@ from urllib.parse import urlencode
 
 def index(request):
     switch_to_user_database('Users')
+    s_a = UsersType.objects.get(UserTypeCode='1')
+    s_u = UsersType.objects.get(UserTypeCode='2')
+    w_u = UsersType.objects.get(UserTypeCode='3')
     try:
         user = request.user
         current_date = datetime.now().date()
@@ -73,7 +76,23 @@ def index(request):
         
     except:
         subed  = False
-    context = {'user' : user , 'subed' : subed , 'org' : org , 'org_num' : org_num , 'cart' : cart , 'in_cart' : in_cart , 'total' : total}
+
+    cart_basic = Cart.objects.filter(Bundle_T='Basic')
+    try:
+        userform = ProfileForm(instance=request.user)
+    except:
+        userform = None
+    if request.method == 'POST':
+        if 'save-profile' in request.POST:
+            userform = ProfileForm(request.POST , request.FILES , instance=request.user)
+            if userform.is_valid:
+                userform.save()
+
+                
+            
+            
+    
+    context = {'user' : user , 'subed' : subed , 'org' : org , 'org_num' : org_num , 'cart' : cart , 'in_cart' : in_cart , 'total' : total , 'cart_basic' : cart_basic , 'userform' : userform , 's_a' : s_a}
     return render(request , 'galaxy/index.html' , context)
 #update user--------------------------------------------------------------------------------------------------------------------------------------
 def update_subscription_status(user, current_date):
@@ -82,6 +101,9 @@ def update_subscription_status(user, current_date):
 
 def about_us(request):
     switch_to_user_database('Users')
+    s_a = UsersType.objects.get(UserTypeCode='1')
+    s_u = UsersType.objects.get(UserTypeCode='2')
+    w_u = UsersType.objects.get(UserTypeCode='3')
     # for total price in cart -----------------------------------------
     total = 0
     try:
@@ -110,7 +132,20 @@ def about_us(request):
         
     except:
         subed  = False
-    context = {'page_name' : 'About-us' , 'subed' : subed , 'org' : org , 'in_cart' : in_cart , 'cart' : cart , 'total' : total}
+    #------------- for buttton disable if no cart basic in cart or subscription----------------------------   
+    cart_basic = Cart.objects.filter(Bundle_T='Basic')    
+    #------- for user profile form-------------------
+    try:
+        userform = ProfileForm(instance=request.user)
+    except:
+        userform = None
+    if request.method == 'POST':
+        if 'save-profile' in request.POST:
+            userform = ProfileForm(request.POST , request.FILES , instance=request.user)
+            if userform.is_valid:
+                userform.save()
+    #-----------------------------------------------------------
+    context = {'page_name' : 'About-us' , 'subed' : subed , 'org' : org , 'in_cart' : in_cart , 'cart' : cart , 'total' : total , 'cart_basic' : cart_basic , 'userform' : userform , 's_a' : s_a}
     return render(request , 'galaxy/about.html' , context)
 
 def get_user_organizations(user_id):
@@ -137,6 +172,9 @@ def choose_org(request):
 
 
 def pricing(request):    
+    s_a = UsersType.objects.get(UserTypeCode='1')
+    s_u = UsersType.objects.get(UserTypeCode='2')
+    w_u = UsersType.objects.get(UserTypeCode='3')
     switch_to_user_database('Users')
     # for total price in cart -----------------------------------------
     total = 0
@@ -164,6 +202,19 @@ def pricing(request):
             
     sub_basic = Subscription.objects.filter(Bundle_T='Basic' , Status=True)
     cart_basic = Cart.objects.filter(Bundle_T='Basic')
+    
+    #------- for user profile form-------------------
+    try:
+        userform = ProfileForm(instance=request.user)
+    except:
+        userform = None
+    if request.method == 'POST':
+        if 'save-profile' in request.POST:
+            userform = ProfileForm(request.POST , request.FILES , instance=request.user)
+            if userform.is_valid:
+                userform.save()
+    #-----------------------------------------------------------
+        
         
     POS_M = Product.objects.get(id=6 , Type='Monthly')
     POS_A = Product.objects.get(id=2 , Type='Annually')
@@ -265,6 +316,8 @@ def pricing(request):
                'a_a' : a_a,
                'cart_basic' : cart_basic,
                'sub_basic' : sub_basic,
+               'userform' : userform ,
+               's_a' : s_a ,
                }
     return render(request , 'galaxy/pricing.html' , context)
 
@@ -290,7 +343,9 @@ def delete_cart(request , id):
     else:
         obj.delete()
     
-    return redirect('galaxy:pricing')
+    referring_url = request.META.get('HTTP_REFERER')
+    redirect_url = f"{referring_url}?auto_button=true"
+    return redirect(redirect_url)
 
 def cart_total(request):
     total = 0
@@ -306,6 +361,7 @@ def payment(request):
     end_date_m = current_date + timedelta(days=30)
     end_date_y = current_date + timedelta(days=365)
     # org_id = user.OrganizationID
+    
     cart_items = Cart.objects.filter(UserID=user)
     if request.method == 'POST':
         if 'payment_btn' in request.POST:                                                            # if not create one
@@ -319,7 +375,9 @@ def payment(request):
                         sub=Subscription.objects.create( UserID = user, Status = True , ProductID= item.ProductID , AutoRenew = False , StartDate = current_date, EndDate = end_date_m , Type='Monthly' , Bundle_T='Add-Ons')
                         if item.ProductID.Code == 201:
                             Organization.objects.create(UserID=user , SubscriptionID=sub , CreatedDate=current_date)
-                
+                            create_user_database('sub'+str(sub.id)+'_'+str(user.id))
+                        if item.ProductID.Code == 203:
+                            User.objects.create(SubscriptionID = sub , date_joined=current_date)
                 if item.Type == 'Annually' and item.Bundle_T == 'Basic':
                     for i in range(item.Qty):
                         Subscription.objects.create( UserID = user, Status = True , ProductID= item.ProductID , AutoRenew = False , StartDate = current_date, EndDate = end_date_y , Type='Annually' , Bundle_T='Basic')
@@ -329,7 +387,10 @@ def payment(request):
                         sub=Subscription.objects.create( UserID = user, Status = True , ProductID= item.ProductID , AutoRenew = False , StartDate = current_date, EndDate = end_date_y , Type='Annually' , Bundle_T='Add-Ons')
                         if item.ProductID.Code == 201:
                             Organization.objects.create(UserID=user , SubscriptionID=sub , CreatedDate=current_date)
-            
+                            create_user_database('sub'+str(sub.id)+'_'+str(user.id))
+                        if item.ProductID.Code == 203:
+                            User.objects.create(SubscriptionID = sub , date_joined=current_date)
+                            
             # try:
             #     create_user_database(str(user.username)+'_'+str(user.id))
             # except:
@@ -371,6 +432,9 @@ def update_success(request):
 
 def contact_us(request):
     switch_to_user_database('Users')
+    s_a = UsersType.objects.get(UserTypeCode='1')
+    s_u = UsersType.objects.get(UserTypeCode='2')
+    w_u = UsersType.objects.get(UserTypeCode='3')
     # for total price in cart -----------------------------------------
     total = 0
     try:
@@ -398,36 +462,49 @@ def contact_us(request):
         
     except:
         subed  = False
-    context = {'page_name' : 'Contact-us' , 'subed' : subed , 'org' : org , 'in_cart' : in_cart , 'cart' : cart , 'total' : total}
+        
+    #------- for user profile form-------------------
+    try:
+        userform = ProfileForm(instance=request.user)
+    except:
+        userform = None
+    if request.method == 'POST':
+        if 'save-profile' in request.POST:
+            userform = ProfileForm(request.POST , request.FILES , instance=request.user)
+            if userform.is_valid:
+                userform.save()
+    #-----------------------------------------------------------
+    
+    context = {'page_name' : 'Contact-us' , 'subed' : subed , 'org' : org , 'in_cart' : in_cart , 'cart' : cart , 'total' : total , 'userform' : userform , 's_a' : s_a}
     return render(request , 'galaxy/contact.html' , context)
 
 
-def profile(request):
-    user = User.objects.get(id = request.user.id)
-    if request.method == 'POST':
-        return redirect('galaxy:profile_edit')
+# def profile(request):
+#     user = request.user
+#     userform = ProfileForm(instance=user)
     
-    context = {'user' : user}
-    return render(request , 'galaxy/profile.html' , context)
+        
+#     context = {'userform' : userform}
+#     return render(request , 'galaxy/profile.html' , context)
 
 
-def profile_edit(request):
-    user = request.user
-    form = ProfileForm(instance=user)
-    if request.method =='POST':
-        form = ProfileForm(request.POST , request.FILES , instance=user)
-        if request.POST.get('first_name').isnumeric() or request.POST.get('last_name').isnumeric():
-            messages.error(request, 'First/Last Name Can’t Be Entirely Numeric')
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-        if not request.POST.get('first_name') or not request.POST.get('last_name'):
-            messages.error(request, 'Do Not Leave First/Last Name Blank')
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-        else:
-            if form.is_valid():
-                form.save()
-                return redirect('galaxy:profile')
-    context = {'form' : form}
-    return render(request , 'galaxy/profile_edit.html' , context)
+# def profile_edit(request):
+#     user = request.user
+#     form = ProfileForm(instance=user)
+#     if request.method =='POST':
+#         form = ProfileForm(request.POST , request.FILES , instance=user)
+#         if request.POST.get('first_name').isnumeric() or request.POST.get('last_name').isnumeric():
+#             messages.error(request, 'First/Last Name Can’t Be Entirely Numeric')
+#             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+#         if not request.POST.get('first_name') or not request.POST.get('last_name'):
+#             messages.error(request, 'Do Not Leave First/Last Name Blank')
+#             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+#         else:
+#             if form.is_valid():
+#                 form.save()
+#                 return redirect('galaxy:profile')
+#     context = {'form' : form}
+#     return render(request , 'galaxy/profile_edit.html' , context)
 
 #--------------------------------------------------------------------------------
 
@@ -502,12 +579,15 @@ def signup_page(request):
         username = request.POST.get('user_n')
         organization = request.POST.get('org_n')
         current_date = datetime.now().date()
+        s_a = UsersType.objects.get(UserTypeCode='1')
+        s_u = UsersType.objects.get(UserTypeCode='2')
+        w_u = UsersType.objects.get(UserTypeCode='3')
         try:
             user = User.objects.get(email=email)
             errors.append('Email already associated with another account!')
         except:
             
-            user = User.objects.create(email=email, username=username)
+            user = User.objects.create(email=email, username=username , user_Type = s_a)
             user.set_password(password)
             user.save()
             user.is_active = False
@@ -561,6 +641,9 @@ def activation_done(request):
 
 
 def my_products(request):
+    s_a = UsersType.objects.get(UserTypeCode='1')
+    s_u = UsersType.objects.get(UserTypeCode='2')
+    w_u = UsersType.objects.get(UserTypeCode='3')
     # for total price in cart -----------------------------------------
     total = 0
     try:
@@ -579,17 +662,32 @@ def my_products(request):
     if cart:
         for p in cart:
             in_cart += 1
-    #----------------------------------------------------------------------------------
+    #------- for user profile form-------------------
+    try:
+        userform = ProfileForm(instance=request.user)
+    except:
+        userform = None
+    if request.method == 'POST':
+        if 'save-profile' in request.POST:
+            userform = ProfileForm(request.POST , request.FILES , instance=request.user)
+            if userform.is_valid:
+                userform.save()
+    #-----------------------------------------------------------
     
     sub_basic = Subscription.objects.filter(UserID=request.user ,  Bundle_T='Basic')
     sub_add = Subscription.objects.filter(UserID=request.user, Bundle_T='Add-Ons').values('ProductID__Code', 'ProductID__Name').annotate(total_qty=Count('ProductID__Code'))
+    userform = ProfileForm(instance=request.user)
     
-    context = {'sub_basic' : sub_basic,'sub_add' : sub_add ,'in_cart' : in_cart , 'cart' : cart , 'total' : total}
+    
+    context = {'sub_basic' : sub_basic,'sub_add' : sub_add ,'in_cart' : in_cart , 'cart' : cart , 'total' : total , 'userform' : userform , 's_a' : s_a}
     return render(request , 'galaxy/my_products.html' , context)
 
         
 def manage_org(request):
     switch_to_user_database('Users')
+    s_a = UsersType.objects.get(UserTypeCode='1')
+    s_u = UsersType.objects.get(UserTypeCode='2')
+    w_u = UsersType.objects.get(UserTypeCode='3')
     # for total price in cart -----------------------------------------
     total = 0
     try:
@@ -637,8 +735,10 @@ def manage_org(request):
         sub_start = None  
         sub_end = None  
         sub_autorenew = None     
-    
-    
+    try:
+        userform = ProfileForm(instance=request.user)
+    except:
+        userform = None
     try:
         sub_id = org.SubscriptionID.id
     except:
@@ -650,15 +750,11 @@ def manage_org(request):
     except:
         form2 = None
     if request.method == 'POST':  
-            form_id = request.POST.get('form_id')
             if 'save-btn' in request.POST:
                 form = OrgForm(request.POST , request.FILES , instance=org)
                 if form.is_valid():
                     org=form.save()
-                    try:
-                        create_user_database('sub'+str(sub_id)+'_'+str(user.id))
-                    except:
-                        pass
+                    
                     url = f'/my_products/organizations?id={choosed_org}'
                     return redirect(url)
             elif 'delete-btn' in request.POST:
@@ -693,14 +789,19 @@ def manage_org(request):
                 subs.AutoRenew = auto_value
                 subs.save()
                 form2 = AutoRenew(instance=subs)
-                
+            elif 'save-profile' in request.POST:
+                userform = ProfileForm(request.POST , request.FILES , instance=request.user)
+                if userform.is_valid:
+                    userform.save()    
                     
-                    
-                
+
+    
+ 
+ 
 
             # Redirect the user to the form page
             
-            
+    userform = ProfileForm(instance=request.user)       
    
     context = {'organisations' : organisations ,
                'form' : form ,
@@ -713,7 +814,10 @@ def manage_org(request):
                'org_subs' : org_subs ,
                'in_cart' : in_cart,
                'total' : total,
-               'org' : org
+               'org' : org ,
+               'userform' : userform ,
+               'cart' : cart , 
+               's_a' : s_a
                }
     
     
@@ -767,6 +871,103 @@ def delete_org(request):
     return render(request , 'galaxy/org_delete.html' , context)
 
 
+
+def manage_user(request):
+    switch_to_user_database('Users')
+    s_a = UsersType.objects.get(UserTypeCode='1')
+    s_u = UsersType.objects.get(UserTypeCode='2')
+    w_u = UsersType.objects.get(UserTypeCode='3')
+    # for total price in cart -----------------------------------------
+    total = 0
+    try:
+        item_in_cart = Cart.objects.filter(UserID=request.user)
+    except:
+        item_in_cart = None
+    if item_in_cart: 
+        for item in item_in_cart:
+            total += item.ProductID.Price * item.Qty
+    # for number of object in cart -------------------------------------
+    in_cart = 0
+    
+    try:
+        cart = Cart.objects.filter(UserID=request.user)
+    except:
+        cart = None
+    if cart:
+        for p in cart:
+            in_cart += 1
+    p_ids = []
+    if cart:
+        for item in cart:
+            p_ids.append(item.ProductID.id)
+    
+    user = request.user
+    user_subs = Subscription.objects.filter(UserID=user , ProductID__Code = 203)
+    users = User.objects.filter(SubscriptionID__UserID = user)
+    current_date = datetime.now().date()
+    the_user = None
+    try:
+        choosed_user = request.GET.get('id')
+    except:
+        choosed_user = None
+    try:
+        the_user = User.objects.get(id=choosed_user)
+    except:
+        the_user = None
+    try:
+        sub_status = the_user.SubscriptionID.Status
+        sub_start = the_user.SubscriptionID.StartDate
+        sub_end = the_user.SubscriptionID.EndDate
+        sub_autorenew = the_user.SubscriptionID.AutoRenew
+    except:
+        sub_status = None 
+        sub_start = None  
+        sub_end = None  
+        sub_autorenew = None     
+    try:
+        userform = ProfileForm(instance=request.user)
+    except:
+        userform = None
+    try:
+        sub_id = the_user.SubscriptionID.id
+    except:
+        sub_id = None
+    try:
+        form = SystemUserForm(instance=the_user)
+    except:
+        form = None
+         
+    try:
+        form2 = AutoRenew(instance=the_user.SubscriptionID)
+    except:
+        form2 = None
+    if request.method == 'POST':
+        if 'user-save-btn' in request.POST:
+            form = SystemUserForm(request.POST, request.FILES, instance=the_user)
+            password = request.POST.get('psw')
+            if form.is_valid():
+                the_user = form.save()
+    
+                url = f'/my_products/users?id={choosed_user}'
+                return redirect(url)
+               
+    context = {'users' : users ,
+               'form' : form ,
+               'sub_status' : sub_status ,
+               'sub_start' : sub_start ,
+               'sub_end' : sub_end ,
+               'sub_autorenew' : sub_autorenew ,
+               'form2' : form2 ,
+               'choosed_user' : choosed_user ,
+               'user_subs' : user_subs ,
+               'in_cart' : in_cart,
+               'total' : total,
+               'the_user' : the_user ,
+               'userform' : userform ,
+               'cart' : cart ,
+               's_a' : s_a 
+               }
+    return render(request , 'galaxy/manage_user.html' , context)
 
 
 

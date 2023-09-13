@@ -14,12 +14,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         <meta name="author" content="Raouf Mostafa">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/x-icon" href="{% static 'images/galaxy_home_logo.png' %}">
-        
         <link type="text/css" rel="stylesheet" href="{% static 'css/avatar.css' %}"/>
-        
         <link type="text/css" rel="stylesheet" href="{% static 'css/dropdown_menu.css' %}"/>
-        
+        <link type="text/css" rel="stylesheet" href="{% static 'css/products_managment.css' %}"/>
+        <script src="{% static 'js/products_managment.js' %}"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        
         
         {% block header %}{% endblock header %}
         <style>
@@ -76,48 +76,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 {% endif %}        
                 <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
                 {% if request.user.is_authenticated %}
+                      
                         <div class="cart">
-                            <button onclick="displaycartcontent()" class="cartbtn dropbtn"><span class="price" style="color:black"><img src="{% static 'files_images/cart-orange.png' %}" draggable="false" width="25" height="30"></span><p style="color:white;">{{in_cart}}</p> 
+                            {% if request.user.user_Type == s_a %}<button id="cartbtn" onclick="opencartNav()" class="cartbtn dropbtn"><span class="price" style="color:black"><img src="{% static 'files_images/cart-orange.png' %}" draggable="false" width="25" height="30"></span><p style="color:white;">{{in_cart}}</p>
                               <i class="fa fa-caret-down"></i>
-                            </button>
-                              <div id="cartcont" class="cart-content">
-                                <div class="header">
-                                  <div><h2>Cart Total  ${{total}}</h2></div>
-                                <div > <input {% if not cart %} disabled {% endif %}{% if not cart_basic %}{% if not sub_basic %} disabled {% endif %}{% endif %} id="checkout" onclick="location.href='{% url 'galaxy:payment' %}'" type="submit" value="Continue to checkout" class="btn"></div>
-                              </div>   
-                            {% if cart %}
-                              <div class="row">
-                                <div style="width: 45%;" class="column">
-                                  <h3><center>Products</center></h3>
-                                  {% for p in cart %}
-                                    <a style="alignment: left; font-size: medium;" href="url">{{p.ProductID.Name}}</a>
-                                  {% endfor %}
-                                </div>
-                                <div style="width: 10%;" class="column">
-                                  <h3><center>Qty</center></h3>
-                                  {% for p in cart %}
-                                    <a style="font-size: medium ;"><center>{{p.Qty}}</center></a>
-                                  {% endfor %}
-                                </div>
-                                <div style="width: 29%;" class="column">
-                                  <h3><center>Unit Price</center></h3>
-                                  {% for p in cart %}
-                                    <a style="font-size: medium ;"><center>${{p.ProductID.Price}}/{{p.ProductID.Type}}</center></a>
-                                  {% endfor %}
-                                </div>
-                                <div style="width: 16%;" class="column">
-                                  <h3><center>Action</center></h3>
-                                  {% for p in cart %}
-                                    <center><button style="background-color: white;"  type="submit" value="Remove" class="CartDeletebtn" ><span><img onclick="location.href='/delete_cart/{{p.ProductID.id}}'" src="{% static 'files_images/delete.png' %}" height="25"></span></center>
-                                  {% endfor %}
-                                </div>
-                              </div>
-                            {% else %}
-                            
-                            <div class='image-container'><img src="{% static 'files_images/empty-cart.png' %}" draggable="false" width="500" height="300"></div>
-                          
-                            {% endif %}
-                            </div>
+                            </button>{% endif %} 
+                              
                         </div>
                         <div class="dropdown">
                             <button class="dropbtn">
@@ -129,8 +93,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                             </button>
                             <div class="dropdown-content">
                                 
-                                <a href="{% url 'galaxy:profile' %}">Profile</a>
-                                <a href="{% url 'galaxy:my_products' %}">My Products</a>
+                                <a style = "cursor: pointer" onclick = "document.getElementById('userprofile').style.display = 'block' " >Profile</a>
+                                {% if request.user.user_Type == s_a %}<a href="{% url 'galaxy:my_products' %}">My Products</a>{% endif %}
                                 <a style = "color: red;" href="{% url 'galaxy:logout' %}"><strong>Logout</strong></a>
                             </div>
                         </div>
@@ -138,14 +102,86 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 {% else %}
                     <a style="float: right" class="active" href = "{% url 'galaxy:login' %}">Login</a>
                 {% endif %}
-                
+                  
             </div>
-             
+            <div  id="cartNav" class="cart1">
+              <a href="javascript:void(0)" class="closebtn" onclick="closecartNav()" style="font-size: 40px;right: 15px;">&times;</a>
+              <div class="title" style="padding-left:10px;padding-top: 10px">
+                    <div>Cart</div>
+
+
+                    <p></p>
+              </div>
+                <div >
+                    <div class="container">
+                        <div class="orgrow" style="display:block;font-size:small; color: black;">
+                            <div class="col-24" style="padding-left:15px">
+                                <h3>Products</h3>
+                            </div>
+                            <div class="col-24">
+                                <h3><center>Qty</center></h3>
+                            </div>
+                            <div class="col-24">
+                                <h3><center>Unit Price</center></h3>
+                            </div>
+                            <div class="col-24">
+                                <h3><center>Delete</center></h3>
+                            </div>
+
+                        </div>
+
+                        <div id="cartinfo" class="smallcontainer" style="display:block;">
+                        <div class="orgrow">  
+                          {% if cart %}
+                            <div class="orgrow">
+                              <div class="col-24">
+                                  {% for p in cart %}
+                                    <a style="alignment: left; font-size: small;" href="url">{{p.ProductID.Name}}</a>
+                                  {% endfor %}
+                              </div>
+                              <div class="col-24">
+                                  {% for p in cart %}
+                                    <a style="font-size: small ;"><center>{{p.Qty}}</center></a>
+                                  {% endfor %}
+                              </div>
+                              <div class="col-24" style="font-size: small ;">
+                                  {% for p in cart %}
+                                    <a style="font-size: small ;"><center>${{p.ProductID.Price}}/{{p.ProductID.Type}}</center></a>
+                                  {% endfor %}
+                              </div>
+                              <div class="col-24" style="font-size: small ;">
+                                  {% for p in cart %}
+                                  <center><a class="fa fa-remove" style="font-size: large ; padding-top: 10px;" onclick="location.href='/delete_cart/{{p.ProductID.id}}'"></a></center>
+                                  {% endfor %}
+                              </div>
+                            </div>
+                          {% else %}
+                            <center><h1>Empty</h1></center>
+                          {% endif %}
+                        </div>
+                  </div>
+                </div>
+              </div>
+              <div class="title" style="text-align: center;font-size:large">
+                    <div style="text-align: center;font-size:x-large">Sub Total : ${{total}}</div>
+                    <div style="text-align: center;font-size:medium">Apply Promo : <input type="text" style="width:40px;padding-right:10px"></div>
+                    <div style="text-align: center;font-size:x-large">Grand Total : 550 $</div>
+                    <div style="align-content: center;font-size:large;padding-right: 10%"> <input id="checkout" onclick="location.href='{% url 'galaxy:payment' %}'" type="submit" value="Continue to checkout" class="btn" style="width:90%;" ></div>
+                </div>
+            </div>
+            
+              
+            
+            
+            
             {% block body %}
+            
             {% endblock body %}
             
             {% block additional %}
             {% endblock additional %}
+          
+          {% include 'galaxy/profile.html' %}
           <Script> 
             function displaycartcontent()
             {
@@ -159,6 +195,115 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             }
             }
           </script>
+          <Script>
+            // Get the modal
+            var modal = document.getElementById("userprofile");
+        
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+        
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {           
+              modal.style.display = "none";
+            };
+        
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {            
+              if (event.target === modal) {
+                modal.style.display = "none";
+              }
+            };
+          </script>
+          <script>
+            document. addEventListener('mouseup', function(e) {
+              var container = document. getElementById('cartNav');
+              if (! container. contains(e. target)) {
+              container. style.width = "0%";
+              }
+            });
+          </script>
+          <Script>
+            function myFunction() {
+              var x = document.getElementById("myTopnav");
+              if (x.className === "topnav") {
+                x.className += " responsive";
+              } else {
+                x.className = "topnav";
+              }
+            }
+          </script>
+          <script>
+            // Check for the query parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('auto_button') === 'true') {
+                // Find the button element by its ID or any other selector
+                const button = document.getElementById("cartbtn");
+        
+                // Check if the button element exists
+                if (button) {
+                    // Add an event listener to the button
+                    button.addEventListener('click', function() {
+                        // Remove the query parameter from the URL
+                        urlParams.delete('auto_button');
+        
+                        // Generate the updated URL without the query parameter
+                        const updatedUrl = window.location.origin + window.location.pathname + urlParams.toString();
+        
+                        // Change the URL to the updated URL
+                        window.history.replaceState({}, '', updatedUrl);
+                    });
+        
+                    // Simulate a button click event
+                    button.click();
+                }
+            }
+          </script>
+          <script>
+            window.addEventListener("resize", resizeCurtainMenu);
+            function resizeCurtainMenu() {
+            var w = window.innerWidth;
+            if (document.getElementById("cartNav").style.width != "0%")
+              {if( w >= 1025 )
+                {document.getElementById("cartNav").style.width = "50%";}
+                else 
+                {
+                    if(w > 800 && w < 1025)
+                      {document.getElementById("cartNav").style.width = "70%";}
+                      else
+                      {document.getElementById("cartNav").style.width = "90%";}
+              }
+            }
+            }
+          </script>
+          <script>
+            window.addEventListener("resize", resizeCurtainMenu);
+            function resizeCurtainMenu() {
+            var w = window.innerWidth;
+            if (document.getElementById("orgNav").style.width != "0%")
+              {if( w >= 1025 )
+                {document.getElementById("orgNav").style.width = "20%";}
+                else 
+                {
+                    if(w > 800 && w < 1025)
+                      {document.getElementById("orgNav").style.width = "30%";}
+                      else
+                      {document.getElementById("orgNav").style.width = "50%";}
+              }
+            }
+            }
+          </script>
+          
+        
+          {% comment %} <Script>
+            {% for item in cart %}
+              num = {{item.ProductID.id}} ;
+              url = '/delete_cart/' + num ;
+            {% endfor %}
+            $("#cart-del").on("click", function (){
+              fetch(url);
+              url = '/delete_cart/' + num ;
+            });
+          </script> {% endcomment %}
             
             
             

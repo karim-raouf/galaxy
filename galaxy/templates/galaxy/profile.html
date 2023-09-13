@@ -1,68 +1,131 @@
 {% load static %}
 <head>
-    <link type="text/css" rel="stylesheet" href="{% static 'css/login_signup.css' %}"/>
-    <script src="{% static 'js/login_signup.js' %}"></script>
-    <link type="text/css" rel="stylesheet" href="{% static 'css/avatar.css' %}"/>
-    <style>
-        .form-field {
-            margin-bottom: 1em;
-        }
-    </style>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/user_profile.css' %}"/>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/products_managment.css' %}"/>
+
 
 </head>
 <body>
-    <div id="id02" class="modal">
-
-        <form class="modal-content animate-zoom" action="" method="POST">
+<div id="userprofile" class="modal">
+    <!-- user profile -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+        <form method = 'POST' id="user-form" enctype="multipart/form-data">    
             {% csrf_token %}
-            <span onclick="location.href='{% url 'galaxy:index' %}'" class="close" title="Close Modal">&times;</span>
-            <div style="padding: 20px">
-                <h1 style = "color: black;"><center>Profile</center></h1>
-               
-                <div>
-                    <ul>
-                        <li>Avatar: <span>
-                            <div class="avatar avatar--medium active right-align">
-                            <img src="{{ request.user.avatar.url }}" />
-                            </div></span></li>
-                        <br>
-                        <li>First name: <span>{{user.first_name}}</span></li>
-                        <br>
-                        <li>Last name: <span>{{user.last_name}}</span></li>
-                        <br>
-                        <li>Username: <span>{{user.username}}</span></li>
-                        <br>
-                        <li>Email: <span>{{user.email}}</span></li>
-                        <br>
-                    </ul>
+            <div id="info" class="subcontainer" style = "display: block" >
+                <div class="orgrow">  
+                    <div class="col-15" style = "padding-top: 20px; padding-right: 15px;">
+                        <img src="{{request.user.avatar.url}}" width="100" height="180" class="useravatar">
+                        <p> </p>
+                        <div class="orgrow">
+                            <div  class="col-100" >
+                                {{userform.avatar}}
+                            </div>
+                        </div>
+                    </div>
                     
+              <div class="col-40" style="">
+                <div class="orgrow">
+                    <div class="col-25">
+                        <label for="username" >User Name :</label>
+                    </div>
+                    <div class="col-75">
+                        {{userform.username}}
+                    </div>
                 </div>
-                {% if messages %}
-                    {% for message in messages %}
-                        <h6 style="text-align: center; color: red;  font-size: 15px;  font-family: arial;">
-                            <em>• {{ message }}</em>
-                        </h6>
-                    {% endfor %}
-                {% endif %}
-                
-                {% if errors %}
-                    {% for i in errors %}
-                        <h4 style="text-align: center; margin: 0px 0px 0px; padding-left: 8px; color: red">{{ i }}</h4>
-                    {% endfor %}
-                {% endif %}
-                <p></p>
-
-
-                
-
-
-
-                <div class="clearfix">
-                    <button type="button" onclick="location.href='{% url 'galaxy:index' %}'" class="button cancelbtn">Back</button>
-                    <button type="submit" class="button signupbtn" onclick="location.href='{% url 'galaxy:index' %}'" >Edit Proile</button>
+                <div class="orgrow">
+                    <div class="col-25">
+                        <label for="AddressFiled">First Name :</label>
+                    </div>
+                    <div class="col-75">
+                        {{userform.first_name}}
+                    </div>
                 </div>
-            </div>
-
+                <div class="orgrow">
+                    <div class="col-25">
+                        <label for="country">Last Name :</label>
+                    </div>
+                    <div class="col-75">
+                        {{userform.last_name}}
+                    </div>
+                </div>
+                <div class="orgrow">
+                    <div class="col-25">
+                        <label for="userEmail">E-mail :</label>
+                    </div>
+                    <div class="col-75">
+                        {{userform.email}}
+                    </div>
+                </div>
+              </div>
+              <div class="col-40" style="padding-left:25px;">
+                
+                <div class="orgrow">
+                <div class="col-25">
+                  <label for="language">Language :</label>
+                </div>
+                <div class="col-75">
+                    {{userform.Language}}
+                </div>
+                </div>
+                <div class="orgrow">
+                <div class="col-25">
+                  <label for="gender">Gender :</label>
+                </div>
+                <div class="col-75">
+                  {{userform.Gender}}
+                </div>
+                </div>
+                <div class="orgrow">
+                <div class="col-25">
+                  <label for="birthdate">Birth Date :</label>
+                </div>
+                <div class="col-75">
+                  {{userform.Birth_Date}}
+                </div>
+                </div>
+                <div class="orgrow">
+                <div class="col-25">
+                  <label for="telephone">Telephone :</label>
+                </div>
+                <div class="col-75">
+                  {{userform.Telephone}}
+                </div>
+                </div>
+              </div>
+            <p></p>        
+            <div class="orgrow">
+          <button style="float: right" class="btn" id="cancel-btn" type="button" onclick="location.reload()">Cancel</button><a>&nbsp;</a><button style="float: right;margin-right: 10px;" class="btn" name="save-profile" type="submit" value="Save">save</button>
+            </div> 
         </form>
     </div>
-</body>
+</div>
+
+
+
+  <Script>
+    // Get the modal
+    var modal = document.getElementById("userprofile");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {           
+      modal.style.display = "none";
+    };
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {            
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    };
+  </script>
+  <script>
+    function updateFileName(input) {
+        const file = input.files[0];
+        const fileName = file ? file.name : '';
+        document.getElementById('selectedFileName').textContent = fileName;
+    }
+  </script>

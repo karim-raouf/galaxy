@@ -1,56 +1,168 @@
-function orginfo() {
-    if(document.getElementById("OrgInfo").style.display === 'block')
-  {
-    document.getElementById("OrgInfo").style.display = 'none';
-  }
-  else
-  {
-    document.getElementById('OrgInfo').style.display = 'block';
-  }
-  }
-function openNav() {
-    if(document.getElementById("myNav").style.width === "0%")
-    {
-      document.getElementById("myNav").style.width = "50%";
-    }
-    else
-    {
-      document.getElementById("myNav").style.width = "0%";
-    }
-  }
-function closeNav() {
-    document.getElementById("myNav").style.width = "0%";
+/* 
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/javascript.js to edit this template
+ */
+
+function info() {
+  if(document.getElementById("info").style.display === 'block')
+{
+document.getElementById("info").style.display = 'none';
 }
+else
+{
+document.getElementById('info').style.display = 'block';
+}
+}
+function openNav(y) {
+  var w = window.innerWidth;
+  
+  if( w >= 1025 ){ 
+      document.getElementById(y).style.width = "20%";
+      }
+      else {
+          if(w > 800 && w < 1025)
+            {document.getElementById(y).style.width = "30%";}
+            else
+            {document.getElementById(y).style.width = "50%";}
+    }
+      }
+     
+    function closeNav(y) {
+      document.getElementById(y).style.width = "0%";
+  
+  }
+  function opencartNav() {
+    var w = window.innerWidth;
+    
+    if( w >= 1025 ){ 
+        document.getElementById('cartNav').style.width = "50%";
+        }
+        else {
+            if(w > 800 && w < 1025)
+              {document.getElementById('cartNav').style.width = "70%";}
+              else
+              {document.getElementById('cartNav').style.width = "90%";}
+      }
+        }
+       
+  function closecartNav() {
+        document.getElementById('cartNav').style.width = "0%";
+    
+    }
+// function openNav(y) {
+  
+// if(document.getElementById(y).style.width === "50%")
+// {
+// document.getElementById(y).style.width = "0%";
+// }
+// else
+// {
+// document.getElementById(y).style.width = "50%";
+// }
+// }
 
-  document.addEventListener('DOMContentLoaded', function() {
-    var cancelButton = document.getElementById('cancel-btn');
+// function closeNav(y) {
+// document.getElementById(y).style.width = "0%";
 
-    cancelButton.addEventListener('click', function() {
-      location.reload();
-    });
-  });
+// }
 
 function showdiv(x) {
-    if(document.getElementById(x).style.display === "block")
-    {
-      document.getElementById(x).style.display = "none";
-    
-      
-    }
-    else
-    {
-      document.getElementById(x).style.display = "block";
-    
-    
-    }
-    }
 
+if(document.getElementById(x).style.display === "block")
+{
+document.getElementById(x).style.display = "none";
+
+
+}
+else
+{
+document.getElementById(x).style.display = "block";
+
+
+}
+}
 function arrowdirection(x) {
-    if (document.getElementById(x).className === "fa fa-arrow-circle-down") {
-      document.getElementById(x).className = "fa fa-arrow-circle-up";
-    } else {
-      document.getElementById(x).className = "fa fa-arrow-circle-down";
-    }
-  }
+if (document.getElementById(x).className === "fa fa-arrow-circle-down") {
+document.getElementById(x).className = "fa fa-arrow-circle-up";
+} else {
+document.getElementById(x).className = "fa fa-arrow-circle-down";
+}
+}
 
- 
+function ChangePswMsgStatus(psw) {
+// Check password and put the results (true or false in a variable
+var result1 = psw.match(/[A-Z]/) ? "true" : "false";
+var result2 = psw.match(/[a-z]/) ? "true" : "false";
+var result3 = psw.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/) ? "true" : "false";
+var result4 = psw.match(/[0-9]/) ? "true" : "false";
+var result5 = psw.length >= 8 ? "true" : "false";
+var result6 = document.getElementById("psw").value;
+var result7 = document.getElementById("psw-repeat").value;
+// -----------------------------
+// 1- check the password match :
+// ---------------------------
+if (result6 === "") {
+  var element = document.getElementById("lab6");
+  element.style.color = "red";
+  element.innerHTML = element.innerHTML.replace(/✔/g, "✖");
+} else if (result6 === result7) {
+  var element = document.getElementById("lab6");
+  element.style.color = "green";
+  element.innerHTML = element.innerHTML.replace(/✖/g, "✔");
+} else {
+  var element = document.getElementById("lab6");
+  element.style.color = "red";
+  element.innerHTML = element.innerHTML.replace(/✔/g, "✖");
+}
+// ----------------------------------
+// 2- Check the password conditions :
+// ---------------------------------
+// create array for password check results variables
+results = [result1, result2, result3, result4, result5];
+// create array for password message parts
+labels = ["lab1", "lab2", "lab3", "lab4", "lab5"];
+// create for loop and using the previous 2 arrays in it to repalce 
+// the invalied message to valid for every part of the message
+for (i = 0; i < 5; i++) {
+  if (results[i] === "true")
+  {
+      var element = document.getElementById(labels[i]);
+      element.innerHTML = element.innerHTML.replace(/✖/g, "✔");
+      element.style.color = "green";
+  } else
+  {
+      var element = document.getElementById(labels[i]);
+      element.innerHTML = element.innerHTML.replace(/✔/g, "✖");
+      element.style.color = "red";
+  }
+}
+;
+}
+// END  of Check the password conditions ---------------------------
+// 
+//--------------------------------
+// show password condition message 
+//--------------------------------
+function hidePswMsg() {
+document.getElementById("pswMessage").style.display = "none";
+}
+;
+function showPswMsg() {
+document.getElementById("pswMessage").style.display = "block";
+}
+;
+// End show password condition message ---------------------------------------
+// 
+//--------------------------------
+// show password Match condition message 
+//--------------------------------
+function hidePswMatchMsg() {
+document.getElementById("pswMatchMsg").style.display = "none";
+}
+;
+function showPswMatchMsg() {
+document.getElementById("pswMatchMsg").style.display = "block";
+}
+;
+// End show password condition message ---------------------------------------
+

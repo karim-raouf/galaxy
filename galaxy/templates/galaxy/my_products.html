@@ -1,59 +1,67 @@
-{% extends 'galaxy/base.html' %}
+{% extends "galaxy/base.html" %}
 {% load static %}
 {% block header %}
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link type="text/css" rel="stylesheet" href="{% static 'css/my_products.css' %}"/>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link type="text/css" rel="stylesheet" href="{% static "css/products_managment.css" %}"/>
+<script src="{% static "js/products_managment.js" %}"></script>
 {% endblock header %}
-    
+
 {% block body %}
-
-    <a href="{% url 'galaxy:index' %}" style="padding:30px;color: green;font-size:xxx-large;font-weight:bolder "  class="fa fa-arrow-left"> </a><a style="padding:30px;color: green;font-size:xxx-large;font-weight:bolder "> My Products</a>
-<div class="row">
-  <div class="col-75">
-    <div class="container">
-      <form action="">
-        <div class="row">
-          <div class="col-50">
-            <a style="padding-bottom: 30px;padding-top :30px;font-size:xx-large;font-weight:bolder " class="fa fa-database">&nbsp; Basic Bundle  </a>
-            {% for item in sub_basic %}    
-                <div class="row2">
-                    <div class="column" style="width:auto">
-                        <a id="Pname" style= "font-size:large;font-weight:bolder " class="fa fa-tag"> {{item.ProductID.Name}} </a> 
-                    </div>
-                    <div class="column" style="width:auto ;float:right">
-                        <a href="" id="Manage" style="color:green;font-size:medium;float:right">Manage</a>
-                    </div>
-                </div>
-            {% endfor %}
-</div>
-
-            <div class="col-50">
-                <a style="padding-bottom: 30px;padding-top:30px;font-size:xx-large;font-weight:bolder" class="fa fa-paperclip">&nbsp; Add-ons </a>
-                {% for item in sub_add %}
-                    <div class="row2">
-                        <div class="column" style="width:48%">
-                            <a id="Pname" style="font-size:large;font-weight:bolder" class="fa fa-tag"> {{ item.ProductID__Name }}</a>
-                        </div>
-                        <div class="column" style="width:auto">
-                            <a id="Pname" style="font-size:medium;">Qty: {{ item.total_qty }}</a>
-                        </div>
-                        <div class="column" style="width:24%;float:right">
-                            <a {% if item.ProductID__Code == 201 %} href="{% url 'galaxy:manage_org' %}" {% else %} href="#" {% endif %} id="Manage" style="color:green;font-size:medium;float:right">Manage</a>
-                        </div>
-                    </div>
+<a class="pagetitle"> My Products</a>
+<p></p>
+<div>
+    <div class="subcontainer" style="display:block;" >
+        <a id="Div1" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('basicinfo') ,arrowdirection(id)"> Modules </a>
+        <p></p>
+        <div id="basicinfo" class="smallcontainer">
+            <div class="orgrow">  
+              {% if sub_basic %} 
+                {% for item in sub_basic %}
+                  <div class="orgrow">
+                      <div class="col-40">
+                          <a id="modulename" style="color:blue;" class="fa fa-tag"> {{item.ProductID.Name}}  </a> 
+                      </div>
+                      <div class="col-10">
+                          <a id="moduleqty" > Only 1 </a> 
+                      </div>
+                      <div class="col-45" style="">
+                          <a class="btn1" style="float:right">Manage</a> 
+                      </div>
+                  </div>
                 {% endfor %}
+              {% else %}
+                <h1><center>Empty</center></h1>
+              {% endif %} 
             </div>
-            
-          
         </div>
-
-
-      </form>
     </div>
-  </div>
-
+        <p></p>    
+    <div class="subcontainer" style="display:block;" >
+        <a id="Div2" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('addonsinfo') ,arrowdirection(id)"> Add-ons </a>
+        <p></p>
+        <div id="addonsinfo" class="smallcontainer">
+          <div class="orgrow">  
+            {% if sub_add %}  
+              {% for item in sub_add %}
+                <div class="orgrow">
+                  <div class="col-40">
+                      <a id="addonsname" style="color:blue;" class="fa fa-tag"> {{ item.ProductID__Name }} </a> <a href="{% url 'galaxy:pricing' %}" style="color:blue;;padding:5px" class="fa fa-cart-plus" ></a>
+                  </div>
+                  <div class="col-10" >
+                      <a id="addonsqty" > Qty : {{ item.total_qty }} </a> 
+                  </div>
+                  <div class="col-45" style="">
+                      <a {% if item.ProductID__Code == 201 %} href="{% url 'galaxy:manage_org' %}" {% elif item.ProductID__Code == 203 %} href="{% url 'galaxy:manage_user' %}" {% else %} href="#" {% endif %}class="btn1" style="float:right">Manage</a> 
+                  </div>
+                </div>
+              {% endfor %}
+            {% else %}
+                <h1><center>Empty</center></h1>
+            {% endif %}
+          </div>
+        </div>
+    </div>
+    
 </div>
-
-
 {% endblock body %}

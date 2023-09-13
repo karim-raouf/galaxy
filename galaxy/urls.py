@@ -13,14 +13,13 @@ urlpatterns = [
     path('my_products/', views.my_products , name = 'my_products'),
     path('my_products/organizations', views.manage_org , name = 'manage_org'),
     path('my_products/organizations/delete_org', views.delete_org , name = 'delete_org'),
-
+    path('my_products/users', views.manage_user , name = 'manage_user'),
    
     
     path('login/', views.login_page , name = 'login'),
     path('register/', views.signup_page , name = 'signup'),
     path('logout/', views.signout , name = 'logout'),
-    path('profile/', views.profile , name = 'profile'),
-    path('profile_edit/', views.profile_edit , name = 'profile_edit'),
+    # path('profile/', views.profile , name = 'profile'),
     #  
     path('payment/', views.payment , name = 'payment'),
     path('organization/', views.choose_org , name = 'org_choose'),

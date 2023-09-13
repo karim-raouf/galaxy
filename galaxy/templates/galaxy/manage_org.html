@@ -15,11 +15,11 @@
       </div>
     </div>
     <p></p>
-    <strong><span class="title" style="color:green;cursor:pointer" onclick="openNav()">&#9776; <Strong>Select Organization</strong></span></strong>
+    <strong><span class="title" style="color:green;cursor:pointer" onclick="openNav('orgNav')">&#9776; <Strong>Select Organization</strong></span></strong>
     <p></p>
       
-<div  id="myNav" class="overlay">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+<div  id="orgNav" class="overlay">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav('orgNav')">&times;</a>
 
   <div class="overlay-content">
     {% for organisation in organisations %} 
@@ -32,26 +32,26 @@
 <div id="orgSubscription" class="container">
   
   <div class="row" style="text-align: left;font-size:medium;font-weight:bold;">
-    <a id="Orgname" name="Orgname" style="font-size: large;font-weight: bold; color: blue;">{% if org.OrganizationName %}│{{org.OrganizationName}}│{% endif %}{% if org and not org.OrganizationName %}Undefined organization {% endif %}{% if not org %}Choose organization{% endif %}</a>
+    <a id="Orgname" name="Orgname" style="font-size: large;font-weight: bold; color: blue;">{% if org.OrganizationName %}│{{org.OrganizationName|capfirst}}│{% endif %}{% if org and not org.OrganizationName %}Undefined organization {% endif %}{% if not org %}Choose Organization{% endif %}</a>
   </div>
   <div id="manage" class="orgrow" style="text-align: center;font-size:medium;font-weight:bold;">
                 <div class="col-15" style="border-bottom: solid;border-color: blue">
-                  <label for="Status">Subscription Status</label>
+                  <label style="color: black" for="Status">Subscription Status</label>
                   <a id="Status" name="Status" style=" color:blue; ">{% if sub_status %}Active{% elif sub_status == 'False' %}Inactive<span style="color: black; padding-left: 10px;">│</span>{% endif %}</a>
                 </div>
                 
                 <div  class="col-15" style="border-bottom: solid;border-color: blue">
-                  <label for="StartD">│ Start Date</label>
+                  <label style="color: black" for="StartD">│ Start Date</label>
                   <a id="StartD" name="StartD" style=" color:blue;">{% if sub_start %}{{sub_start}}{% endif %}</a>
                 </div>
                 
                 <div class="col-15" style="border-bottom: solid;border-color: blue">
-                  <label for="EndD">│ End Date</label>
+                  <label style="color: black" for="EndD">│ End Date</label>
                   <a id="EndD" name="EndD" style=" color:blue; ">{% if sub_end %}{{sub_end}}<span style="color: black; padding-left: 10px;">│</span>{% endif %}</a>
                 </div>
                 
                 <div  class="col-10" style="border-bottom: solid;border-color: blue;">
-                    <label for="AutoRenew">Auto Renew</label>
+                    <label style="color: black" for="AutoRenew">Auto Renew</label>
                     <div  class="col-5" style="padding-left: 8px;">
                       <form method="POST" id="myForm">
                         {% csrf_token %}
@@ -73,7 +73,7 @@
                 </div>
 
                 <div class="col-20" >
-                  {% if org %}<button id="orginfo" style="width: 60%; float: right;" class="fa fa-arrow-circle-o-down btn" onclick="orginfo()"> Organization Info</button> {% endif %}
+                  {% if org %}<button id="orginfo" style="width: 60%; float: right;" class="fa fa-arrow-circle-o-down btn" onclick="info()"> Organization Info</button> {% endif %}
                 </div>
                 
   </div> 
@@ -81,7 +81,7 @@
   <form method = 'POST' action="" id="org-form" enctype="multipart/form-data">
     {% csrf_token %}
       
-    <div id="OrgInfo" class="subcontainer" >
+    <div id="info" class="subcontainer" >
       <a id="Div1" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('Adress') ,arrowdirection(id)"> Name & Address </a>
       <div id="Adress" class="smallcontainer">
         <div class="orgrow">
@@ -266,7 +266,7 @@
       </div>
       <p></p> 
       <div class="orgrow">
-        <button class="btn" style="float: right" id="cancel-btn" type="button">Cancel</button>
+        <button class="btn" style="float: right" id="cancel-btn" type="button" onclick="location.reload()">Cancel</button>
      
         <button class="btn" style="float: right; margin-right: 10px;" name="save-btn" type="submit" value="Save">save</button>
       </div>
@@ -290,7 +290,7 @@
 </script>
 <script>
   document. addEventListener('mouseup', function(e) {
-    var container = document. getElementById('myNav');
+    var container = document. getElementById('orgNav');
     if (! container. contains(e. target)) {
     container. style.width = "0%";
     
