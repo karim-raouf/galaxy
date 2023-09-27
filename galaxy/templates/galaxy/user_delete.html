@@ -1,0 +1,26 @@
+<h1>User Delete Confirmation</h1>
+<strong><h2>Warning:</h2></strong>
+<ul>
+  <li>the user will be deleted with all information</li>
+  <li>a backup will be saved for a month if want the information back but with fees</li>
+</ul>
+<h2>a confirmation code has been sent to your email</h2>
+{% if error_message %}
+<p style="color: red;">{{ error_message }}</p>
+{% endif %}
+<form method="POST">
+  {% csrf_token %}
+  
+  <label for="code">Confirmation Code:</label>
+  <input type="text" id="code" name="code" required>
+  
+  <button type="submit">Confirm Delete</button>
+  <button onclick="goBack()" type="submit">Cancel</button>
+</form>
+
+
+<script>
+    function goBack() {
+      window.history.back();
+    }
+</script>

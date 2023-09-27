@@ -4,26 +4,43 @@
     <link type="text/css" rel="stylesheet" href="{% static 'css/products_managment.css' %}"/>
     <script src="{% static 'js/products_managment.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      button {
+        background-color: #04AA6D;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+      }
+      
+      button:hover {
+        opacity:1;
+      }
+    </style> 
+    
     {% endblock header %}
 
 {% block body %}
 
 <div style="text-align: center;  vertical-align: middle;" class="orgrow">
       <div >
-          <strong><span style="color:blue;" class="pagetitle" ><Strong>User Management</strong></span></strong>
+          <strong><span class="pagetitle" ><Strong>User Management</strong></span></strong>
 
       </div>
     </div>
     <p></p>
-    <strong><span class="title" style="color:green;cursor:pointer" onclick="openNav('userNav')">&#9776; <Strong>Select User</strong></span></strong>
+    <strong><span class="title" style="color:green;cursor:pointer" onclick="openleftNav('userNav')">&#9776; <Strong>Select User</strong></span></strong>
     <p></p>
       
 <div  id="userNav" class="overlay">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav('userNav')">&times;</a>
+  <a href="javascript:void(0)" class="closebtn" onclick="closeleftNav('userNav')">&times;</a>
 
   <div class="overlay-content">
     {% for user in users %}
-        <a href="{% url 'galaxy:manage_user' %}?id={{user.id}}"> {% if user.username %}{{user.username}}{% else %}Undefined User{% endif %}</a>
+        <a href="{% url 'galaxy:manage_user' %}?id={{user.id}}"> {% if user.email %}{{user.email}}{% else %}Undefined User{% endif %}</a>
     {% endfor %}
     <a href="{% url 'galaxy:pricing' %}" style="font-size:xx-large;color:blue;" class="fa fa-cart-plus" ></a>  
   </div>
@@ -32,80 +49,124 @@
 <div id="orgSubscription" class="container">
   
   <div class="orgrow" style="text-align: left;font-size:medium;font-weight:bold;">
-    <a id="username" name="username" style=" color:blue;font-size: large;font-weight: bold; ">{% if the_user.username %}│{{the_user.username|capfirst}}│{% endif %}{% if the_user and not the_user.username %}Undefined User {% endif %}{% if not the_user %}Choose User{% endif %}</a>
+    <a id="username" name="username" style=" color:blue;font-size: large;font-weight: bold; ">{% if the_user.username %}│{{the_user.email}}│{% endif %}{% if the_user and not the_user.email %}Undefined User {% endif %}{% if not the_user %}Choose User{% endif %}</a>
   </div>
-  <div id="manage" class="orgrow" style="text-align: center;font-size:medium;font-weight:bold;">
-                <div class="col-15" style="border-bottom: solid;border-color: blue">
+              <div id="manage" class="orgrow" style="text-align: center;font-size:medium;font-weight:bold;">
+                <div class="col-25" style="border-bottom: solid;border-color: blue">
                   <label for="Status">Subscription Status</label>
                   <a id="Status" name="Status" style=" color:blue; ">{% if sub_status %}Active{% elif sub_status == 'False' %}Inactive<span style="color: black; padding-left: 10px;">│</span>{% endif %}</a>
                 </div>
                 
-                <div  class="col-15" style="border-bottom: solid;border-color: blue">
-                  <label for="StartD">│ Start Date</label>
+                <div  class="col-25" style="border-bottom: solid;border-color: blue">
+                  <label for="StartD">Start Date</label>
                   <a id="StartD" name="StartD" style=" color:blue;">{% if sub_start %}{{sub_start}}{% endif %}</a>
                 </div>
                 
-                <div class="col-15" style="border-bottom: solid;border-color: blue">
-                  <label for="EndD">│ End Date</label>
-                  <a id="EndD" name="EndD" style=" color:blue; ">{% if sub_end %}{{sub_end}}<span style="color: black; padding-left: 10px;">│</span>{% endif %}</a>
+                <div class="col-25" style="border-bottom: solid;border-color: blue">
+                  <label for="EndD">End Date</label>
+                  <a id="EndD" name="EndD" style=" color:blue; ">{% if sub_end %}{{sub_end}}<span style="color: black; padding-left: 10px;"></span>{% endif %}</a>
                 </div>
                 
-                <div  class="col-10" style="border-bottom: solid;border-color: blue;">
-                    <label for="AutoRenew">Auto Renew</label>
-                    <div  class="col-5" style="padding-left: 8px;">
-                      <form method="POST" id="myForm">
-                        <div class="col-5">
-                          {% if the_user %}
-                            <input type="checkbox" id="autoRenewField" name="Auto-Renew" {% if form2.AutoRenew.value %} checked {% endif %} >{% comment %}  {% endcomment %}
-                          {% endif %}
-                        </div>
-                      </form>
-                    </div>
+                <div  class="col-25" style="border-bottom: solid;border-color: blue">
+                  <form method="POST" id="myForm">
+                    {% csrf_token %}
+                      <label for="AutoRenew" >Auto Renew</label>
+                      {% if the_user %}  
+                        <input type="checkbox" id="autoRenewField" name="Auto-Renew" style=" color:blue " {% if form2.AutoRenew.value %} checked {% endif %}>
+                      {% endif %}
+                  </form>
                 </div>
-  
-                <div class="col-25" >
-                    <form method="POST">
-                      <button name="delete-btn" type="submit" style="width: 60%; float: right;" class="fa fa-remove btn"> Delete User</button>
-                    </form>
+              </div>
+              <div id="manage1" class="orgrow" style="text-align: center;font-size:medium;font-weight:bold;">
+                <div class="col-45" style="text-align: center;">
+                  {% if the_user %}<button id="userinfo" style="width: 60%; float: right;" class="fa fa-arrow-circle-o-down btn" onclick="info()"> User Info</button>{% endif %}
                 </div>
-
-                <div class="col-20" >
-                    <button id="orginfo" style="width: 60%; float: right;" class="fa fa-arrow-circle-o-down btn" onclick="info()"> User Info</button> 
+                <div class="col-45" style="text-align: center;">
+      
+                      {% if the_user.email %}<button type="button" style="width: 60%; float: right;" onclick="document.getElementById('userdeleteconfirm').style.display='block'" class="fa fa-remove btn"> Delete User</button>{% endif %}
+                    
                 </div>
-                
+              </div>
+  <div>
+    {% if messages %}
+      <div class="messages" id="message">
+            {% for message in messages %}
+              <a id="fade-msg" {% if message.tags %} class="messages {{ message.tags }} alert {% if message.level_tag == 'error' %} error{% endif %}"{% endif %}>{{ message }}</a><br>
+            {% endfor %}
+      </div>
+    {% endif %}
   </div>
-     
+  <div id="userdeleteconfirm" class="deletemodal">
+    <span onclick="document.getElementById('userdeleteconfirm').style.display='none';document.getElementById('deleteconfirmation').style.display='none'" class="deletemodel_close" title="Close Modal">x</span>
+    <form class="deletemodal-content" action="/action_page.php">
+      <div class="container"  style="padding: 5px;text-align: center;">
+        <h1 style="color: black;">User Data Delete Confirmation</h1>
+        <p style="color: black;">Are you sure you want to delete User Data?</p>
+        <p></p>
+        <strong><h2 style="color: black;">Warning:</h2></strong>
+        <Label style="color: black;"> User data will be permanently erased and you will not be able to access it again</label>
+        <br>
+        <div class="clearfix">
+          <button id="remove-button" type="button" onclick="document.getElementById('userdeleteconfirm').style.display='none';document.getElementById('deleteconfirmation').style.display='none'" class="modeldelete_cancelbtn">Cancel</button>
+          
+          <button id="user-delete-btn" name="user-delete-btn" type="button" onclick="document.getElementById('deleteconfirmation').style.display='block'" class="modeldelete_deletebtn">Delete</button>
+          
+          <div id="deleteconfirmation" style="display:none">
+              <h4 style="color: black;">a confirmation code has been sent to your email</h4>
+                  {% if error_message %}
+                  <p style="color: red;">{{ error_message }}</p>
+                  {% endif %}
+  
+                    <label style="color: black;" for="code">Confirmation Code:</label>
+                    <input style="margin-bottom: 10px" type="text" id="code" name="code" required>
+                    <a id="code-error" style="color: red"></a><br>
+                    <button class="modeldelete_deletebtn userdel" data-user-id = "{{choosed_user}}" type="submit">Confirm Delete</button>
+                  
+                  
+  
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
   <form method = 'POST' id="user-form" enctype="multipart/form-data">
   {% csrf_token %}
-      
+   
   <div id="info" class="subcontainer" >
-      <a id="Div1" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('basicinfo') ,arrowdirection(id)"> Basic Info </a>
-      <div id="basicinfo" class="smallcontainer">
+      <a id="Div1" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('basicinfo'),showdiv('subbasicinfo') ,arrowdirection(id) , showdiv('password')"> Basic Info </a>
+    <div id="basicinfo" class="smallcontainer">
+      <div id="subbasicinfo" class="smallcontainer">
       <div class="orgrow">  
             <div class="orgrow">
               <div class="col-10">
                 <label for="activeuser" >Active :</label>
                 {{form.is_active}}
+                {% if form.is_active.errors %}
+                  <ul class="errorlist" style="color: red">
+                    {% for error in form.is_active.errors %}
+                      <li>{{ error }}</li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
               </div>
             </div>
             <div class="orgrow">
               <div class="col-10">
                 <label for="Usertype">User Type :</label>
               </div>
-              <div class="col-10">
+              <div class="col-15">
                 {{form.user_Type}}
+                {% if form.user_Type.errors %}
+                  <ul class="errorlist" style="color: red">
+                    {% for error in form.user_Type.errors %}
+                      <li>{{ error }}</li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
               </div>
             </div>
           <p> </p>
-           <div class="col-15">
-               <img src="{{the_user.avatar.url}}" class="useravatar" width="140" height="180">
-               <p> </p>
-               <div class="orgrow">
-                   <div  class="col-100">
-                      {{form.avatar}}
-                    </div>
-               </div>
-           </div>
+           
           <div class="col-40" style="">
 
             <div class="orgrow">
@@ -114,6 +175,13 @@
               </div>
               <div class="col-75">
                 {{form.username}}
+                {% if form.username.errors %}
+                  <ul class="errorlist" style="color: red">
+                    {% for error in form.username.errors %}
+                      <li>{{ error }}</li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
               </div>
             </div>
             <div class="orgrow">
@@ -122,6 +190,13 @@
               </div>
               <div class="col-75">
                 {{form.first_name}}
+                {% if form.first_name.errors %}
+                  <ul class="errorlist" style="color: red">
+                    {% for error in form.first_name.errors %}
+                      <li>{{ error }}</li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
               </div>
             </div>
             <div class="orgrow">
@@ -130,6 +205,13 @@
               </div>
               <div class="col-75">
                   {{form.last_name}}
+                  {% if form.last_name.errors %}
+                  <ul class="errorlist" style="color: red">
+                    {% for error in form.last_name.errors %}
+                      <li>{{ error }}</li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
               </div>
             </div>
             <div class="orgrow">
@@ -138,6 +220,13 @@
               </div>
               <div class="col-75">
                 {{form.email}}
+                {% if form.email.errors %}
+                  <ul class="errorlist" style="color: red">
+                    {% for error in form.email.errors %}
+                      <li>{{ error }}</li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
               </div>
             </div>
           </div>
@@ -149,6 +238,13 @@
               </div>
               <div class="col-75">
                 {{form.Language}}
+                {% if form.Language.errors %}
+                  <ul class="errorlist" style="color: red">
+                    {% for error in form.Language.errors %}
+                      <li>{{ error }}</li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
               </div>
             </div>
             <div class="orgrow">
@@ -157,6 +253,13 @@
               </div>
               <div class="col-75">
                 {{form.Gender}}
+                {% if form.Gender.errors %}
+                  <ul class="errorlist" style="color: red">
+                    {% for error in form.Gender.errors %}
+                      <li>{{ error }}</li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
               </div>
             </div>
             <div class="orgrow">
@@ -165,6 +268,13 @@
               </div>
               <div class="col-75">
                 {{form.Birth_Date}}
+                {% if form.Birth_Date.errors %}
+                  <ul class="errorlist" style="color: red">
+                    {% for error in form.Birth_Date.errors %}
+                      <li>{{ error }}</li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
               </div>
             </div>
             <div class="orgrow">
@@ -173,90 +283,202 @@
               </div>
               <div class="col-75">
                 {{form.Telephone}}
+                {% if form.Telephone.errors %}
+                  <ul class="errorlist" style="color: red">
+                    {% for error in form.Telephone.errors %}
+                      <li>{{ error }}</li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
               </div>
             </div>
           </div>
       </div>
-         </div>
+           
+    
+    
+    </div>
       <p></p>
+      <div id="password" class="smallcontainer">
+        <div class="password-container">
+          <div class="orgrow">
+            <div class="col-15">
+              <label for="psw">Password :</label>
+            </div>
+            <div class="col-75">
+              {{form.password}}
+              {% if form.password.errors %}
+                <ul class="errorlist" style="color: red">
+                  {% for error in form.password.errors %}
+                    <li>{{ error }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+              
+                  <div id="pswMessage">
+                      <h3 style="font-size:10px">Password must contain the following: </h3>
+                      <p id="lab1" style="background-color:inherit">✖ capital letters,</p> 
+                      <p id="lab2" >✖ small letters,</p> 
+                      <p id="lab3" >✖ special character,</p>
+                      <p id="lab4" >✖ number,</p>
+                      <p id="lab5" >✖ not less than 8 character.</p>
+                  </div>
+            </div>
+          </div>
+
+          </div>
+          <div class="password-container">
+          <div class="orgrow">
+            <div class="col-15">
+              <label for="psw-repeat-user">Repeat Password :</label>
+            </div>
+            <div class="col-75">
+              <input type="password" name="psw-repeat" onfocus="showPswMatchMsg()" onblur="hidePswMatchMsg()" onkeyup="ChangePswMsgStatus(psw.value)" placeholder="Repeat Password..." id="psw-repeat">
+                    <!--  <i class="fa-solid fa-eye" id="eye2"></i> -->
+                  <div id="pswMatchMsg">
+                      <p id="lab6" >✖ Password Matches</p>
+                  </div>
+            </div>
+            
+          </div>
+
+          </div>
+          <p></p>
+                 
+          <div class="passerror">
+          {% if pass_error_user %}
+            {% for error in pass_error_user %}
+              {{error}}<br>
+            {% endfor %}
+          {% endif %}
+          </div>
+      </div>
+      <p></p>
+      <div class="orgrow">
+        <button style="float: right" class="btn" id="cancel-btn" type="button">Cancel</button><a>&nbsp;</a><button style="float: right;margin-right: 10px;" class="btn" name="user-save-btn" type="submit" value="Save" >{% if the_user.username %}Update {% else %}Save{% endif %}</button>
+      </div>
+    </div>
+    <p></p>
       
       <a id="Div2" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('rolls') ,arrowdirection(id)"> Rules </a>
       <div id="rolls" class="smallcontainer">
       </div>
       <p></p>
       
-      <a id="Div3" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('password') ,arrowdirection(id)"> Password </a>
-      <div id="password" class="smallcontainer">
-          <div class="password-container">
-            <div class="orgrow">
-              <div class="col-15">
-                <label for="psw"><b>Password :</b></label>
-              </div>
-              <div class="col-75">
-                {{form.password}}
-                <i class="fa-solid fa-eye" id="eye1"></i>
-                    <div id="pswMessage">
-                        <h3 style="font-size:10px">Password must contain the following: </h3>
-                        <p id="lab1" style="background-color:inherit">✖ capital letters,</p> 
-                        <p id="lab2" >✖ small letters,</p> 
-                        <p id="lab3" >✖ special character,</p>
-                        <p id="lab4" >✖ number,</p>
-                        <p id="lab5" >✖ not less than 8 character.</p>
-                    </div>
-              </div>
-            </div>
+    
 
-            </div>
-            <div class="password-container">
-            <div class="orgrow">
-              <div class="col-15">
-                <label for="psw-repeat"><b>Repeat Password :</b></label>
-              </div>
-              <div class="col-75">
-                <input type="password" name="psw-repeat" onfocus="showPswMatchMsg()" onblur="hidePswMatchMsg()" onkeyup="ChangePswMsgStatus(psw.value)" id="psw-repeat">
-                      <!--  <i class="fa-solid fa-eye" id="eye2"></i> -->
-                    <div id="pswMatchMsg">
-                        <p id="lab6" >✖ Password Matches</p>
-                    </div>
-              </div>
-            </div>
-
-            </div>
-
-
-                    <p></p>
-
-
-                    
-
-
-      </div>
-      <p></p>
       
       <a id="Div4" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('modulesaccess') ,arrowdirection(id)"> Modules Access </a>
       <div id="modulesaccess" class="smallcontainer">
+            <div class="orgrow">
+              <div class="col-10">
+                <label for="gender">Modules :</label>
+              </div>
+              <div class="col-25">
+                <select id="module" name="module">
+                    <option value="POS">POS</option>
+                    <option value="Accounting">Accounting</option>
+                    <option value="CRM">CRM</option>
+                </select>
+              </div>
+              <div class="col-15" style="display: inline-block;color :green;padding-left: 20px">
+                  <span onclick="addnewmodule()" class="btn1" style="text-align: center;padding: 12px 12px 12px 0;display: inline-block;text-align: center;">Add</span>
+              </div>
+             <div class="col-20">
+                <label >Allowed Modules :</label> 
+             </div>
+             <div class="col-25">
+                    <ul id="mymoduleUL">
+
+                    </ul>
+                        
+             </div>
+            </div>
+
+
+
       </div>
       <p></p>
       
-      <a id="Div5" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('security') ,arrowdirection(id)"> Security </a>
+      <a id="Div5" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('security') ,arrowdirection(id)"> Access Time </a>
       <div id="security" class="smallcontainer">
+          <div class="orgrow">
+              <div class="col-25">
+                  <label for="weekdays"><b>User Access Time :</b></label>
+              </div>
+              <div id="weekdays" class="col-60">
+                <dl>
+                    <dt>Saturday</dt>
+                    <dd><a> From :</a> <input type="time" name="aftertime" > <a> To :</a> <input type="time" name="befortime" ></dd>
+                    <dt>Sunday</dt>
+                    <dd><a> From :</a> <input type="time" name="aftertime" > <a> To :</a> <input type="time" name="befortime" ></dd>
+                    <dt>Monday</dt>
+                    <dd><a> From :</a> <input type="time" name="aftertime" > <a> To :</a> <input type="time" name="befortime" ></dd>
+                    <dt>Tuesday</dt>
+                    <dd><a> From :</a> <input type="time" name="aftertime" > <a> To :</a> <input type="time" name="befortime" ></dd>
+                    <dt>Wednesday</dt>
+                    <dd><a> From :</a> <input type="time" name="aftertime" > <a> To :</a> <input type="time" name="befortime" ></dd>
+                    <dt>Thursday</dt>
+                    <dd><a> From :</a> <input type="time" name="aftertime" > <a> To :</a> <input type="time" name="befortime" ></dd>
+                    <dt>Friday</dt>
+                    <dd><a> From :</a> <input type="time" name="aftertime" > <a> To :</a> <input type="time" name="befortime" ></dd>
+                </dl>  
+
+              </div>
+               <div class="col-45"> 
+                <button style="float: left" class="btn" id="weekdays-btn" type="button">Save</button>
+               </div>
+
+          </div>
+      </div>
+      <p></p>
+      <a id="Div6" class="fa fa-arrow-circle-down"  style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('restrictip') ,arrowdirection(id)"> Restrict IP </a>
+
+      <div id="restrictip" class="smallcontainer">
+          <input type="radio" id="allowips" name="age" value="Allow" checked="" onclick="document.getElementById('restrictipssection').style.display='none'">
+            <label for="allowips">Allow all IPs</label><br>
+            <input type="radio" id="restrictips" name="age" value="Restrict" onclick="document.getElementById('restrictipssection').style.display='block'">
+            <label for="restrictips">Restrict user login to the IPs specified here.</label><br>  
+
+
+
+            <div class="orgrow" id="restrictipssection" style="display:none">
+            <label >Multiple IPs can be added separated by commas.</label><br>
+            <div class="col-5">
+                <label for="ips">IPs :</label>
+              </div>
+              <div class="col-25">
+                  <input type="text" id="ips" name="ips" placeholder="IP...">
+              </div>
+              <div class="col-20" style="display: inline-block;color :green;padding-left: 20px">
+                  <span onclick="ValidateIPaddress(ips)" class="btn1" style="text-align: center;padding: 12px 12px 12px 0;display: inline-block;text-align: center;">Add</span>
+              </div>
+             <div class="col-10">
+                <label >Allowed IPs :</label> 
+             </div>
+                <div class="col-25">
+                    <ul id="myipUL">
+
+                    </ul>
+                        
+             </div>
+            </div>
+
       </div>
       
       
-      
+     
 
       <p></p>
       
         
-    <div class="orgrow">
-        <button style="float: right" class="btn" id="cancel-btn" type="button">Cancel</button><a>&nbsp;</a><button style="float: right;margin-right: 10px;" class="btn" name="user-save-btn" type="submit" value="Save">save</button>
-    </div>
+    
       
  
   </div>
 
  </form>
-   
+  
 </div>
    
 {% endblock body %}
@@ -272,6 +494,24 @@
 </script>
 
 <script>
+  window.addEventListener("resize", resizeCurtainMenu);
+  function resizeCurtainMenu() {
+  var w = window.innerWidth;
+  if (document.getElementById("userNav").style.width != "0%")
+    {if( w >= 1025 )
+      {document.getElementById("userNav").style.width = "30%";}
+      else 
+      {
+          if(w > 800 && w < 1025)
+            {document.getElementById("userNav").style.width = "40%";}
+            else
+            {document.getElementById("userNav").style.width = "60%";}
+    }
+  p}
+  }
+</script>
+
+<script>
   $(document).ready(function() {
     $('#autoRenewField').on('change', function() {
       // Submit the form
@@ -281,11 +521,263 @@
 </script>
 <script>
   document. addEventListener('mouseup', function(e) {
-    var container = document. getElementById('myNav');
+    var container = document. getElementById('userNav');
     if (! container. contains(e. target)) {
     container. style.width = "0%";
     }
     });
 </script>
 
+
+
+<script>
+  // Wait for the DOM to load
+  document.addEventListener('DOMContentLoaded', function() {
+      // Select all the messages with the 'alert' class
+      var messages = document.querySelectorAll('.alert');
+
+      // Loop through each message and set a timeout to remove it after 3 seconds,
+      // except for error messages
+      messages.forEach(function(message) {
+          if (!message.classList.contains('error')) {
+              setTimeout(function() {
+                  message.remove();
+              }, 3000);
+          }
+      });
+  });
+</script>
+<script>
+  var message = document.getElementById('fade-msg');
+  if (!message.classList.contains('error')) {
+      setTimeout(function() {
+        message.style.opacity = '0';
+      }, 1250);
+  }
+</script>
+<script>
+  var coll = document.getElementsByClassName("smallcontainer");
+  var i;
+  
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.maxHeight){
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+      } 
+    });
+  }
+  </script>  
+      <script>
+          
+          function ValidateIPaddress(inputText)
+   {
+   var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+   if(inputText.value.match(ipformat))
+   {
+   document.getElementById("ips").focus();
+   addnewip();
+   }
+   else
+   {
+   alert("You have entered an invalid IP address!");
+   document.getElementById("ips").focus();return false;
+   }
+   }
+   
+   
+  // Create a "close" button and append it to each list item
+  var myNodelist = document.getElementsByTagName("LI");
+  var i;
+  for (i = 0; i < myNodelist.length; i++) {
+    var span = document.createElement("SPAN");
+    var txt = document.createTextNode("\u00D7");
+    span.className = "closeLI";
+    span.appendChild(txt);
+    myNodelist[i].appendChild(span);
+  }
+  
+  // Click on a close button to hide the current list item
+  var close = document.getElementsByClassName("closeLI");
+  var i;
+  for (i = 0; i < close.length; i++) {
+    close[i].onclick = function() {
+      var div = this.parentElement;
+      div.style.display = "none";
+    };
+  }
+  
+  // Add a "checked" symbol when clicking on a list item
+  var list = document.querySelector('ul');
+  list.addEventListener('click', function(ev) {
+    if (ev.target.tagName === 'LI') {
+      ev.target.classList.toggle('checked');
+    }
+  }, false);
+  
+  // Create a new list item when clicking on the "Add" button
+  function addnewip() {
+    var li = document.createElement("li");
+    var inputValue = document.getElementById("ips").value;
+    var t = document.createTextNode(inputValue);
+    li.appendChild(t);
+    if (inputValue === '') {
+      alert("You must write something!");
+    } else {
+      document.getElementById("myipUL").appendChild(li);
+    }
+    document.getElementById("ips").value = "";
+  
+    var span = document.createElement("SPAN");
+    var txt = document.createTextNode("\u00D7");
+    span.className = "closeLI";
+    span.appendChild(txt);
+    li.appendChild(span);
+  
+    for (i = 0; i < close.length; i++) {
+      close[i].onclick = function() {
+        var div = this.parentElement;
+        div.style.display = "none";
+      };
+    }
+  }
+  function addnewmodule() {
+    var li = document.createElement("li");
+    var inputValue = document.getElementById("module").value;
+    var t = document.createTextNode(inputValue);
+    li.appendChild(t);
+    if (inputValue === '') {
+      alert("You must write something!");
+    } else {
+      document.getElementById("mymoduleUL").appendChild(li);
+    }
+    document.getElementById("module").value = "";
+  
+    var span = document.createElement("SPAN");
+    var txt = document.createTextNode("\u00D7");
+    span.className = "closeLI";
+    span.appendChild(txt);
+    li.appendChild(span);
+  
+    for (i = 0; i < close.length; i++) {
+      close[i].onclick = function() {
+        var div = this.parentElement;
+        div.style.display = "none";
+      };
+    }
+  }
+  </script>
+<script>
+  // Get the user delete modal
+var modal = document.getElementById('userdeleteconfirm');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target === modal) {
+    modal.style.display = "none";
+    document.getElementById('deleteconfirmation').style.display='none';
+  };
+};
+</script>
+
+<script>
+  // Get references to the buttons
+  const specificButton = document.getElementById('user-delete-btn');
+  const removeButton = document.getElementById('remove-button');
+
+  // Attach an event listener to the add button
+  specificButton.addEventListener('click', () => {
+    // Get the current URL
+    const url = new URL(window.location.href);
+
+    // Add the query parameter to the URL
+    url.searchParams.append('del', 'true');
+
+    // Modify the browser history with triggering a page reload
+    window.location.href = url.href;
+  });
+
+  // Check if the 'del' query parameter exists in the URL
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('del')) {
+    const delEl = document.getElementById('userdeleteconfirm');
+    const delEl2 = document.getElementById('deleteconfirmation');
+
+    // Show the delEl element by modifying its style
+    delEl.style.display = 'block';
+    delEl2.style.display = 'block';
+  }
+
+  // Attach an event listener to the remove button
+  removeButton.addEventListener('click', () => {
+    // Get the current URL
+    const url = new URL(window.location.href);
+
+    // Remove the query parameter from the URL
+    url.searchParams.delete('del');
+
+    // Modify the browser history without triggering a page reload
+    window.history.pushState({}, '', url.href);
+  });
+</script>
+
+<script>
+  // Get a reference to the delete button
+  const deleteButton = document.querySelector('.userdel');
+  console.log(deleteButton);
+
+  // Attach an event listener to the delete button
+  deleteButton.addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent the default behavior of the button click
+
+    // Get the product ID associated with the delete button
+    const userId = deleteButton.dataset.userId;
+    console.log(userId);
+
+    // Get the confirmation code from the input field
+    const confirmationCode = document.getElementById('code').value;
+
+    // Construct the URL with the confirmation code as a query parameter
+    const url = `/my_products/users/delete_user/${userId}?code=${encodeURIComponent(confirmationCode)}`;
+
+    // Make an asynchronous request to delete the product from the server
+    fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response data
+        // For example, display a success message or update the cart UI
+        if (data.success) {
+          // Handle the success response
+          console.log('success');
+          const url = new URL(window.location.href);
+
+          // Remove the query parameter from the URL
+          url.searchParams.delete('del');
+
+          // Modify the browser history without triggering a page reload
+          window.location.href = url.href;
+        } else if (data.error) {
+          console.log('error');
+          const errorEl = document.getElementById('code-error')
+          errorEl.textContent = '• Invalid Code!'
+        }
+      })
+      .catch(error => {
+        // Handle any errors that occurred during the request
+        console.error(error);
+      });
+  });
+</script>
+
+
+ 
 {% endblock additional %}

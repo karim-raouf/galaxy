@@ -19,13 +19,13 @@
               {% if sub_basic %} 
                 {% for item in sub_basic %}
                   <div class="orgrow">
-                      <div class="col-40">
+                      <div class="col-40" style="font-size: large">
                           <a id="modulename" style="color:blue;" class="fa fa-tag"> {{item.ProductID.Name}}  </a> 
                       </div>
-                      <div class="col-10">
+                      <div class="col-10" style="font-size: large">
                           <a id="moduleqty" > Only 1 </a> 
                       </div>
-                      <div class="col-45" style="">
+                      <div class="col-45" style="font-size: large">
                           <a class="btn1" style="float:right">Manage</a> 
                       </div>
                   </div>
@@ -45,13 +45,13 @@
             {% if sub_add %}  
               {% for item in sub_add %}
                 <div class="orgrow">
-                  <div class="col-40">
+                  <div class="col-40" style="font-size: large">
                       <a id="addonsname" style="color:blue;" class="fa fa-tag"> {{ item.ProductID__Name }} </a> <a href="{% url 'galaxy:pricing' %}" style="color:blue;;padding:5px" class="fa fa-cart-plus" ></a>
                   </div>
-                  <div class="col-10" >
+                  <div class="col-10" style="font-size: large" >
                       <a id="addonsqty" > Qty : {{ item.total_qty }} </a> 
                   </div>
-                  <div class="col-45" style="">
+                  <div class="col-45" style="font-size: large">
                       <a {% if item.ProductID__Code == 201 %} href="{% url 'galaxy:manage_org' %}" {% elif item.ProductID__Code == 203 %} href="{% url 'galaxy:manage_user' %}" {% else %} href="#" {% endif %}class="btn1" style="float:right">Manage</a> 
                   </div>
                 </div>

@@ -2,299 +2,806 @@
 {% load static %}
     {% block header %}
     <link type="text/css" rel="stylesheet" href="{% static 'css/pricing.css' %}"/>
-    <style>
-        .tooltip {
-           position: relative;
-           display: inline-block;
-        }
-        
-        .tooltip .tooltiptext {
-           visibility: hidden;
-           width: 210px;
-           background-color: #D3D3D3;
-           color: #000000;
-           text-align: center;
-           border-radius: 6px;
-           padding: 5px;
-           position: absolute;
-           z-index: 1;
-           top: -18%;
-           left: 130px;
-           transform: translateX(-50%);
-           opacity: 0;
-           transition: opacity 0.3s;
-        }
-        
-        .tooltip:hover .tooltiptext {
-           visibility: visible;
-           opacity: 0.85;
-           font-size: 15px;
-        }
-        
-        .tooltip .exclamation-mark {
-           color: white;
-           cursor: help;
-        }
-    </style>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/products_managment.css' %}"/>
     {% endblock header %}
     
-    {% block body %}
+{% block body %}
     
+   
+        <div class="orgrow" style="text-align: center;  vertical-align: middle;">
+          <label  class="pagetitle" >Pricing Tables</label><br>
+          <label class="title">Pay only for what you need</label>
+        </div>
         <div style="text-align: center; color: black;">
-                <span style="text-align: center; font-size: xxx-large;"><strong>Pay only for what you need</strong></span>
-                <br>
-                {% comment %} <span style="text-align:center;font-size: 30px">Pay only for what you need</span> {% endcomment %}
-                <div style="text-align:center">
-                    <h2>Monthly<label class="switch"><input id="myCheckbox" type="checkbox"><span class="slider round"></span></label>Annually</h2>
-                </div>
-        </div>   
-        <div class="columns">
-            <ul class="price">
-                <li class="header" style="background-color:green ; text-align:center">Basic Modules
-                       <span class="tooltip">
-                          <span style="font-size:large;" class="fa fa-info-circle"></span>
-                          <span class="tooltiptext">You should minimum buy 1 main product to start work.</span>
-                       </span>
-                    
-                <hr> <a style="font-size:20px; color: white;" >Select Main Product </a> </li>
-                {% comment %} ----Monthly bundles---- {% endcomment %}
-                {% comment %} <li class="posM"> Point of Sales <button {% if request.user.is_authenticated %} onclick="location.href='/add_cart/6/Monthly'" {% else %} onclick="location.href='/login/'" {% endif %} class="button "><a style="color: white;">${{POS_M.Price}} -</a> Add to Cart</button></li> {% endcomment %}
-                <li class="posM">Point of Sales<button {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} {% if POS_M.id in p_ids or POS_A.id in p_ids %} disabled {% endif %}{% if m_pos or a_pos %}disabled{% endif %} onclick="delayedAction('/add_cart/6/Monthly/Basic')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">{% if POS_M.id in p_ids or POS_A.id in p_ids %}Item added {% elif m_pos or a_pos %}Subscribed{% else %}$ {{POS_M.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button></li></li>
-                <li class="imM">Inventory Management<button {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} {% if IM_M.id in p_ids or IM_A.id in p_ids %} disabled {% endif %}{% if m_im or a_im %}disabled{% endif %} onclick="delayedAction('/add_cart/7/Monthly/Basic')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">{% if IM_M.id in p_ids or IM_A.id in p_ids %}Item added {% elif m_im or a_im %}Subscribed{% else %}$ {{IM_M.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button></li></li>
-                <li class="crmM">CRM<button {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} {% if CRM_M.id in p_ids or CRM_A.id in p_ids %} disabled {% endif %}{% if m_crm or a_crm %}disabled{% endif %} onclick="delayedAction('/add_cart/8/Monthly/Basic')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">{% if CRM_M.id in p_ids or CRM_A.id in p_ids %}Item added {% elif m_crm or a_crm %}Subscribed{% else %}$ {{CRM_M.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button></li></li>
-                <li class="aM">Accounting<button {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} {% if A_M.id in p_ids or A_A.id in p_ids %} disabled {% endif %}{% if m_a or a_a %}disabled{% endif %} onclick="delayedAction('/add_cart/9/Monthly/Basic')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">{% if A_M.id in p_ids or A_A.id in p_ids %}Item added {% elif m_a or a_a %}Subscribed{% else %}$ {{A_M.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button></li></li>
+                  <div style="text-align:center">
+                      <label>Monthly
+                          <label class="switch">
+                              <input id="myCheckbox" type="checkbox">
+                              <span class="slider round"></span>
+                          </label>
+                              Annually</label>
+                  </div>
+        </div>  
+{% comment %}-----------------------------------------------------------------------------------------------------------------------------------------------------------------  {% endcomment %}
+          <div id="container" class="container">
+              <div class="orgrow">
+  
+                  <div class="col-45">
+                      <a id="Div1" style="font-weight: bold; padding-left:10px;font-size: large; color: green;"> Modules </a>
+                             <span class="tooltip">
+                                <span style="font-size:large;" class="fa fa-info-circle"></span>
+                                <span class="tooltiptext">You should minimum buy 1 main product to start work.</span>
+                             </span>
+                      <p></p>
+  
+                      <div class="smallcontainer" style="display:block;">
+                          <div class="orgrow" style="height:50px">
+                               <a style="color:green;"><b>Select Main Product</b> </a>
+                          </div>
+                          {% comment %} ----Monthly bundles---- {% endcomment %}
+                          <div class="orgrow posM" style="height:50px">
+                              <div class="col-74" >
+                                  <a style="padding-top:10px">Point of Sales</a>
+                              </div>
+                              <div class="col-24">
+                                  <button id="posMonth-btn" style="float:right" {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} {% if POS_M.id in p_ids or POS_A.id in p_ids %} disabled {% endif %}{% if m_pos or a_pos %}disabled{% endif %} data-product-id="6" data-sub-type="Monthly" data-bundle-type="Basic" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span id="posMonth" class="add-to-cart">{% if POS_M.id in p_ids or POS_A.id in p_ids %}Item added {% elif m_pos or a_pos %}Subscribed{% else %}$ {{POS_M.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                              </div>
+                          </div>
+  
+                          <div class="orgrow imM" style="height:50px">
+                              <div class="col-74" >
+                                  <a style="padding-top:10px">Inventory Management</a>
+                              </div>
+                              <div class="col-24">
+                                  <button id="imMonth-btn" style="float:right" {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} {% if IM_M.id in p_ids or IM_A.id in p_ids %} disabled {% endif %}{% if m_im or a_im %}disabled{% endif %} data-product-id="7" data-sub-type="Monthly" data-bundle-type="Basic" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span id="imMonth" class="add-to-cart">{% if IM_M.id in p_ids or IM_A.id in p_ids %}Item added {% elif m_im or a_im %}Subscribed{% else %}$ {{IM_M.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                              </div>
+                          </div>
+                          <div class="orgrow crmM" style="height:50px">
+                              <div class="col-74" >
+                                  <a style="padding-top:10px">CRM</a>
+                              </div>
+                              <div class="col-24">
+                                  <button id="crmMonth-btn" style="float:right" {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} {% if CRM_M.id in p_ids or CRM_A.id in p_ids %} disabled {% endif %}{% if m_crm or a_crm %}disabled{% endif %} data-product-id="8" data-sub-type="Monthly" data-bundle-type="Basic" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span id="crmMonth" class="add-to-cart">{% if CRM_M.id in p_ids or CRM_A.id in p_ids %}Item added {% elif m_crm or a_crm %}Subscribed{% else %}$ {{CRM_M.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                              </div>
+                          </div>
+                          <div class="orgrow aM" style="height:50px">
+                              <div class="col-74" >
+                                  <a style="padding-top:10px">Accounting</a>
+                              </div>
+                              <div class="col-24">
+                                  <button id="aMonth-btn" style="float:right" {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} {% if A_M.id in p_ids or A_A.id in p_ids %} disabled {% endif %}{% if m_a or a_a %}disabled{% endif %} data-product-id="9" data-sub-type="Monthly" data-bundle-type="Basic" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span id="aMonth" class="add-to-cart">{% if A_M.id in p_ids or A_A.id in p_ids %}Item added {% elif m_a or a_a %}Subscribed{% else %}$ {{A_M.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                              </div>
+                          </div>
+                          {% comment %} ----Anually bundles---- {% endcomment %}
+                          <div class="orgrow posA" style="height:50px">
+                              <div class="col-74" >
+                                  <a style="padding-top:10px"> Point of Sales</a>
+                              </div>
+                              <div class="col-24">
+                                  <button id="posAnnual-btn" style="float:right" {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} {% if POS_A.id in p_ids or POS_M.id in p_ids %} disabled {% endif %}{% if m_pos or a_pos %}disabled{% endif %} data-product-id="2" data-sub-type="Annually" data-bundle-type="Basic" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span id="posAnnual" class="add-to-cart">{% if POS_A.id in p_ids or POS_M.id in p_ids %}Item added {% elif m_pos or a_pos %}Subscribed{% else %}$ {{POS_A.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                              </div>
+                          </div>
+                          <div class="orgrow imA" style="height:50px">
+                              <div class="col-74" >
+                                  <a style="padding-top:10px">Inventory Management</a>
+                              </div>
+                              <div class="col-24">
+                                  <button id="imAnnual-btn" style="float:right" {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} {% if IM_A.id in p_ids or IM_M.id in p_ids %} disabled {% endif %}{% if m_im or a_im %}disabled{% endif %} data-product-id="3" data-sub-type="Annually" data-bundle-type="Basic" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span id="imAnnual" class="add-to-cart">{% if IM_A.id in p_ids or IM_M.id in p_ids %}Item added {% elif m_im or a_im %}Subscribed{% else %}$ {{IM_A.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                              </div>
+                          </div>
+                          <div class="orgrow crmA" style="height:50px">
+                              <div class="col-74" >
+                                  <a style="padding-top:10px">CRM</a>
+                              </div>
+                              <div class="col-24">
+                                  <button id="crmAnnual-btn" style="float:right" {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} {% if CRM_A.id in p_ids or CRM_M.id in p_ids %} disabled {% endif %}{% if m_crm or a_crm %}disabled{% endif %} data-product-id="4" data-sub-type="Annually" data-bundle-type="Basic" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span id="crmAnnual" class="add-to-cart">{% if CRM_A.id in p_ids or CRM_M.id in p_ids %}Item added {% elif m_crm or a_crm %}Subscribed{% else %}$ {{CRM_A.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                              </div>
+                          </div>
+                          <div class="orgrow aA" style="height:50px">
+                              <div class="col-74" >
+                                  <a  style="padding-top:10px">Accounting</a>
+                              </div>
+                              <div class="col-24">
+                                  <button id="aAnnual-btn" style="float:right" {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} {% if A_A.id in p_ids or A_M.id in p_ids %} disabled {% endif %}{% if m_a or a_a %}disabled{% endif %} data-product-id="5" data-sub-type="Annually" data-bundle-type="Basic" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span id="aAnnual" class="add-to-cart">{% if A_A.id in p_ids or A_M.id in p_ids  %}Item added {% elif m_a or a_a %}Subscribed{% else %}$ {{A_A.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+  
+  
+  
+                  <p></p>
+                  <div class="col-10">
+                   <p></p>     
+                  </div>
+  
+                  <div class="col-45">
+                      <a id="Div2" style="font-weight: bold; padding-left:10px;font-size: large; color: green;" > Add-ons </a>
+                          <span class="tooltip">
+                              <span style="font-size:large;" class="fa fa-info-circle"></span>
+                              <span style="text-align: left;" class="tooltiptext">Minimum requirement:<br>
+                                  - 1 Organization<br>
+                                  - 1 Store<br>
+                                  - 1 User
+                              </span>
+                           </span>
+                      <p></p>
+                      <div class="smallcontainer" style="display:block;">
+                            <div class="orgrow" style="height:50px">
+                                <a style="color:green;"><b>Add extra products to your Modules </b></a>
+                            </div>
+                          {% comment %} ----Monthly Bundles---- {% endcomment %}
+                            <div class="orgrow oM" style="height:50px">
+                                <div class="col-74" >
+                                    <a style="padding-top:10px"> 1 Organization </a>
+                                </div>
+                                <div class="col-24">
+                                    <button style="float:right" {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} data-product-id="17" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{O_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                </div>
+                            </div>
+                            <div class="orgrow storeM" style="height:50px">
+                                <div class="col-74" >
+                                    <a style="padding-top:10px"> 1 Store </a>
+                                    <span class="tooltip">
+                                        <span style="font-size:large;" class="fa fa-info-circle"></span>
+                                        <span style="text-align:left" class="tooltiptext">
+                                            Each Store Includes:<br>
+                                            - 10,000 Transactions / Month<br>
+                                            - 10GB Storage
+                                        </span>
+                                    </span>
+                                </div>
+                                <div class="col-24">
+                                    <button style="float:right" {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} data-product-id="18" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORE_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                </div>
+                            </div>
+                            <div class="orgrow uM" style="height:50px">
+                                <div class="col-74" >
+                                    <a style="padding-top:10px"> 1 User </a>
+                                </div>
+                                <div class="col-24">
+                                    <button style="float:right" {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} data-product-id="19" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{U_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                </div>
+                            </div>
+                            <div class="orgrow rM" style="height:50px">
+                                <div class="col-74" >
+                                    <a style="padding-top:10px"> 5 Reports </a>
+                                </div>
+                                <div class="col-24">
+                                    <button style="float:right" {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} data-product-id="20" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{R_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                </div>
+                            </div>
+                            <div class="orgrow tM" style="height:50px">
+                                <div class="col-74" >
+                                    <a style="padding-top:10px"> 10,000 Transactions / Month </a>
+                                </div>
+                                <div class="col-24">
+                                    <button style="float:right" {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} data-product-id="21" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{T_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                </div>
+                            </div>
+                            <div class="orgrow slaM" style="height:50px">
+                                <div class="col-74" >
+                                    <a style="padding-top:10px"> SLA </a>
+                                </div>
+                                <div class="col-24">
+                                    <button style="float:right" {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} data-product-id="22" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{SLA_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                </div>
+                            </div>
+                            <div class="orgrow storageM" style="height:50px">
+                                <div class="col-74" >
+                                    <a style="padding-top:10px"> 10GB Storage </a>
+                                </div>
+                                <div class="col-24">
+                                    <button style="float:right" {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} data-product-id="23" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORAGE_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                </div>
+                            </div>
+                            {% comment %} Annually bundles {% endcomment %}
+                            <div class="orgrow oA" style="height:50px">
+                                <div class="col-74" >
+                                    <a style="padding-top:10px"> 1 Organization </a>
+                                </div>
+                                <div class="col-24">
+                                    <button style="float:right" {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} data-product-id="10" data-sub-type="Annually" data-bundle-type="Add-Ons" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{O_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                </div>
+                            </div>
+                            <div class="orgrow storeA" style="height:50px">
+                                <div class="col-74" >
+                                    <a style="padding-top:10px"> 1 Store </a>
+                                    <span class="tooltip">
+                                        <span style="font-size:large;" class="fa fa-info-circle"></span>
+                                        <span style="text-align:left" class="tooltiptext">Each Store Includes:<br>- 10,000 Transactions / Month<br>- 10GB Storage</span>
+                                    </span>
+                                </div>
+                                <div class="col-24">
+                                    <button style="float:right" {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} data-product-id="11" data-sub-type="Annually" data-bundle-type="Add-Ons" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORE_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                </div>
+                            </div>
+                            <div class="orgrow uA" style="height:50px">
+                                <div class="col-74" >
+                                    <a style="padding-top:10px"> 1 User </a>
+                                </div>
+                                <div class="col-24">
+                                    <button style="float:right" {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} data-product-id="12" data-sub-type="Annually" data-bundle-type="Add-Ons" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{U_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                </div>
+                            </div>
+                            <div class="orgrow rA" style="height:50px">
+                                <div class="col-74" >
+                                    <a style="padding-top:10px"> 5 Reports </a>
+                                </div>
+                                <div class="col-24">
+                                    <button style="float:right" {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} data-product-id="13" data-sub-type="Annually" data-bundle-type="Add-Ons" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{R_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                </div>
+                            </div>
+                            <div class="orgrow tA" style="height:50px">
+                                <div class="col-74" >
+                                    <a style="padding-top:10px"> 10,000 Transactions / Month </a>
+                                </div>
+                                <div class="col-24">
+                                    <button style="float:right" {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} data-product-id="14" data-sub-type="Annually" data-bundle-type="Add-Ons" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{T_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                </div>
+                            </div>
+                            <div class="orgrow slaA" style="height:50px">
+                                <div class="col-74" >
+                                    <a style="padding-top:10px"> SLA </a>
+                                </div>
+                                <div class="col-24">
+                                    <button style="float:right" {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} data-product-id="15" data-sub-type="Annually" data-bundle-type="Add-Ons" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{SLA_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                </div>
+                            </div>
+                            <div class="orgrow storageA" style="height:50px">
+                                <div class="col-74" >
+                                    <a style="padding-top:10px"> 10GB Storage </a>
+                                </div>
+                                <div class="col-24">
+                                    <button style="float:right" {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} data-product-id="16" data-sub-type="Annually" data-bundle-type="Add-Ons" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORAGE_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                </div>
+                            </div>
 
-                {% comment %} ----Anually bundles---- {% endcomment %}
-                <li class="posA"> Point of Sales<button {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} {% if POS_A.id in p_ids or POS_M.id in p_ids %} disabled {% endif %}{% if m_pos or a_pos %}disabled{% endif %} onclick="delayedAction('/add_cart/2/Annually/Basic')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">{% if POS_A.id in p_ids or POS_M.id in p_ids %}Item added {% elif m_pos or a_pos %}Subscribed{% else %}$ {{POS_A.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button></li></li>
-                <li class="imA">Inventory Management<button {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} {% if IM_A.id in p_ids or IM_M.id in p_ids %} disabled {% endif %}{% if m_im or a_im %}disabled{% endif %} onclick="delayedAction('/add_cart/3/Annually/Basic')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">{% if IM_A.id in p_ids or IM_M.id in p_ids %}Item added {% elif m_im or a_im %}Subscribed{% else %}$ {{IM_A.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button></li></li>
-                <li class="crmA">CRM<button {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} {% if CRM_A.id in p_ids or CRM_M.id in p_ids %} disabled {% endif %}{% if m_crm or a_crm %}disabled{% endif %} onclick="delayedAction('/add_cart/4/Annually/Basic')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">{% if CRM_A.id in p_ids or CRM_M.id in p_ids %}Item added {% elif m_crm or a_crm %}Subscribed{% else %}$ {{CRM_A.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button></li></li>
-                <li class="aA">Accounting<button {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} {% if A_A.id in p_ids or A_M.id in p_ids %} disabled {% endif %}{% if m_a or a_a %}disabled{% endif %} onclick="delayedAction('/add_cart/5/Annually/Basic')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">{% if A_A.id in p_ids or A_M.id in p_ids  %}Item added {% elif m_a or a_a %}Subscribed{% else %}$ {{A_A.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button></li></li>
-            </ul>
-        </div>
-        <div class="columns">
-            <ul class="price">
-                <li class="header" style="background-color:green ;text-align:center">Add-ons 
-                <span class="tooltip">
-                    <span style="font-size:large;" class="fa fa-info-circle"></span>
-                    <span style="text-align: left;" class="tooltiptext">Minimum requirement:<br>
-                        - 1 Organization<br>
-                        - 1 Store<br>
-                        - 1 User
-                    </span>
-                 </span><hr> <a style="font-size:20px; color: white;" >Add extra products to your Modules </a> </li>
-                {% comment %} ----Monthly Bundles---- {% endcomment %}
-            
-                <li class="oM"> 1 Organization<button {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/17/Monthly/Add-Ons')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{O_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
-                <li class="storeM">1 Store
-                    <span class="tooltip">
-                        <span style="font-size:large;" class="fa fa-info-circle"></span>
-                        <span style="text-align:left" class="tooltiptext">Each Store Includes:<br>- 10,000 Transactions / Month<br>- 10GB Storage</span>
-                    </span><button {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/18/Monthly/Add-Ons')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORE_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
-                
-                <li class="uM">1 User<button {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/19/Monthly/Add-Ons')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{U_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
-                <li class="rM">5 Reports<button {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/20/Monthly/Add-Ons')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{R_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
-                <li class="tM">10,000 Transactions / Month<button {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/21/Monthly/Add-Ons')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{T_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
-                <li class="slaM">SLA<button {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/22/Monthly/Add-Ons')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{SLA_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
-                <li class="storageM">10GB Storage<button {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/23/Monthly/Add-Ons')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORAGE_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
-                {% comment %} ----Anually Bundles---- {% endcomment %}
-                <li class="oA"> 1 Organization<button {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/10/Annually/Add-Ons')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{O_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
-                <li class="storeA">1 Store
-                    <span class="tooltip">
-                        <span style="font-size:large;" class="fa fa-info-circle"></span>
-                        <span style="text-align:left" class="tooltiptext">Each Store Includes:<br>- 10,000 Transactions / Month<br>- 10GB Storage</span>
-                    </span><button {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/11/Annually/Add-Ons')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORE_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
-                <li class="uA">1 User<button {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/12/Annually/Add-Ons')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{U_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
-                <li class="rA">5 Reports<button {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/13/Annually/Add-Ons')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{R_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
-                <li class="tA">10,000 Transactions / Month<button {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/14/Annually/Add-Ons')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{T_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
-                <li class="slaA">SLA<button {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/15/Annually/Add-Ons')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{SLA_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
-                <li class="storageA">10GB Storage<button {% if request.user.user_Type == s_a %} {% else %} disabled {% endif %}{% if request.user.is_authenticated %} onclick="delayedAction('/add_cart/16/Annually/Add-Ons')" {% else %} onclick="location.href='/login/'" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORAGE_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button></li></li>
-            </ul>
-        </div>
-    
-    {% endblock body %}
-    {% block additional %}  
-        <Script>
-           
-
-            var checkbox = document.getElementById("myCheckbox");
-        //Monthlyy
-            //Basic---
-            var posMonthly = document.querySelector(".posM");
-            var inventoryMonthly = document.querySelector(".imM");
-            var crmMonthly = document.querySelector(".crmM");
-            var accountingMonthly = document.querySelector(".aM");
-            //Additional---
-            var organizationMonthly = document.querySelector(".oM");
-            var storeMonthly = document.querySelector(".storeM");
-            var userMonthly = document.querySelector(".uM");
-            var reportsMonthly = document.querySelector(".rM");
-            var transactionMonthly = document.querySelector(".tM");
-            var slaMonthly = document.querySelector(".slaM");
-            var storageMonthly = document.querySelector(".storageM");
-        //Anuallyy
-            //Basic---
-            var posAnually = document.querySelector(".posA");
-            var inventoryAnually = document.querySelector(".imA");
-            var crmAnually = document.querySelector(".crmA");
-            var accountingAnually = document.querySelector(".aA");
-            //Additional---
-            var organizationAnually = document.querySelector(".oA");
-            var storeAnually = document.querySelector(".storeA");
-            var userAnually = document.querySelector(".uA");
-            var reportsAnually = document.querySelector(".rA");
-            var transactionAnually = document.querySelector(".tA");
-            var slaAnually = document.querySelector(".slaA");
-            var storageAnually = document.querySelector(".storageA");
-            
-            function updateContent() {
-            if (checkbox.checked) {
-                //Basic Monthly---
-                posMonthly.style.display = "none";
-                inventoryMonthly.style.display = "none";
-                crmMonthly.style.display = "none";
-                accountingMonthly.style.display = "none";
-                //Additional Monthly---
-                organizationMonthly.style.display = "none"
-                storeMonthly.style.display = "none"
-                userMonthly.style.display = "none"
-                reportsMonthly.style.display = "none"
-                transactionMonthly.style.display = "none"
-                slaMonthly.style.display = "none"
-                storageMonthly.style.display = "none"
-                //Basic Anually---
-                posAnually.style.display = "block";
-                inventoryAnually.style.display = "block";
-                crmAnually.style.display = "block";
-                accountingAnually.style.display = "block";
-                //Additional Anually---
-                organizationAnually.style.display = "block"
-                storeAnually.style.display = "block"
-                userAnually.style.display = "block"
-                reportsAnually.style.display = "block"
-                transactionAnually.style.display = "block"
-                slaAnually.style.display = "block"
-                storageAnually.style.display = "block"
-
-            } else {
-                //Basic Monthly---
-                posMonthly.style.display = "block";
-                inventoryMonthly.style.display = "block";
-                crmMonthly.style.display = "block";
-                accountingMonthly.style.display = "block";
-                //Additional Monthly---
-                organizationMonthly.style.display = "block"
-                storeMonthly.style.display = "block"
-                userMonthly.style.display = "block"
-                reportsMonthly.style.display = "block"
-                transactionMonthly.style.display = "block"
-                slaMonthly.style.display = "block"
-                storageMonthly.style.display = "block"
-                //Basic Anually---
-                posAnually.style.display = "none";
-                inventoryAnually.style.display = "none";
-                crmAnually.style.display = "none";
-                accountingAnually.style.display = "none";
-                //Additional Anually---
-                organizationAnually.style.display = "none"
-                storeAnually.style.display = "none"
-                userAnually.style.display = "none"
-                reportsAnually.style.display = "none"
-                transactionAnually.style.display = "none"
-                slaAnually.style.display = "none"
-                storageAnually.style.display = "none"
-            }
-            }
-
-            checkbox.addEventListener("change", updateContent);
-
-            updateContent();
-
-        </script>
-        <script>
-            document.addEventListener("DOMContentLoaded", function(event) {
-        
-        
-                const cartButtons = document.querySelectorAll('.cart-button');
-        
-                cartButtons.forEach(button => {
-        
-                        button.addEventListener('click',cartClick);
-        
-                });
-        
-                function cartClick(){
-                let button =this;
-                button.classList.add('clicked');
-                /* button.classList.remove('clicked');*/
-                }
-                
-                
-                
-            });
-        </script>
-        <script>
-            function delayedAction(url) {
-              // Wait for 2 seconds (2000 milliseconds)
-              setTimeout(function() {
-                // Code to be executed after the delay
-                // Replace this with your desired action
-                window.location.href = url;
-              }, 2250);
-            } 
-        </script>
-    {% endblock additional %}       
-    
-     {% comment %} var checkbox = document.getElementById("myCheckbox");
-
-            // Get the button elements
-            var button1 = document.getElementById("101");
-            var button2 = document.getElementById("102");
-            var button3 = document.getElementById("103");
-            var button4 = document.getElementById("104");
-            var button5 = document.getElementById("201");
-            var button6 = document.getElementById("202");
-            var button7 = document.getElementById("203");
-            var button8 = document.getElementById("204");
-            var button9 = document.getElementById("205");
-            var button10 = document.getElementById("206");
-            var button11 = document.getElementById("207");
-            
-            // Function to handle checkbox change event
-            function handleCheckboxChange() {
+                          
+  
+  
+                      </div>
+  
+                  </div>
+  
+              </div>
+          </div>
+{% endblock body %}
+      
+{% block additional %}
+    <Script>
+             
+  
+              var checkbox = document.getElementById("myCheckbox");
+          //Monthlyy
+              //Basic---
+              var posMonthly = document.querySelector(".posM");
+              var inventoryMonthly = document.querySelector(".imM");
+              var crmMonthly = document.querySelector(".crmM");
+              var accountingMonthly = document.querySelector(".aM");
+              //Additional---
+              var organizationMonthly = document.querySelector(".oM");
+              var storeMonthly = document.querySelector(".storeM");
+              var userMonthly = document.querySelector(".uM");
+              var reportsMonthly = document.querySelector(".rM");
+              var transactionMonthly = document.querySelector(".tM");
+              var slaMonthly = document.querySelector(".slaM");
+              var storageMonthly = document.querySelector(".storageM");
+          //Anuallyy
+              //Basic---
+              var posAnually = document.querySelector(".posA");
+              var inventoryAnually = document.querySelector(".imA");
+              var crmAnually = document.querySelector(".crmA");
+              var accountingAnually = document.querySelector(".aA");
+              //Additional---
+              var organizationAnually = document.querySelector(".oA");
+              var storeAnually = document.querySelector(".storeA");
+              var userAnually = document.querySelector(".uA");
+              var reportsAnually = document.querySelector(".rA");
+              var transactionAnually = document.querySelector(".tA");
+              var slaAnually = document.querySelector(".slaA");
+              var storageAnually = document.querySelector(".storageA");
+              
+              function updateContent() {
               if (checkbox.checked) {
-                // Checkbox is checked
-                button1.innerText = "${{POS_A.Price}} -";
-                button2.innerText = "${{IM_A.Price}} -";
-                button3.innerText = "${{CRM_A.Price}} -";
-                button4.innerText = "${{A_A.Price}} -";
-                button5.innerText = "${{O_A.Price}} -";
-                button6.innerText = "${{STORE_A.Price}} -";
-                button7.innerText = "${{U_A.Price}} -";
-                button8.innerText = "${{R_A.Price}} -";
-                button9.innerText = "${{T_A.Price}} -";
-                button10.innerText = "${{SLA_A.Price}} -";
-                button11.innerText = "${{STORAGE_A.Price}} -";
+                  //Basic Monthly---
+                  posMonthly.style.display = "none";
+                  inventoryMonthly.style.display = "none";
+                  crmMonthly.style.display = "none";
+                  accountingMonthly.style.display = "none";
+                  //Additional Monthly---
+                  organizationMonthly.style.display = "none"
+                  storeMonthly.style.display = "none"
+                  userMonthly.style.display = "none"
+                  reportsMonthly.style.display = "none"
+                  transactionMonthly.style.display = "none"
+                  slaMonthly.style.display = "none"
+                  storageMonthly.style.display = "none"
+                  //Basic Anually---
+                  posAnually.style.display = "block";
+                  inventoryAnually.style.display = "block";
+                  crmAnually.style.display = "block";
+                  accountingAnually.style.display = "block";
+                  //Additional Anually---
+                  organizationAnually.style.display = "block"
+                  storeAnually.style.display = "block"
+                  userAnually.style.display = "block"
+                  reportsAnually.style.display = "block"
+                  transactionAnually.style.display = "block"
+                  slaAnually.style.display = "block"
+                  storageAnually.style.display = "block"
+  
               } else {
-                // Checkbox is not checked
-                button1.innerText = "${{POS_M.Price}} -";
-                button2.innerText = "${{IM_M.Price}} -";
-                button3.innerText = "${{CRM_M.Price}} -";
-                button4.innerText = "${{A_M.Price}} -";
-                button5.innerText = "${{O_M.Price}} -";    
-                button6.innerText = "${{STORE_M.Price}} -";
-                button7.innerText = "${{U_M.Price}} -";
-                button8.innerText = "${{R_M.Price}} -";
-                button9.innerText = "${{T_M.Price}} -";
-                button10.innerText = "${{SLA_M.Price}} -";
-                button11.innerText = "${{STORAGE_M.Price}} -";
+                  //Basic Monthly---
+                  posMonthly.style.display = "block";
+                  inventoryMonthly.style.display = "block";
+                  crmMonthly.style.display = "block";
+                  accountingMonthly.style.display = "block";
+                  //Additional Monthly---
+                  organizationMonthly.style.display = "block"
+                  storeMonthly.style.display = "block"
+                  userMonthly.style.display = "block"
+                  reportsMonthly.style.display = "block"
+                  transactionMonthly.style.display = "block"
+                  slaMonthly.style.display = "block"
+                  storageMonthly.style.display = "block"
+                  //Basic Anually---
+                  posAnually.style.display = "none";
+                  inventoryAnually.style.display = "none";
+                  crmAnually.style.display = "none";
+                  accountingAnually.style.display = "none";
+                  //Additional Anually---
+                  organizationAnually.style.display = "none"
+                  storeAnually.style.display = "none"
+                  userAnually.style.display = "none"
+                  reportsAnually.style.display = "none"
+                  transactionAnually.style.display = "none"
+                  slaAnually.style.display = "none"
+                  storageAnually.style.display = "none"
               }
-            }
-            
-            // Add event listener to the checkbox
-            checkbox.addEventListener("change", handleCheckboxChange);
-            
-            // Call the handleCheckboxChange function initially to set the initial text
-            handleCheckboxChange(); {% endcomment %}
+              }
+  
+              checkbox.addEventListener("change", updateContent);
+  
+              updateContent();
+  
+          </script>
+          <script>
+              document.addEventListener("DOMContentLoaded", function(event) {
+          
+          
+                  const cartButtons = document.querySelectorAll('.cart-button');
+          
+                  cartButtons.forEach(button => {
+          
+                          button.addEventListener('click',cartClick);
+          
+                  });
+          
+                  function cartClick(){
+                  let button =this;
+                  button.classList.add('clicked');
+                  /* button.classList.remove('clicked');*/
+                  }
+                  
+                  
+                  
+              });
+          </script>
+          <script>
+              function delayedAction(url) {
+                // Wait for 2 seconds (2000 milliseconds)
+                setTimeout(function() {
+                  // Code to be executed after the delay
+                  // Replace this with your desired action
+                  window.location.href = url;
+                }, 2250);
+              } 
+          </script>
+
+          <script>
+            // Get a reference to the delete buttons
+            const addButtons = document.querySelectorAll('.cart-button');
+          
+            // Attach an event listener to each delete button
+            addButtons.forEach(button => {
+              button.addEventListener('click', (event) => {
+                event.preventDefault(); // Prevent the default behavior of the button click
+          
+                // Get the product ID associated with the add button
+                const productId = button.dataset.productId;
+                const subType = button.dataset.subType;
+                const bundleType = button.dataset.bundleType;
+          
+                // Make an asynchronous request to add the product to the cart
+                fetch(`/add_cart/${productId}/${subType}/${bundleType}`, {
+                  method: 'GET',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+                  },
+                })
+                .then(response => response.json())
+                .then(data => {
+                  // Handle the response data
+                    const crmMonthly = document.getElementById('crmMonth')
+                    const crmMonthlyBtn = document.getElementById('crmMonth-btn')
+                    const crmAnually = document.getElementById('crmAnnual')
+                    const crmAnuallyBtn = document.getElementById('crmAnnual-btn')
+
+                    const posMonthly = document.getElementById('posMonth')
+                    const posMonthlyBtn = document.getElementById('posMonth-btn')
+                    const posAnually = document.getElementById('posAnnual')
+                    const posAnuallyBtn = document.getElementById('posAnnual-btn')
+
+                    const imMonthly = document.getElementById('imMonth')
+                    const imMonthlyBtn = document.getElementById('imMonth-btn')
+                    const imAnually = document.getElementById('imAnnual')
+                    const imAnuallyBtn = document.getElementById('imAnnual-btn')
+
+                    const aMonthly = document.getElementById('aMonth')
+                    const aMonthlyBtn = document.getElementById('aMonth-btn')
+                    const aAnually = document.getElementById('aAnnual')
+                    const aAnuallyBtn = document.getElementById('aAnnual-btn')
+
+                  // For example, display a success message or update the cart UI
+                  const cartInfoElement = document.getElementById('cartinfo');
+                  if (data.success) {
+                    // Product added to the cart successfully
+                            
+                    const cartItems = cartInfoElement.getElementsByClassName('items');
+                    if (cartItems.length === 0) {
+                        cartInfoElement.innerHTML = '<div id="empty-el" class="orgrow"><center><h1>Empty</h1></center></div>';
+                      }
+                    const existingProductRow = document.querySelector(`.id${data.productId}`);
+                    //console.log(existingProductRow)
+                    if (existingProductRow) {
+                        console.log(existingProductRow)
+                        
+                        const cartItems = cartInfoElement.getElementsByClassName('items');
+                        if (cartItems.length === 0) {
+                            cartInfoElement.innerHTML = '<div id="empty-el" class="orgrow"><center><h1>Empty</h1></center></div>';
+                      }
+
+
+                       
+            // Product already exists in the cart, update its quantity
+                        // Product already exists in the cart, update its quantity
+                        const quantityElement = existingProductRow.querySelector('.qty');
+                        const inCart =  document.getElementById('in-cart')
+                        const inCartQty = parseInt(inCart.textContent);
+                        const newInCart = inCartQty + 1
+                        inCart.textContent = newInCart ;
+                        //const nameElement = 
+                        const currentQuantity = parseInt(quantityElement.textContent);
+                        const newQuantity = currentQuantity + 1;
+                        quantityElement.textContent = newQuantity ;
+                        quantityElement.style.textAlign = 'center';
+
+                    } else {
+                    // Create a new product row element
+                    const inCart =  document.getElementById('in-cart')
+                    const newProductRow = document.createElement('div');
+                    const emptyElement = document.getElementById('empty-el')
+                    newProductRow.classList.add('orgrow', 'del', 'items' , `id${productId}`);
+          
+                    // Add the necessary HTML content to the new product row
+                    newProductRow.innerHTML = `
+                      <div class="col-24">
+                        <a style="alignment: left; font-size: small;color: black;" href="url">${data.productName}</a>
+                      </div>
+                      <div class="col-24 a">
+                        <a class="qty" style="font-size: small;color: black;padding-left: 15px;"><center>${data.quantity}</center></a>
+                      </div>
+                      <div class="col-24" style="font-size: small ;">
+                        <a style="font-size: small ;padding-left: 55px;color: black;"><center>$${data.productPrice}/${data.productType}</center></a>
+                      </div>
+                      <div class="col-24" style="font-size: small ;">
+                        <center><a id="del${productId}" class="fa fa-remove delete-btn" style="font-size: large; padding-top: 10px; padding-left: 60px;color: black;" data-product-id="${data.productId}"></a></center>
+                      </div>
+                    `;
+          
+                    // Append the new product row to the cart
+                    
+                    const inCartQty = parseInt(inCart.textContent);
+                    const newInCart = inCartQty + 1
+                    console.log(newInCart)
+                    
+                    if (productId === '8') {
+                            
+                        crmMonthly.textContent = 'Item added'
+                        crmAnually.textContent = 'Item added'
+                        crmMonthlyBtn.disabled = true
+                        crmAnuallyBtn.disabled = true
+                        
+
+                         
+                      }
+                        
+                        else if(productId === '4') {
+                          
+                          crmAnually.textContent = 'Item added'
+                          crmMonthly.textContent = 'Item added'
+                          crmAnuallyBtn.disabled = true
+                          crmMonthlyBtn.disabled = true
+                          
+                        }
+                        else if(productId === '2') {
+                          
+                          posAnually.textContent = 'Item added'
+                          posMonthly.textContent = 'Item added'
+                          posAnuallyBtn.disabled = true
+                          posMonthlyBtn.disabled = true
+                        
+                        }
+                        else if(productId === '6') {
+                          
+                          posAnually.textContent = 'Item added'
+                          posMonthly.textContent = 'Item added'
+                          posAnuallyBtn.disabled = true
+                          posMonthlyBtn.disabled = true
+                        
+                        }
+
+                        else if(productId === '3') {
+                          
+                          imAnually.textContent = 'Item added'
+                          imMonthly.textContent = 'Item added'
+                          imAnuallyBtn.disabled = true
+                          imMonthlyBtn.disabled = true
+                       
+                        }
+
+                        else if(productId === '7') {
+                          
+                          imAnually.textContent = 'Item added'
+                          imMonthly.textContent = 'Item added'
+                          imAnuallyBtn.disabled = true
+                          imMonthlyBtn.disabled = true
+                        
+                        }
+
+                        else if(productId === '5') {
+                          
+                          aAnually.textContent = 'Item added'
+                          aMonthly.textContent = 'Item added'
+                          aAnuallyBtn.disabled = true
+                          aMonthlyBtn.disabled = true
+                        
+                        }
+
+                        else if(productId === '9') {
+                          
+                          aAnually.textContent = 'Item added'
+                          aMonthly.textContent = 'Item added'
+                          aAnuallyBtn.disabled = true
+                          aMonthlyBtn.disabled = true
+                        
+                        }
+                        else{
+
+                        }
+                    
+                    if(emptyElement){
+                        emptyElement.remove();
+                    }
+                    cartInfoElement.appendChild(newProductRow);
+                    inCart.textContent = newInCart ;
+                    const deleteButton = newProductRow.querySelector(`#del${productId}`);
+
+                    // Add event listener to the delete button
+                    deleteButton.addEventListener('click', function(event) {
+                    // Prevent the default behavior (e.g., navigating to a new page)
+                    event.preventDefault();
+
+                    // Get the product ID from the data-product-id attribute
+                    const productId = deleteButton.getAttribute('data-product-id');
+                    fetch(`/delete_cart/${productId}`, {
+                        method: 'DELETE',
+                        headers: {
+                          'Content-Type': 'application/json',
+                          'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+                        },
+                      })
+                        .then(response => response.json())
+                        .then(data => {
+                          // Handle the response data
+                          // For example, display a success message or update the cart UI
+                          if (data.success) {
+                            // Product deleted successfully
+                          console.log('approved3')
+                            // Remove the product element from the cart UI
+                            const inCart =  document.getElementById('in-cart')
+                            const productIdNum = parseInt(productId)
+                            const productElement = document.querySelector(`.id${productIdNum}`);
+                            const quantityElement = productElement.querySelector('.a');
+                            const currentQuantity = parseInt(quantityElement.textContent);
+      
+                            if (currentQuantity > 1) {
+                              // Decrease the quantity by one
+                              quantityElement.textContent = currentQuantity - 1;
+                              inCart.textContent -= 1
+                              quantityElement.style.fontSize = 'small';
+                              quantityElement.style.textAlign = 'center';
+                              quantityElement.style.marginTop = '15px';
+                              quantityElement.style.marginLeft = '3.5px';
+                              quantityElement.style.marginRight = '-3.59px';
+                            } else {
+                              // Remove the product element from the cart UI
+                              
+                              
+                              const crmMonthly = document.getElementById('crmMonth')
+                              const crmMonthlyBtn = document.getElementById('crmMonth-btn')
+                              const crmAnually = document.getElementById('crmAnnual')
+                              const crmAnuallyBtn = document.getElementById('crmAnnual-btn')
+      
+                              const posMonthly = document.getElementById('posMonth')
+                              const posMonthlyBtn = document.getElementById('posMonth-btn')
+                              const posAnually = document.getElementById('posAnnual')
+                              const posAnuallyBtn = document.getElementById('posAnnual-btn')
+      
+                              const imMonthly = document.getElementById('imMonth')
+                              const imMonthlyBtn = document.getElementById('imMonth-btn')
+                              const imAnually = document.getElementById('imAnnual')
+                              const imAnuallyBtn = document.getElementById('imAnnual-btn')
+      
+                              const aMonthly = document.getElementById('aMonth')
+                              const aMonthlyBtn = document.getElementById('aMonth-btn')
+                              const aAnually = document.getElementById('aAnnual')
+                              const aAnuallyBtn = document.getElementById('aAnnual-btn')
+      
+      
+      
+      
+                                if (productId === '8') {
+                                  productElement.remove();
+                                  crmMonthly.textContent = '$ 50'
+                                  crmAnually.textContent = '$ 150'
+                                  crmMonthlyBtn.disabled = false
+                                  crmAnuallyBtn.disabled = false
+                                  inCart.textContent -= 1
+                                  quantityElement.textContent = currentQuantity - 1; 
+                                }
+                                  
+                                  else if(productId === '4') {
+                                    productElement.remove();
+                                    crmAnually.textContent = '$ 150'
+                                    crmMonthly.textContent = '$ 50'
+                                    crmAnuallyBtn.disabled = false
+                                    crmMonthlyBtn.disabled = false
+                                    inCart.textContent -= 1 
+                                    quantityElement.textContent = currentQuantity - 1;
+                                  }
+                                  else if(productId === '2') {
+                                    productElement.remove();
+                                    posAnually.textContent = '$ 150'
+                                    posMonthly.textContent = '$ 50'
+                                    posAnuallyBtn.disabled = false
+                                    posMonthlyBtn.disabled = false
+                                    inCart.textContent -= 1 
+                                    quantityElement.textContent = currentQuantity - 1;
+                                  }
+                                  else if(productId === '6') {
+                                    productElement.remove();
+                                    posAnually.textContent = '$ 150'
+                                    posMonthly.textContent = '$ 50'
+                                    posAnuallyBtn.disabled = false
+                                    posMonthlyBtn.disabled = false
+                                    inCart.textContent -= 1 
+                                    quantityElement.textContent = currentQuantity - 1;
+                                  }
+      
+                                  else if(productId === '3') {
+                                    productElement.remove();
+                                    imAnually.textContent = '$ 150'
+                                    imMonthly.textContent = '$ 50'
+                                    imAnuallyBtn.disabled = false
+                                    imMonthlyBtn.disabled = false
+                                    inCart.textContent -= 1 
+                                    quantityElement.textContent = currentQuantity - 1;
+                                  }
+      
+                                  else if(productId === '7') {
+                                    productElement.remove();
+                                    imAnually.textContent = '$ 150'
+                                    imMonthly.textContent = '$ 50'
+                                    imAnuallyBtn.disabled = false
+                                    imMonthlyBtn.disabled = false
+                                    inCart.textContent -= 1 
+                                    quantityElement.textContent = currentQuantity - 1;
+                                  }
+      
+                                  else if(productId === '5') {
+                                    productElement.remove();
+                                    aAnually.textContent = '$ 150'
+                                    aMonthly.textContent = '$ 50'
+                                    aAnuallyBtn.disabled = false
+                                    aMonthlyBtn.disabled = false
+                                    inCart.textContent -= 1 
+                                    quantityElement.textContent = currentQuantity - 1;
+                                  }
+      
+                                  else if(productId === '9') {
+                                    productElement.remove();
+                                    aAnually.textContent = '$ 150'
+                                    aMonthly.textContent = '$ 50'
+                                    aAnuallyBtn.disabled = false
+                                    aMonthlyBtn.disabled = false
+                                    inCart.textContent -= 1 
+                                    quantityElement.textContent = currentQuantity - 1;
+                                  }
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  else{
+                                    console.log('no11')
+                                    productElement.remove();
+                                    inCart.textContent -= 1
+                                    quantityElement.textContent = currentQuantity - 1;
+                                  }
+                              
+                              
+                              
+                            }
+                  
+                            // Update the cart summary
+                            const totalPriceElement = document.getElementById('subtotal');
+                            const grandTotalElement = document.getElementById('grandtotal');
+                  
+                            totalPriceElement.textContent = data.subTotal;
+                            grandTotalElement.textContent = data.grandTotal;
+      
+                            const cartInfoElement = document.getElementById('cartinfo');
+                            const cartItems = cartInfoElement.getElementsByClassName('items');
+                            if (cartItems.length === 0) {
+                              cartInfoElement.innerHTML = '<div id="empty-el" class="orgrow"><center><h1>Empty</h1></center></div>';
+                            }
+      
+                          }
+                        })
+                        .catch(error => {
+                          // Handle any errors that occurred during the request
+                          console.error(error);
+                        });
+                    // Add your desired functionality here
+                    console.log(`Delete button clicked for product with ID: ${productId}`);
+                    });
+
+                          
+
+                    
+
+                
+                    }
+                    // Update the cart UI
+                    const totalPriceElement = document.getElementById('subtotal');
+                    const grandTotalElement = document.getElementById('grandtotal');
+          
+                    totalPriceElement.textContent = data.subTotal;
+                    grandTotalElement.textContent = data.grandTotal;
+          
+                    // Update the checkout button or any other UI elements as needed
+                  }
+                    const cartItems = cartInfoElement.getElementsByClassName('items');
+                        if (cartItems.length === 0) {
+                        cartInfoElement.innerHTML = '<div id="empty-el" class="orgrow"><center><h1>Empty</h1></center></div>';
+                      }
+                })
+                .catch(error => {
+                  // Handle any errors that occurred during the request
+                  console.error(error);
+                });
+              });
+            });
+          </script>
+{% endblock additional %} 
+    
+     
     
     
     
@@ -313,256 +820,6 @@
 
 
 
-    {% comment %} {% if subed and plan_1 %}
-        
-        <table style="width: 100%" >
 
-            <tr>
-                <td class="w3-ul w3-white w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom" style="margin:0 -16px;width:33%">
-                    <ul class="w3-ul w3-light-gray w3-center w3-opacity w3-hover-opacity-off">
-                        <li class="w3-dark-grey w3-xxlarge w3-padding-large">Basic</li>
-                        <li class="w3-large w3-padding-small">Web Design</li>
-                        <li class="w3-large w3-padding-small">Photography</li>
-                        <li class="w3-large w3-padding-small">5GB Storage</li>
-                        <li class="w3-large w3-padding-small">Mail Support</li>
-                        <li class="w3-large w3-padding-small">
-                            <h2>$ 10</h2>
-                            <span class="w3-opacity">per month</span>
-                        </li>
-                        <li class="w3-light-grey w3-padding-16">
-                            <button class="w3-button w3-white w3-padding-large w3-hover-green" disabled>Subscribed</button>
-                        </li>
-                    </ul>
-                </td>
-                <td class="w3-ul w3-white w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom" style="width:33%">
-                    <ul class="w3-ul w3-light-gray w3-center w3-opacity w3-hover-opacity-off">
-                        <li class="w3-dark-grey w3-xxlarge w3-padding-large">Recommended</li>
-                        <li class="w3-large w3-padding-small">Web Design</li>
-                        <li class="w3-large w3-padding-small">Photography</li>
-                        <li class="w3-large w3-padding-small">5GB Storage</li>
-                        <li class="w3-large w3-padding-small">Mail Support</li>
-                        <li class="w3-large w3-padding-small">
-                            <h2>$ 15</h2>
-                            <span class="w3-opacity">per month</span>
-                        </li>
-                        <li class="w3-light-grey w3-padding-16">
-                            
-                            <button class="w3-button w3-white w3-padding-large w3-hover-green" onclick="location.href='/payment/2'">Upgrade</button>
 
-                        </li>
-                    </ul>
-                </td>
-                <td class="w3-ul w3-white w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom" style="width:33%">
-                    <ul class="w3-ul w3-light-grey w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom">
-                        <li class="w3-large w3-dark-grey w3-xxlarge w3-padding-large">Pro</li>
-                        <li class="w3-large w3-padding-small">Web Design</li>
-                        <li class="w3-large w3-padding-small">Photography</li>
-                        <li class="w3-large w3-padding-small">50GB Storage</li>
-                        <li class="w3-large w3-padding-small">Endless Support</li>
-                        <li class="w3-large w3-padding-small">
-                            <h2>$ 25</h2>
-                            <span class="w3-opacity">per month</span>
-                        </li>
-                        <li class="w3-light-grey w3-padding-16">
-                            
-                            <button class="w3-button w3-white w3-padding-large w3-hover-green" onclick="location.href='/payment/3'">Upgrade</button>
-                            
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        </table>
-    {% elif subed and plan_2%}
-        <table style="width: 100%" >
-
-            <tr>
-                <td class="w3-ul w3-white w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom" style="margin:0 -16px;width:33%">
-                    <ul class="w3-ul w3-light-gray w3-center w3-opacity w3-hover-opacity-off">
-                        <li class="w3-dark-grey w3-xxlarge w3-padding-large">Basic</li>
-                        <li class="w3-large w3-padding-small">Web Design</li>
-                        <li class="w3-large w3-padding-small">Photography</li>
-                        <li class="w3-large w3-padding-small">5GB Storage</li>
-                        <li class="w3-large w3-padding-small">Mail Support</li>
-                        <li class="w3-large w3-padding-small">
-                            <h2>$ 10</h2>
-                            <span class="w3-opacity">per month</span>
-                        </li>
-                        <li class="w3-light-grey w3-padding-16">
-                            
-                            <button class="w3-button w3-white w3-padding-large w3-hover-green" disabled>Subscribe</button>
-
-                        </li>
-                    </ul>
-                </td>
-                <td class="w3-ul w3-white w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom" style="width:33%">
-                    <ul class="w3-ul w3-light-gray w3-center w3-opacity w3-hover-opacity-off">
-                        <li class="w3-dark-grey w3-xxlarge w3-padding-large">Recommended</li>
-                        <li class="w3-large w3-padding-small">Web Design</li>
-                        <li class="w3-large w3-padding-small">Photography</li>
-                        <li class="w3-large w3-padding-small">5GB Storage</li>
-                        <li class="w3-large w3-padding-small">Mail Support</li>
-                        <li class="w3-large w3-padding-small">
-                            <h2>$ 15</h2>
-                            <span class="w3-opacity">per month</span>
-                        </li>
-                        <li class="w3-light-grey w3-padding-16">
-                            
-                            <button class="w3-button w3-white w3-padding-large w3-hover-green" disabled>Subscribed</button>
-                            
-                        </li>
-                    </ul>
-                </td>
-                <td class="w3-ul w3-white w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom" style="width:33%">
-                    <ul class="w3-ul w3-light-grey w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom">
-                        <li class="w3-large w3-dark-grey w3-xxlarge w3-padding-large">Pro</li>
-                        <li class="w3-large w3-padding-small">Web Design</li>
-                        <li class="w3-large w3-padding-small">Photography</li>
-                        <li class="w3-large w3-padding-small">50GB Storage</li>
-                        <li class="w3-large w3-padding-small">Endless Support</li>
-                        <li class="w3-large w3-padding-small">
-                            <h2>$ 25</h2>
-                            <span class="w3-opacity">per month</span>
-                        </li>
-                        <li class="w3-light-grey w3-padding-16">
-                           
-                            <button class="w3-button w3-white w3-padding-large w3-hover-green" onclick="location.href='/payment/3'">Upgrade</button>
-                            
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        </table>
-    {% elif subed and plan_3 %}
-        <table style="width: 100%" >
-
-            <tr>
-                <td class="w3-ul w3-white w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom" style="margin:0 -16px;width:33%">
-                    <ul class="w3-ul w3-light-gray w3-center w3-opacity w3-hover-opacity-off">
-                        <li class="w3-dark-grey w3-xxlarge w3-padding-large">Basic</li>
-                        <li class="w3-large w3-padding-small">Web Design</li>
-                        <li class="w3-large w3-padding-small">Photography</li>
-                        <li class="w3-large w3-padding-small">5GB Storage</li>
-                        <li class="w3-large w3-padding-small">Mail Support</li>
-                        <li class="w3-large w3-padding-small">
-                            <h2>$ 10</h2>
-                            <span class="w3-opacity">per month</span>
-                        </li>
-                        <li class="w3-light-grey w3-padding-16">
-                            
-                            <button class="w3-button w3-white w3-padding-large w3-hover-green" disabled>Subscribe</button>
-                            
-                        </li>
-                    </ul>
-                </td>
-                <td class="w3-ul w3-white w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom" style="width:33%">
-                    <ul class="w3-ul w3-light-gray w3-center w3-opacity w3-hover-opacity-off">
-                        <li class="w3-dark-grey w3-xxlarge w3-padding-large">Recommended</li>
-                        <li class="w3-large w3-padding-small">Web Design</li>
-                        <li class="w3-large w3-padding-small">Photography</li>
-                        <li class="w3-large w3-padding-small">5GB Storage</li>
-                        <li class="w3-large w3-padding-small">Mail Support</li>
-                        <li class="w3-large w3-padding-small">
-                            <h2>$ 15</h2>
-                            <span class="w3-opacity">per month</span>
-                        </li>
-                        <li class="w3-light-grey w3-padding-16">
-                            
-                            <button class="w3-button w3-white w3-padding-large w3-hover-green" disabled>Subscribe</button>
-                            
-                        </li>
-                    </ul>
-                </td>
-                <td class="w3-ul w3-white w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom" style="width:33%">
-                    <ul class="w3-ul w3-light-grey w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom">
-                        <li class="w3-large w3-dark-grey w3-xxlarge w3-padding-large">Pro</li>
-                        <li class="w3-large w3-padding-small">Web Design</li>
-                        <li class="w3-large w3-padding-small">Photography</li>
-                        <li class="w3-large w3-padding-small">50GB Storage</li>
-                        <li class="w3-large w3-padding-small">Endless Support</li>
-                        <li class="w3-large w3-padding-small">
-                            <h2>$ 25</h2>
-                            <span class="w3-opacity">per month</span>
-                        </li>
-                        <li class="w3-light-grey w3-padding-16">
-                            
-                            <button class="w3-button w3-white w3-padding-large w3-hover-green" disabled>Subscribed</button>
-                            
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        </table>
-    {% else %}
-        <table style="width: 100%" >
-
-            <tr>
-                <td class="w3-ul w3-white w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom" style="margin:0 -16px;width:33%">
-                    <ul class="w3-ul w3-light-gray w3-center w3-opacity w3-hover-opacity-off">
-                        <li class="w3-dark-grey w3-xxlarge w3-padding-large">Basic</li>
-                        <li class="w3-large w3-padding-small">Web Design</li>
-                        <li class="w3-large w3-padding-small">Photography</li>
-                        <li class="w3-large w3-padding-small">5GB Storage</li>
-                        <li class="w3-large w3-padding-small">Mail Support</li>
-                        <li class="w3-large w3-padding-small">
-                            <h2>$ 10</h2>
-                            <span class="w3-opacity">per month</span>
-                        </li>
-                        <li class="w3-light-grey w3-padding-16">
-                            {% if request.user.is_authenticated %}
-                                <button class="w3-button w3-white w3-padding-large w3-hover-green" onclick="location.href='/payment/1'">Subscribe</button>
-                            {% else %}
-                                <button class="w3-button w3-white w3-padding-large w3-hover-green" onclick="location.href='/login'">Subscribe</button>
-                            {% endif %}
-                        </li>
-                    </ul>
-                </td>
-                <td class="w3-ul w3-white w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom" style="width:33%">
-                    <ul class="w3-ul w3-light-gray w3-center w3-opacity w3-hover-opacity-off">
-                        <li class="w3-dark-grey w3-xxlarge w3-padding-large">Recommended</li>
-                        <li class="w3-large w3-padding-small">Web Design</li>
-                        <li class="w3-large w3-padding-small">Photography</li>
-                        <li class="w3-large w3-padding-small">5GB Storage</li>
-                        <li class="w3-large w3-padding-small">Mail Support</li>
-                        <li class="w3-large w3-padding-small">
-                            <h2>$ 15</h2>
-                            <span class="w3-opacity">per month</span>
-                        </li>
-                        <li class="w3-light-grey w3-padding-16">
-                            {% if request.user.is_authenticated %}
-                                <button class="w3-button w3-white w3-padding-large w3-hover-green" onclick="location.href='/payment/2'">Subscribe</button>
-                            {% else %}
-                                <button class="w3-button w3-white w3-padding-large w3-hover-green" onclick="location.href='/login'">Subscribe</button>
-                            {% endif %}
-                            
-                        </li>
-                    </ul>
-                </td>
-                <td class="w3-ul w3-white w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom" style="width:33%">
-                    <ul class="w3-ul w3-light-grey w3-center w3-opacity w3-hover-opacity-off w3-row-padding w3-margin-bottom">
-                        <li class="w3-large w3-dark-grey w3-xxlarge w3-padding-large">Pro</li>
-                        <li class="w3-large w3-padding-small">Web Design</li>
-                        <li class="w3-large w3-padding-small">Photography</li>
-                        <li class="w3-large w3-padding-small">50GB Storage</li>
-                        <li class="w3-large w3-padding-small">Endless Support</li>
-                        <li class="w3-large w3-padding-small">
-                            <h2>$ 25</h2>
-                            <span class="w3-opacity">per month</span>
-                        </li>
-                        <li class="w3-light-grey w3-padding-16">
-                           
-                            {% if request.user.is_authenticated %}
-                                <button class="w3-button w3-white w3-padding-large w3-hover-green" onclick="location.href='/payment/3'">Subscribe</button>
-                            {% else %}
-                                <button class="w3-button w3-white w3-padding-large w3-hover-green" onclick="location.href='/login'">Subscribe</button>
-                            {% endif %}
-                            
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        </table>
-
-    {% endif %}
-        <!-- End Grid/Pricing tables -->
-
-{% endcomment %}
+           

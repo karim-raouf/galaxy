@@ -1,204 +1,201 @@
-* {
-    box-sizing: border-box;
-  }
-  
-  .columns {
-    float: left;
-    width: 50%;
-    padding: 8px;
-  }
-  
-  .price {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    height: 30px;
-    -webkit-transition: 0.3s;
-    transition: 0.3s;
-  }
-  
-  .price:hover {
-    box-shadow: 0 8px 12px 0 rgba(0,0,0,0)
-  }
-  
-  .price .header {
-    background-color: #111;
-    color: white;
-    font-size: 25px;
-  }
-  
-  .price li {
-    border-bottom: 1px solid #eee;
-    padding: 10px;
-    text-align: left;
-    font-size: 20px;
-    color: black;
-  }
-  
-  .price .grey {
-    background-color: #eee;
-    font-size: 20px;
-  }
-  
-  .button {
-         float: right;
-    background-color: #04AA6D;
-    border: none;
-    color: white;
-    padding: 10px 25px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 18px;
-  }
-  
-  .button:hover {
-      background-color: black;
-  }
-  
-  .buttonSmall {
-      float: right;
-    background-color: #04AA6D;
-    border: none;
-    color: white;
-    padding: 3px 15px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 10px;
-  }
-  
-  .buttonSmall:hover {
-      background-color: yellowgreen;
-  }
-  
-  @media only screen and (max-width: 600px) {
-    .columns {
-      width: 100%;
-    }
-  }
-  
-  .switch {
-    position: relative;
-    display: inline-block;
-    width: 115px;
-    height: 34px;
-    margin-left: 10px;
-    margin-right: 10px;
-  }
-  
-  .switch input { 
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-  
-  .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: -3px;
-    bottom: 0;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
-  }
-  
-  .slider:before {
-    position: absolute;
-    content: "";
-    height: 20px;
-    width: 20px;
-    left: 4px;
-    bottom: 2.4px;
-    background-color: black;
-    -webkit-transition: .4s;
-    transition: .4s;
-  }
-  
-  input:checked + .slider {
-    background-color: white;
-  }
-  
-  input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
-  }
-  
-  input:checked + .slider:before {
-    -webkit-transform: translateX(80px);
-    -ms-transform: translateX(80px);
-    transform: translateX(80px);
-  }
-  
-  /* Rounded sliders */
-  .slider.round {
-    border-radius: 34px;
-    border-width: 3px;
-    border-style: solid;
-  }
-  
-  .slider.round:before {
-    border-radius: 50%;
-    border-width: 3px;
-    border-style: solid;
-  }
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
 
-  /*    */
-  .buttons{
-                
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center}
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 210px;
+  background-color: #D3D3D3;
+  color: #000000;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  top: -18%;
+  left: 130px;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
 
-    .cart-button{
-    float: right;
-    position: relative;
-    outline: 0;
-    background-color: #04AA6D;
-    color: #fff;
-    border: none;
-    height: 35px;
-    width: 200px;
-    padding: 10px;
-    border-radius: 10px;
-    line-height: 0px;
-    overflow: hidden;
-    cursor:pointer}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 0.85;
+  font-size: 15px;
+}
+
+.tooltip .exclamation-mark {
+  color: white;
+  cursor: help;
+}
+.switch {
+position: relative;
+display: inline-block;
+width: 115px;
+height: 15px;
+margin-left: 10px;
+margin-right: 10px;
+}
+
+.switch input { 
+opacity: 0;
+width: 0;
+height: 0;
+}
+
+.slider {
+position: absolute;
+cursor: pointer;
+top: 4px;
+left: 0;
+right: 0px;
+bottom: 0;
+background-color: white;
+-webkit-transition: .4s;
+transition: .4s;
+width:111px
+}
+
+.slider:before {
+position: absolute;
+content: "";
+height: 20px;
+width: 20px;
+left: 4px;
+bottom: 2.4px;
+background-color: yellowgreen;
+-webkit-transition: .4s;
+transition: .4s;
+}
+
+input:checked + .slider {
+background-color: lightgreen;
+}
+
+input:focus + .slider {
+box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+-webkit-transform: translateX(80px);
+-ms-transform: translateX(80px);
+transform: translateX(80px);
+}
+
+/* Rounded sliders */
+.slider.round {
+border-radius: 34px;
+border-width: 3px;
+border-style: solid;
+height: 30px;
+}
+
+.slider.round:before {
+border-radius: 50%;
+border-width: 3px;
+border-style: solid;
+}
+
+/*    */
+.buttons{
+       
+margin: 0;
+padding: 0;
+height: 100vh;
+display: flex;
+justify-content: center;
+align-items: center}
+
+.cart-button{
+float: right;
+position: relative;
+outline: 0;
+background-color: #04AA6D;
+color: #fff;
+border: none;
+height: 35px;
+width: 200px;
+padding: 10px;
+border-radius: 10px;
+line-height: 0px;
+overflow: hidden;
+cursor:pointer}
 .cart-button:focus{
-    outline: none !important}
+outline: none !important}
 .cart-button .fa-shopping-cart{
-    position: absolute;
-    z-index: 2;
-    top: 50%;
-    left: -20%;
-    font-size: 1.8em;
-    transform: translate(-50%, -50%)}
+position: absolute;
+z-index: 2;
+top: 50%;
+left: -20%;
+font-size: 1.8em;
+transform: translate(-50%, -50%)}
 .cart-button .fa-square{
-    position: absolute;
-    z-index: 1;
-    top: -20%;
-    left: 53%;
-    font-size: 0.8em;
-    transform: translate(-50%, -50%)}
+position: absolute;
+z-index: 1;
+top: -20%;
+left: 53%;
+font-size: 0.8em;
+transform: translate(-50%, -50%)}
 .cart-button span{
-    position: absolute;
-    left: 50%;top: 50%;
-    color: #fff;
-    transform: translate(-50%, -50%)}
+position: absolute;
+left: 50%;top: 50%;
+color: #fff;
+transform: translate(-50%, -50%)}
 .cart-button span.added{
-    opacity: 0}
+opacity: 0}
 .cart-button.clicked .fa-shopping-cart{
-    animation: cart 2s ease-in forwards}
+animation: cart 2s ease-in forwards}
 .cart-button.clicked .fa-square{
-    animation: box 2s ease-in forwards}
+animation: box 2s ease-in forwards}
 .cart-button.clicked span.add-to-cart{
-    animation: addcart 2s ease-in forwards}
+animation: addcart 2s ease-in forwards}
 .cart-button.clicked span.added{
-    animation: added 2s ease-in forwards}
+animation: added 2s ease-in forwards}
 @keyframes cart{0%{left: -10%}40%, 60%{left: 50%}100%{left: 110%}}
 @keyframes box{0%, 40%{top: -20%}60%{top: 36%;left: 53%}100%{top: 40%;left: 112%}}
 @keyframes addcart{0%, 30%{opacity: 1}30%, 100%{opacity: 0}}
 @keyframes added{0%, 80%{opacity: 0}100%{opacity: 1}}
 /*     */
+
+
+/* Responsive layout - when the screen is less than 1025 wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 1025px) {
+.slider {
+top: 8px;
+width:55px
+}
+.switch {
+   position: relative;
+   display: inline-block;
+   width: 50px;
+   height: 5px;
+   margin-left: 10px;
+   margin-right: 10px;
+ }
+
+input:checked + .slider:before {
+-webkit-transform: translateX(30px);
+-ms-transform: translateX(30px);
+transform: translateX(30px);
+}
+.slider.round {
+border-radius: 34px;
+border-width: 1px;
+border-style:solid;
+height: 20px;
+}
+.slider.round:before {
+border-radius: 50%;
+border-width: 1px;
+border-style: solid;
+}
+.slider:before {
+height: 15px;
+width: 15px;
+}
+.cart-button{
+  width: 100px;
+}
+}

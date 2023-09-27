@@ -14,11 +14,17 @@ urlpatterns = [
     path('my_products/organizations', views.manage_org , name = 'manage_org'),
     path('my_products/organizations/delete_org', views.delete_org , name = 'delete_org'),
     path('my_products/users', views.manage_user , name = 'manage_user'),
+    path('my_products/users/delete_user/<int:id>', views.delete_user , name = 'delete_user'),
+
+    
+
+    
    
     
     path('login/', views.login_page , name = 'login'),
     path('register/', views.signup_page , name = 'signup'),
     path('logout/', views.signout , name = 'logout'),
+    path('pass_reset', views.pass_reset , name = 'pass_reset'),
     # path('profile/', views.profile , name = 'profile'),
     #  
     path('payment/', views.payment , name = 'payment'),

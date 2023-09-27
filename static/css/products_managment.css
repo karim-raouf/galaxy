@@ -9,21 +9,29 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/css.css to edit this t
 
 body {
   font-family: 'Lato', sans-serif;
+  
 }
 
 .cart1 {
-  height: 100%;
+  height: auto;
   width: 0;
   position: absolute;
   z-index: 1;
   top: 58px;
   right: 0;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  background-color:  #e9ecef;
+  box-shadow: 0px 8px 16px 0px rgba(10, 78, 10, 0.9);
+  background-color:  #e9efed;
   overflow-x: hidden;
   transition: 0.5s ;
 }
-
+.cart1-content {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  margin-top: 30px;
+  top: 10%;
+  color:black
+}
 .cart1 a {
   padding: 8px;
   text-decoration: none;
@@ -34,13 +42,13 @@ body {
 }
 
 .cart1 a:hover, .cart1 a:focus {
-  color: blue;
+  color: darkgreen;
   font-weight: bold;
 }
 
 .cart1 .closebtn {
   position: absolute;
-  font-size: 60px;
+  font-size: 40px;
   right: 45px;
   
 }
@@ -51,7 +59,7 @@ body {
   z-index: 1;
   top: 58px;
   left: 0;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(10, 78, 10, 0.9);
   background-color:  #e9ecef;
   overflow-x: hidden;
   transition: 0.5s ;
@@ -70,23 +78,35 @@ body {
 .overlay a {
   padding: 8px;
   text-decoration: none;
-  font-size: xx-large;
+  font-size: large;
   color: #818181;
   display: block;
   transition: 0.3s;
 }
 
 .overlay a:hover, .overlay a:focus {
-  color: blue;
+  color: darkgreen;
   font-weight: bold;
 }
 
 .overlay .closebtn {
   position: absolute;
-  font-size: 60px;
+  font-size: 40px;
   right: 45px;
   
 }
+/*
+@media screen and (max-height: 450px) {
+  .overlay a {font-size: xx-small}
+  .overlay .closebtn {
+  font-size: xx-small;
+  top: 15px;
+  right: 35px;
+  }
+
+}
+*/
+
 
 input[type=text], select, textarea {
   width: 95%;
@@ -139,6 +159,61 @@ label {
   display: inline-block;
   color :green;
 }
+dt {
+   padding: 5px 5px 5px 0;
+  color :green; 
+  font-size:medium
+}
+dd {
+   padding: 5px 5px 5px 0;
+  color :black; 
+  font-size:medium
+}
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+/* Style the list items */
+ul li {
+    color:green;
+  cursor: pointer;
+  position: relative;
+  padding: 12px 8px 12px 40px;
+  list-style-type: none;
+  background: #eee;
+  font-size: medium;
+  transition: 0.2s;
+  
+  /* make the list items unselectable */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Set all odd list items to a different color (zebra-stripes) */
+ul li:nth-child(odd) {
+  background: #f9f9f9;
+}
+
+/* Darker background-color on hover */
+ul li:hover {
+  background: #ddd;
+}
+
+/* Style the close button */
+.closeLI {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 12px 16px 12px 16px;
+}
+
+.closeLI:hover {
+  background-color: #f44336;
+  color: white;
+}
 
 .input[type=file] {
   width: 100%;
@@ -164,9 +239,11 @@ input[type=submit]:hover {
 }
 
 .container {
+
   border-radius: 5px;
-  background-color:lightsteelblue;
+  background-color:#c8c389;
   padding: 20px;
+
 }
 
 .subcontainer {
@@ -175,6 +252,7 @@ input[type=submit]:hover {
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   background-color: lightgray;
   padding: 20px;
+
 }
 
 .smallcontainer {
@@ -185,6 +263,7 @@ background-color: whitesmoke;
 padding: 20px;
 height: auto;
 width: auto;
+
 }
 
 .col-5 {
@@ -214,20 +293,18 @@ width: auto;
   color: black;
 }
 
-.col-24 {
-  float: left;
-  width: 24%;
-  margin-top: 6px;
-  color: black;
-}
-
 .col-25 {
   float: left;
   width: 25%;
   margin-top: 6px;
   color: black;
 }
-
+.col-24 {
+  float: left;
+  width: 24%;
+  margin-top: 6px;
+  color: black;
+}
 .col-35 {
   float: left;
   width: 35%;
@@ -269,6 +346,11 @@ width: auto;
   width: 65%;
   margin-top: 6px;
 }
+.col-74 {
+  float: left;
+  width: 65%;
+  margin-top: 6px;
+}
 
 .col-100 {
   float: left;
@@ -294,17 +376,18 @@ width: auto;
     vertical-align: middle;
     font-size:xx-large;
     font-weight:bolder;
-    color:blue;
+    color:darkgreen;
 }
 .title {
-    font-size:xx-large;
+    font-size:x-large;
     font-weight:bolder;
+    color:green
 }
 
 .btn {
   background-color: green;
   color: white;
-  padding: 5px;
+
   margin: 10px 0;
   border-style: solid;
   border-color:  black;
@@ -346,18 +429,135 @@ width: auto;
 #pswMessage,#pswMatchMsg {display:none;background: inherit;color: #000;position: relative;}
 #pswMessage p,#pswMatchMsg p {font-size: 12px;color:red;font-weight: bold;font-style: italic}
 
+/*error messages */
 
+.passerror{        
+  color: red;
+  text-align:left;
+  padding-left: 200px;
+  }
+      
+      
+.messages {
+  margin-bottom: 10px;
+  padding-top: 15px;
+  margin-left: 10px;
+  margin-right: 10px;
+  text-align:center;
+  opacity: 1;
+  transition: opacity 1.25s ease;
+  font-size: medium;
+
+}
+    
+.message {
+  padding: 4px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+        
+}
+    
+.success {
+        
+  color: #3c763d;
+}
+    
+.error {
+        
+  color: #a94442;
+}
+
+.gender-radio input[type="radio"] {
+  display: inline;
+  margin-right: 5px;
+}
+    
+.gender-radio label {
+  display: inline;
+  margin-right: 10px;
+}
+    
+
+
+/* Float cancel and delete buttons and add an equal width */
+.modeldelete_cancelbtn, .modeldelete_deletebtn {
+  align-content: center;
+  width: 30%;
+}
+
+/* Add a color to the cancel button */
+.modeldelete_cancelbtn {
+  background-color: #ccc;
+  color: black;
+}
+
+/* Add a color to the delete button */
+.modeldelete_deletebtn {
+  background-color: #f44336;
+}
+
+/* The Modal (background) */
+.deletemodal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(255,255,255,0.9);
+  padding-top: 50px;
+
+}
+
+/* Modal Content/Box */
+.deletemodal-content {
+  background-color: #fefefe;
+  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+  width: 50%; /* Could be more or less, depending on screen size */
+}
+
+/* Style the horizontal ruler */
+hr {
+  border: 1px solid #f1f1f1;
+  margin-bottom: 25px;
+}
+ 
+/* The Modal Close Button (x) */
+.deletemodel_close {
+  position: absolute;
+  right: 35px;
+  top: 15px;
+  font-size: 40px;
+  font-weight: bold;
+  color: #f1f1f1;
+}
+
+.deletemodel_close:hover,
+.deletemodel_close:focus {
+  color: #f44336;
+  cursor: pointer;
+}
+
+/* Clear floats */
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}  
 
 
 
 /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 1025px) {
   .col-100,.col-65,.col-20,.col-35,.col-25, .col-75,.col-15,.col-10,.col-5,.col-60,.col-11,.col-45,.col-40 input[type=submit] 
   {
     width: 100%;
     margin-top: 0;
   }
-  .overlay-content a {font-size: large}
+  .overlay-content a {font-size: medium}
   .orgrow a {font-size: medium}
   .overlay 
   {
@@ -365,17 +565,34 @@ width: auto;
   top: 55px;
   right: 35px;
   }
-  .title .pagetitle{
+.pagetitle {
+    text-align: center;  
+    vertical-align: middle;
     font-size:large;
     font-weight:bolder;
-
-     
+ 
+}
+.title {
+    font-size:small;
+    font-weight:bolder;
+   
 }
 label {
-
   color :green;
   font-size: small;
 }
+dt {
+  color :green; 
+  font-size:small
+}
+dd {
+  color :black; 
+  font-size:small
+}
+ul li {
+  font-size: small;
+}
+
 input[type=text], select, textarea {
   font-size: small;
 }
@@ -385,4 +602,17 @@ input[type=password]{
   width: 100%;
 }
 .orgrow a {font-size:small}
+.passerror{        
+  font-size:small;
+  padding-left:0px;
+}
+
+.modeldelete_cancelbtn, .modeldelete_deletebtn {
+  width: 100%;
+}
+/* Modal Content/Box */
+.deletemodal-content {
+width: 90%; /* Could be more or less, depending on screen size */
+}
+
 }

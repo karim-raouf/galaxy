@@ -19,6 +19,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         <link type="text/css" rel="stylesheet" href="{% static 'css/products_managment.css' %}"/>
         <script src="{% static 'js/products_managment.js' %}"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
         
         
         {% block header %}{% endblock header %}
@@ -58,8 +59,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         </style>
         
         
+        
     </head>
-    <body>{% comment %} style="background-image: url('{% static 'images/galaxy-bg.jpg' %}');" {% endcomment %}
+    <body style="font-family: 'Lato': sans-serif; padding-top: 65px; background-image: url('{% static 'files_images/background_image.jpg' %}');">{% comment %} style="background-image: url('{% static 'images/galaxy-bg.jpg' %}');" {% endcomment %}
         
             <div class="topnav" id="myTopnav">
             
@@ -68,18 +70,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 <a href="{% url 'galaxy:pricing' %}" >Pricing</a>
                 <a href="{% url 'galaxy:contact_us' %}" >Contact</a>
                 <a href="{% url 'galaxy:about_us' %}" >About</a>
-                {% if request.user.is_authenticated and subed %}
-                    <a href="{% url 'App:apphome' %}?orgname={{user.OrganizationID}}_{{request.user.id}}">{{org|capfirst}}</a>
-                {% endif %}
-                {% if org_num > 1 %}
-                    <a href = "{% url 'galaxy:org_choose' %}">Switch Organization</a>
-                {% endif %}        
+                     
                 <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
                 {% if request.user.is_authenticated %}
-                      
                         <div class="cart">
-                            {% if request.user.user_Type == s_a %}<button id="cartbtn" onclick="opencartNav()" class="cartbtn dropbtn"><span class="price" style="color:black"><img src="{% static 'files_images/cart-orange.png' %}" draggable="false" width="25" height="30"></span><p style="color:white;">{{in_cart}}</p>
-                              <i class="fa fa-caret-down"></i>
+                            {% if request.user.user_Type == s_a %}<button id="cart-btn" onclick="openrightNav('cartNav')" class="cartbtn dropbtn"><span class="price" style="color:black"><img src="{% static 'files_images/cart-orange.png' %}" draggable="false" width="25" height="30"></span><p id="in-cart" style="color:black;">{{in_cart}}</p>
+                              <i style="color:black" class="fa fa-caret-down"></i>
                             </button>{% endif %} 
                               
                         </div>
@@ -87,14 +83,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                             <button class="dropbtn">
                                 <span class="button-text">{{ request.user.username|capfirst }}</span>
                                 <div class="avatar avatar--medium active right-align">
-                                  <img src="{{ request.user.avatar.url }}" draggable="false" />
+                                  <img {% if request.user.avatar %}src="{{ request.user.avatar.url }}" {% else %} src="{% static 'files_images/avatar.svg' %}" {% endif %} draggable="false" />
                                 </div>
                                 <i class="fa fa-caret-down"></i>
                             </button>
                             <div class="dropdown-content">
                                 
-                                <a style = "cursor: pointer" onclick = "document.getElementById('userprofile').style.display = 'block' " >Profile</a>
+                                <a style = "cursor: pointer" onclick="openprofileNav()" >Profile</a>
+                                <a id = 'pass-btn' style = "cursor: pointer" onclick="openpasswordNav()" >Password</a>
+
                                 {% if request.user.user_Type == s_a %}<a href="{% url 'galaxy:my_products' %}">My Products</a>{% endif %}
+                                
                                 <a style = "color: red;" href="{% url 'galaxy:logout' %}"><strong>Logout</strong></a>
                             </div>
                         </div>
@@ -104,9 +103,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 {% endif %}
                   
             </div>
-            <div  id="cartNav" class="cart1">
-              <a href="javascript:void(0)" class="closebtn" onclick="closecartNav()" style="font-size: 40px;right: 15px;">&times;</a>
-              <div class="title" style="padding-left:10px;padding-top: 10px">
+            <div  id="cartNav" class="cart1" style="width: 0%">
+              <a href="javascript:void(0)" class="closebtn" onclick="closerightNav('cartNav')" style="font-size: 40px;right: 15px;">&times;</a>
+              <div class="pagetitle" style="padding-top:20px;padding-left:20px;text-align: left;">
                     <div>Cart</div>
 
 
@@ -131,41 +130,45 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         </div>
 
                         <div id="cartinfo" class="smallcontainer" style="display:block;">
-                        <div class="orgrow">  
+                        <div id="cart-cont" class="orgrow">  
                           {% if cart %}
-                            <div class="orgrow">
+                           {% for p in cart %}
+                            <div class="orgrow del items id{{p.ProductID.id}}">
+                              
                               <div class="col-24">
-                                  {% for p in cart %}
-                                    <a style="alignment: left; font-size: small;" href="url">{{p.ProductID.Name}}</a>
-                                  {% endfor %}
+                                 
+                                    <a style="alignment: left; font-size: small;color: black;" href="url">{{p.ProductID.Name}}</a>
+                                  
                               </div>
-                              <div class="col-24">
-                                  {% for p in cart %}
-                                    <a style="font-size: small ;"><center>{{p.Qty}}</center></a>
-                                  {% endfor %}
+                              <div class="col-24 a">
+                                 
+                                    <a class="qty" style="font-size: small;color: black;padding-left: 15px;"><center>{{p.Qty}}</center></a>
+                                 
                               </div>
                               <div class="col-24" style="font-size: small ;">
-                                  {% for p in cart %}
-                                    <a style="font-size: small ;"><center>${{p.ProductID.Price}}/{{p.ProductID.Type}}</center></a>
-                                  {% endfor %}
+                                  
+                                    <a style="font-size: small ;padding-left: 55px;color: black;"><center>${{p.ProductID.Price}}/{{p.ProductID.Type}}</center></a>
+                                  
                               </div>
                               <div class="col-24" style="font-size: small ;">
-                                  {% for p in cart %}
-                                  <center><a class="fa fa-remove" style="font-size: large ; padding-top: 10px;" onclick="location.href='/delete_cart/{{p.ProductID.id}}'"></a></center>
-                                  {% endfor %}
+                                  
+                                    <center><a class="fa fa-remove delete-btn" style="font-size: large; padding-top: 10px; padding-left: 60px;color: black;" data-product-id="{{ p.ProductID.id }}"></a></center>
+                                  
                               </div>
+                              
                             </div>
+                           {% endfor %}
                           {% else %}
-                            <center><h1>Empty</h1></center>
+                            <center><h1 id="empty-el">Empty</h1></center>
                           {% endif %}
                         </div>
                   </div>
                 </div>
               </div>
-              <div class="title" style="text-align: center;font-size:large">
-                    <div style="text-align: center;font-size:x-large">Sub Total : ${{total}}</div>
-                    <div style="text-align: center;font-size:medium">Apply Promo : <input type="text" style="width:40px;padding-right:10px"></div>
-                    <div style="text-align: center;font-size:x-large">Grand Total : 550 $</div>
+              <div class="title" style="font-size:large;padding-top:20px;padding-left:20px;text-align: left;" >
+                    <div style="display: flex; align-items: center;"><span style="margin-right: 5px;">Sub Total : $</span><div id="subtotal">{{total}}</div></div>
+                    <div >Apply Promo : <input type="text" style="width:40px;padding-right:10px"></div>
+                    <div style="display: flex; align-items: center;"><span style="margin-right: 5px;">Grand Total : $</span><div id="grandtotal">550</div></div>
                     <div style="align-content: center;font-size:large;padding-right: 10%"> <input id="checkout" onclick="location.href='{% url 'galaxy:payment' %}'" type="submit" value="Continue to checkout" class="btn" style="width:90%;" ></div>
                 </div>
             </div>
@@ -182,6 +185,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             {% endblock additional %}
           
           {% include 'galaxy/profile.html' %}
+          {% include "galaxy/password.html" %}
           <Script> 
             function displaycartcontent()
             {
@@ -197,7 +201,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
           </script>
           <Script>
             // Get the modal
-            var modal = document.getElementById("userprofile");
+            var modal = document.getElementById("userprofileNav");
         
             // Get the <span> element that closes the modal
             var span = document.getElementsByClassName("close")[0];
@@ -230,32 +234,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
               } else {
                 x.className = "topnav";
               }
-            }
-          </script>
-          <script>
-            // Check for the query parameter
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('auto_button') === 'true') {
-                // Find the button element by its ID or any other selector
-                const button = document.getElementById("cartbtn");
-        
-                // Check if the button element exists
-                if (button) {
-                    // Add an event listener to the button
-                    button.addEventListener('click', function() {
-                        // Remove the query parameter from the URL
-                        urlParams.delete('auto_button');
-        
-                        // Generate the updated URL without the query parameter
-                        const updatedUrl = window.location.origin + window.location.pathname + urlParams.toString();
-        
-                        // Change the URL to the updated URL
-                        window.history.replaceState({}, '', updatedUrl);
-                    });
-        
-                    // Simulate a button click event
-                    button.click();
-                }
             }
           </script>
           <script>
@@ -292,47 +270,210 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             }
             }
           </script>
+          <script>
+            var prevScrollpos = window.pageYOffset;
+            window.onscroll = function() {
+            var currentScrollPos = window.pageYOffset;
+              if (prevScrollpos > currentScrollPos) {
+                document.getElementById("myTopnav").style.top = "0";
+              } else {
+                document.getElementById("myTopnav").style.top = "-50px";
+              }
+              prevScrollpos = currentScrollPos;
+            }
+          </script>
+          
+          <script>
+            // Get a reference to the delete buttons
+            const deleteButtons = document.querySelectorAll('.delete-btn');
+            console.log('approved1')
+            // Attach an event listener to each delete button
+            deleteButtons.forEach(button => {
+              button.addEventListener('click', (event) => {
+                event.preventDefault(); // Prevent the default behavior of the button click
+                console.log('approved2')
+                // Get the product ID associated with the delete button
+                const productId = button.dataset.productId;
+          
+                // Make an asynchronous request to delete the product from the server
+                fetch(`/delete_cart/${productId}`, {
+                  method: 'DELETE',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+                  },
+                })
+                  .then(response => response.json())
+                  .then(data => {
+                    // Handle the response data
+                    // For example, display a success message or update the cart UI
+                    if (data.success) {
+                      // Product deleted successfully
+                    console.log('approved3')
+                      // Remove the product element from the cart UI
+                      const inCart =  document.getElementById('in-cart')
+                      const productIdNum = parseInt(productId)
+                      const productElement = button.closest(`.id${productIdNum}`);
+                      const quantityElement = productElement.querySelector('.a');
+                      const currentQuantity = parseInt(quantityElement.textContent);
+
+                      if (currentQuantity > 1) {
+                        // Decrease the quantity by one
+                        quantityElement.textContent = currentQuantity - 1;
+                        inCart.textContent -= 1
+                        quantityElement.style.fontSize = 'small';
+                        quantityElement.style.textAlign = 'center';
+                        quantityElement.style.marginTop = '15px';
+                        quantityElement.style.marginLeft = '3.5px';
+                        quantityElement.style.marginRight = '-3.59px';
+                      } else {
+                        // Remove the product element from the cart UI
+                        
+                        
+                        const crmMonthly = document.getElementById('crmMonth')
+                        const crmMonthlyBtn = document.getElementById('crmMonth-btn')
+                        const crmAnually = document.getElementById('crmAnnual')
+                        const crmAnuallyBtn = document.getElementById('crmAnnual-btn')
+
+                        const posMonthly = document.getElementById('posMonth')
+                        const posMonthlyBtn = document.getElementById('posMonth-btn')
+                        const posAnually = document.getElementById('posAnnual')
+                        const posAnuallyBtn = document.getElementById('posAnnual-btn')
+
+                        const imMonthly = document.getElementById('imMonth')
+                        const imMonthlyBtn = document.getElementById('imMonth-btn')
+                        const imAnually = document.getElementById('imAnnual')
+                        const imAnuallyBtn = document.getElementById('imAnnual-btn')
+
+                        const aMonthly = document.getElementById('aMonth')
+                        const aMonthlyBtn = document.getElementById('aMonth-btn')
+                        const aAnually = document.getElementById('aAnnual')
+                        const aAnuallyBtn = document.getElementById('aAnnual-btn')
+
+
+
+
+                          if (productId === '8') {
+                            productElement.remove();
+                            crmMonthly.textContent = '$ 50'
+                            crmAnually.textContent = '$ 150'
+                            crmMonthlyBtn.disabled = false
+                            crmAnuallyBtn.disabled = false
+                            inCart.textContent -= 1
+                            quantityElement.textContent = currentQuantity - 1; 
+                          }
+                            
+                            else if(productId === '4') {
+                              productElement.remove();
+                              crmAnually.textContent = '$ 150'
+                              crmMonthly.textContent = '$ 50'
+                              crmAnuallyBtn.disabled = false
+                              crmMonthlyBtn.disabled = false
+                              inCart.textContent -= 1 
+                              quantityElement.textContent = currentQuantity - 1;
+                            }
+                            else if(productId === '2') {
+                              productElement.remove();
+                              posAnually.textContent = '$ 150'
+                              posMonthly.textContent = '$ 50'
+                              posAnuallyBtn.disabled = false
+                              posMonthlyBtn.disabled = false
+                              inCart.textContent -= 1 
+                              quantityElement.textContent = currentQuantity - 1;
+                            }
+                            else if(productId === '6') {
+                              productElement.remove();
+                              posAnually.textContent = '$ 150'
+                              posMonthly.textContent = '$ 50'
+                              posAnuallyBtn.disabled = false
+                              posMonthlyBtn.disabled = false
+                              inCart.textContent -= 1 
+                              quantityElement.textContent = currentQuantity - 1;
+                            }
+
+                            else if(productId === '3') {
+                              productElement.remove();
+                              imAnually.textContent = '$ 150'
+                              imMonthly.textContent = '$ 50'
+                              imAnuallyBtn.disabled = false
+                              imMonthlyBtn.disabled = false
+                              inCart.textContent -= 1 
+                              quantityElement.textContent = currentQuantity - 1;
+                            }
+
+                            else if(productId === '7') {
+                              productElement.remove();
+                              imAnually.textContent = '$ 150'
+                              imMonthly.textContent = '$ 50'
+                              imAnuallyBtn.disabled = false
+                              imMonthlyBtn.disabled = false
+                              inCart.textContent -= 1 
+                              quantityElement.textContent = currentQuantity - 1;
+                            }
+
+                            else if(productId === '5') {
+                              productElement.remove();
+                              aAnually.textContent = '$ 150'
+                              aMonthly.textContent = '$ 50'
+                              aAnuallyBtn.disabled = false
+                              aMonthlyBtn.disabled = false
+                              inCart.textContent -= 1 
+                              quantityElement.textContent = currentQuantity - 1;
+                            }
+
+                            else if(productId === '9') {
+                              productElement.remove();
+                              aAnually.textContent = '$ 150'
+                              aMonthly.textContent = '$ 50'
+                              aAnuallyBtn.disabled = false
+                              aMonthlyBtn.disabled = false
+                              inCart.textContent -= 1 
+                              quantityElement.textContent = currentQuantity - 1;
+                            }
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            else{
+                              console.log('no00')
+                              productElement.remove();
+                              inCart.textContent -= 1
+                              quantityElement.textContent = currentQuantity - 1;
+                            }
+                        
+                        
+                        
+                      }
+            
+                      // Update the cart summary
+                      const totalPriceElement = document.getElementById('subtotal');
+                      const grandTotalElement = document.getElementById('grandtotal');
+            
+                      totalPriceElement.textContent = data.subTotal;
+                      grandTotalElement.textContent = data.grandTotal;
+
+                      const cartInfoElement = document.getElementById('cartinfo');
+                      const cartItems = cartInfoElement.getElementsByClassName('items');
+                      if (cartItems.length === 0) {
+                        cartInfoElement.innerHTML = '<div id="empty-el" class="orgrow"><center><h1>Empty</h1></center></div>';
+                      }
+
+                    }
+                  })
+                  .catch(error => {
+                    // Handle any errors that occurred during the request
+                    console.error(error);
+                  });
+              });
+            });
+          </script>
           
         
-          {% comment %} <Script>
-            {% for item in cart %}
-              num = {{item.ProductID.id}} ;
-              url = '/delete_cart/' + num ;
-            {% endfor %}
-            $("#cart-del").on("click", function (){
-              fetch(url);
-              url = '/delete_cart/' + num ;
-            });
-          </script> {% endcomment %}
-            
-            
-            
-            
-            
-            {% comment %} <script>
-              $(document).ready(function() {
-                  // Get the dropdown element
-                  var dropdown = $('#cartmenu');
-              
-                  // Open the dropdown immediately
-                  dropdown.addClass('show');
-              });
-            </script> {% endcomment %}
-        
-              {% comment %} <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                  var urlParams = new URLSearchParams(window.location.search);
-                  var dropdownId = urlParams.get('dropdown');
-                  
-                  if (dropdownId) {
-                    var dropdown = document.getElementById(dropdownId);
-                    if (dropdown) {
-                      dropdown.selectedIndex = 0; // Select the first option (index 0)
-                      dropdown.classList.add('open'); // Add a CSS class to make the dropdown appear open
-                    }
-                  }
-                });
-              </script> {% endcomment %}
+          
 
     
     

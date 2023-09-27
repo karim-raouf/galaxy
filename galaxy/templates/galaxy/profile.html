@@ -1,111 +1,133 @@
 {% load static %}
 <head>
-    <link type="text/css" rel="stylesheet" href="{% static 'css/user_profile.css' %}"/>
+    
     <link type="text/css" rel="stylesheet" href="{% static 'css/products_managment.css' %}"/>
 
 
 </head>
-<body>
-<div id="userprofile" class="modal">
-    <!-- user profile -->
-    <div class="modal-content">
-      <span class="close">&times;</span>
-        <form method = 'POST' id="user-form" enctype="multipart/form-data">    
-            {% csrf_token %}
-            <div id="info" class="subcontainer" style = "display: block" >
-                <div class="orgrow">  
-                    <div class="col-15" style = "padding-top: 20px; padding-right: 15px;">
-                        <img src="{{request.user.avatar.url}}" width="100" height="180" class="useravatar">
-                        <p> </p>
-                        <div class="orgrow">
-                            <div  class="col-100" >
-                                {{userform.avatar}}
-                            </div>
-                        </div>
-                    </div>
-                    
-              <div class="col-40" style="">
-                <div class="orgrow">
-                    <div class="col-25">
-                        <label for="username" >User Name :</label>
-                    </div>
-                    <div class="col-75">
-                        {{userform.username}}
-                    </div>
-                </div>
-                <div class="orgrow">
-                    <div class="col-25">
-                        <label for="AddressFiled">First Name :</label>
-                    </div>
-                    <div class="col-75">
-                        {{userform.first_name}}
-                    </div>
-                </div>
-                <div class="orgrow">
-                    <div class="col-25">
-                        <label for="country">Last Name :</label>
-                    </div>
-                    <div class="col-75">
-                        {{userform.last_name}}
-                    </div>
-                </div>
-                <div class="orgrow">
-                    <div class="col-25">
-                        <label for="userEmail">E-mail :</label>
-                    </div>
-                    <div class="col-75">
-                        {{userform.email}}
-                    </div>
-                </div>
-              </div>
-              <div class="col-40" style="padding-left:25px;">
+
+  <div  id="userprofileNav" class="cart1" style="width: 0%">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeprofileNav()" style="font-size: 40px;right: 15px;">&times;</a>
+      <div class="title" style="padding-left:10px;padding-top: 10px">
+          <div>My Profile</div>
+          <p></p>
+      </div>
+      <div >
+          <div class="container">
+              <div id="userprofileinfo" class="smallcontainer" style="display:block;">
+              <div class="orgrow">  
                 
-                <div class="orgrow">
-                <div class="col-25">
-                  <label for="language">Language :</label>
-                </div>
-                <div class="col-75">
-                    {{userform.Language}}
-                </div>
-                </div>
-                <div class="orgrow">
-                <div class="col-25">
-                  <label for="gender">Gender :</label>
-                </div>
-                <div class="col-75">
-                  {{userform.Gender}}
-                </div>
-                </div>
-                <div class="orgrow">
-                <div class="col-25">
-                  <label for="birthdate">Birth Date :</label>
-                </div>
-                <div class="col-75">
-                  {{userform.Birth_Date}}
-                </div>
-                </div>
-                <div class="orgrow">
-                <div class="col-25">
-                  <label for="telephone">Telephone :</label>
-                </div>
-                <div class="col-75">
-                  {{userform.Telephone}}
-                </div>
-                </div>
+                  <div class="orgrow">
+                      
+                      <form method = 'POST' id="user-form" enctype="multipart/form-data">    
+                      {% csrf_token %}
+                      <div id="info" class="subcontainer" style = "display: block" >
+                              <div class="orgrow"> 
+                                  
+                                  <div class="col-50" style = "padding-right: 25%; padding-left: 25%; content-alignment: center; font-size: small;">
+                                    
+                                      <div style="overflow: hidden; border: 4px solid green; box-sizing: border-box; border-radius: 50%;">
+                                          <img {% if request.user.avatar %}src="{{ request.user.avatar.url }}"{% else %}src="{% static "files_images/avatar.svg" %}"{% endif %}
+                                              width="100" height="180" class="useravatar">
+                                      </div>
+                                  
+                                      <p> </p>
+                                      
+                                  </div>
+                                  
+                                  
+                              </div>
+                              <div class="orgrow">
+                                <div  class="col-100" style="font-size: medium">
+                                  <center><label style="color: blue; cursor: pointer; padding-bottom: 30px; font-style: oblique; text-decoration: underline;" for="{{ userform.avatar.id_for_label }}">{% if request.user.avatar %}Change Profile Picture {% else %}Add Profile Picture{% endif %}</label><center>
+                                  {{userform.avatar}}
+                                </div>
+                                
+                              </div>
+                              <div class="orgrow">
+                                  <div class="col-25">
+                                      <label for="username">User Name :</label>
+                                  </div>
+                                  <div class="col-75">
+                                      {{userform.username}}
+                                  </div>
+                              </div>
+                              <div class="orgrow">
+                                  <div class="col-25">
+                                      <label >First Name :</label>
+                                  </div>
+                                  <div class="col-75">
+                                      {{userform.first_name}}
+                                  </div>
+                              </div>
+                              <div class="orgrow">
+                                  <div class="col-25">
+                                      <label>Last Name :</label>
+                                  </div>
+                                  <div class="col-75">
+                                      {{userform.last_name}}
+                                  </div>
+                              </div>
+                              <div class="orgrow">
+                                  <div class="col-25">
+                                      <label for="userEmail">E-mail :</label>
+                                  </div>
+                                  <div class="col-75">
+                                      {{userform.email}}
+                                  </div>
+                              </div>
+                              <div class="orgrow">
+                                  <div class="col-25">
+                                    <label for="language">Language :</label>
+                                  </div>
+                                  <div class="col-75">
+                                      {{userform.Language}}
+                                  </div>
+                              </div>
+                              <div class="orgrow">
+                                  <div class="col-25">
+                                    <label for="gender">Gender :</label>
+                                  </div>
+                                  <div class="col-75">
+                                    {{userform.Gender}}
+                                  </div>
+                              </div>
+                              <div class="orgrow">
+                                  <div class="col-25">
+                                    <label for="birthdate">Birth Date :</label>
+                                  </div>
+                                  <div class="col-75">
+                                    {{userform.Birth_Date}}
+                                  </div>
+                              </div>
+                              <div class="orgrow">
+                                  <div class="col-25">
+                                    <label for="telephone">Telephone :</label>
+                                  </div>
+                                  <div class="col-75">
+                                    {{userform.Telephone}}
+                                  </div>
+                              </div>
+                              
+                       </div>
+                       <div class="orgrow">
+                          <button style="float: right" class="btn" id="profile-cancel-btn" type="button" onclick="closeprofileNav()">Cancel</button>
+                          <button style="float: right;margin-right: 10px;" class="btn" id="save-profile" name="save-profile" type="submit" value="Save">Save</button>
+                       </div> 
+                      </form>
+                  </div>
+                  </div>
+                
               </div>
-            <p></p>        
-            <div class="orgrow">
-          <button style="float: right" class="btn" id="cancel-btn" type="button" onclick="location.reload()">Cancel</button><a>&nbsp;</a><button style="float: right;margin-right: 10px;" class="btn" name="save-profile" type="submit" value="Save">save</button>
-            </div> 
-        </form>
-    </div>
-</div>
+          </div>
+      </div>
+  </div>
 
 
 
   <Script>
     // Get the modal
-    var modal = document.getElementById("userprofile");
+    var modal = document.getElementById("userprofileNav");
 
     // Get the <span> element that closes the modal
     var span = document.getElementsByClassName("close")[0];
@@ -115,17 +137,52 @@
       modal.style.display = "none";
     };
 
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {            
-      if (event.target === modal) {
-        modal.style.display = "none";
-      }
-    };
+  
   </script>
   <script>
-    function updateFileName(input) {
-        const file = input.files[0];
-        const fileName = file ? file.name : '';
-        document.getElementById('selectedFileName').textContent = fileName;
+    document. addEventListener('mouseup', function(e) {
+      var container = document. getElementById('userprofileNav');
+      if (! container. contains(e. target)) {
+      container. style.width = "0%";
+      }
+    });
+  </script>
+  <script>
+    window.addEventListener("resize", resizeCurtainMenu);
+    function resizeCurtainMenu() {
+    var w = window.innerWidth;
+    if (document.getElementById("userprofileNav").style.width != "0%")
+      {if( w >= 1025 )
+        {document.getElementById("userprofileNav").style.width = "35%";}
+        else 
+        {
+            if(w > 800 && w < 1025)
+              {document.getElementById("userprofileNav").style.width = "50%";}
+              else
+              {document.getElementById("userprofileNav").style.width = "90%";}
+      }
+    }
     }
   </script>
+  <Script>
+    function openprofileNav() {
+      var w = window.innerWidth;
+      
+      if( w >= 1025 ){ 
+          document.getElementById("userprofileNav").style.width = "35%";
+          }
+          else {
+              if(w > 800 && w < 1025)
+                {document.getElementById("userprofileNav").style.width = "50%";}
+                else
+                {document.getElementById("userprofileNav").style.width = "90%";}
+        }
+          }
+       
+         
+    function closeprofileNav() {
+          document.getElementById("userprofileNav").style.width = "0%";
+      
+      }
+  </script>
+  

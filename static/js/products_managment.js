@@ -13,40 +13,40 @@ else
 document.getElementById('info').style.display = 'block';
 }
 }
-function openNav(y) {
+function openleftNav(y) {
   var w = window.innerWidth;
   
   if( w >= 1025 ){ 
-      document.getElementById(y).style.width = "20%";
+      document.getElementById(y).style.width = "30%";
       }
       else {
           if(w > 800 && w < 1025)
-            {document.getElementById(y).style.width = "30%";}
+            {document.getElementById(y).style.width = "40%";}
             else
-            {document.getElementById(y).style.width = "50%";}
+            {document.getElementById(y).style.width = "60%";}
     }
       }
      
-    function closeNav(y) {
+    function closeleftNav(y) {
       document.getElementById(y).style.width = "0%";
   
   }
-  function opencartNav() {
+  function openrightNav(z) {
     var w = window.innerWidth;
     
     if( w >= 1025 ){ 
-        document.getElementById('cartNav').style.width = "50%";
+        document.getElementById(z).style.width = "50%";
         }
         else {
             if(w > 800 && w < 1025)
-              {document.getElementById('cartNav').style.width = "70%";}
+              {document.getElementById(z).style.width = "70%";}
               else
-              {document.getElementById('cartNav').style.width = "90%";}
+              {document.getElementById(z).style.width = "90%";}
       }
         }
-       
-  function closecartNav() {
-        document.getElementById('cartNav').style.width = "0%";
+  
+  function closerightNav(z) {
+        document.getElementById(z).style.width = "0%";
     
     }
 // function openNav(y) {

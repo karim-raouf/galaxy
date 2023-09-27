@@ -4,22 +4,59 @@
     <link type="text/css" rel="stylesheet" href="{% static 'css/products_managment.css' %}"/>
     <script src="{% static 'js/products_managment.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      .passerror{        
+        color: red;
+        text-align:left;
+        padding-left: 200px;
+      }
+      
+      
+      .messages {
+        margin-bottom: 0px; 
+        padding-top: 5px;
+        margin-left: 10px;
+        margin-right: 10px;
+        text-align:center;
+        opacity: 1;
+        transition: opacity 1.25s ease;
+        font-size: medium;
+
+    }
+    
+    .message {
+        padding: 4px;
+        margin-bottom: 0px;
+        border: 1px solid #ccc;
+        
+    }
+    
+    .success {
+        color: #dff0d8;
+        color: #3c763d;
+    }
+    
+    .error {
+        color: #f2dede;
+        color: #a94442;
+    }
+    </style>
     {% endblock header %}
     
 
     {% block body %}
     <div style="text-align: center;  vertical-align: middle;" class="orgrow">
       <div >
-          <strong><span style="color:blue;" class="title" ><Strong>Organization Management</strong></span></strong>
+          <strong><span class="pagetitle" ><Strong>Organization Management</strong></span></strong>
 
       </div>
     </div>
     <p></p>
-    <strong><span class="title" style="color:green;cursor:pointer" onclick="openNav('orgNav')">&#9776; <Strong>Select Organization</strong></span></strong>
+    <strong><span class="title" style="color:green;cursor:pointer" onclick="openleftNav('orgNav')">&#9776; <Strong>Select Organization</strong></span></strong>
     <p></p>
       
 <div  id="orgNav" class="overlay">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav('orgNav')">&times;</a>
+  <a href="javascript:void(0)" class="closebtn" onclick="closeleftNav('orgNav')">&times;</a>
 
   <div class="overlay-content">
     {% for organisation in organisations %} 
@@ -35,36 +72,48 @@
     <a id="Orgname" name="Orgname" style="font-size: large;font-weight: bold; color: blue;">{% if org.OrganizationName %}│{{org.OrganizationName|capfirst}}│{% endif %}{% if org and not org.OrganizationName %}Undefined organization {% endif %}{% if not org %}Choose Organization{% endif %}</a>
   </div>
   <div id="manage" class="orgrow" style="text-align: center;font-size:medium;font-weight:bold;">
-                <div class="col-15" style="border-bottom: solid;border-color: blue">
-                  <label style="color: black" for="Status">Subscription Status</label>
+                <div class="col-25" style="border-bottom: solid;border-color: blue">
+                  <label for="Status">Subscription Status</label>
                   <a id="Status" name="Status" style=" color:blue; ">{% if sub_status %}Active{% elif sub_status == 'False' %}Inactive<span style="color: black; padding-left: 10px;">│</span>{% endif %}</a>
                 </div>
                 
-                <div  class="col-15" style="border-bottom: solid;border-color: blue">
-                  <label style="color: black" for="StartD">│ Start Date</label>
+                <div  class="col-25" style="border-bottom: solid;border-color: blue">
+                  <label for="StartD">Start Date</label>
                   <a id="StartD" name="StartD" style=" color:blue;">{% if sub_start %}{{sub_start}}{% endif %}</a>
                 </div>
                 
-                <div class="col-15" style="border-bottom: solid;border-color: blue">
-                  <label style="color: black" for="EndD">│ End Date</label>
-                  <a id="EndD" name="EndD" style=" color:blue; ">{% if sub_end %}{{sub_end}}<span style="color: black; padding-left: 10px;">│</span>{% endif %}</a>
+                <div class="col-25" style="border-bottom: solid;border-color: blue">
+                  <label for="EndD">End Date</label>
+                  <a id="EndD" name="EndD" style=" color:blue; ">{% if sub_end %}{{sub_end}}<span style="color: black; padding-left: 10px;"></span>{% endif %}</a>
                 </div>
                 
-                <div  class="col-10" style="border-bottom: solid;border-color: blue;">
+                <div  class="col-25" style="border-bottom: solid;border-color: blue">
+                  <form method="POST" id="myForm">
+                    {% csrf_token %}
+                      <label for="AutoRenew" >Auto Renew</label>
+                      {% if org %}  
+                        <input type="checkbox" id="autoRenewField" name="Auto-Renew" style=" color:blue " {% if form2.AutoRenew.value %} checked {% endif %}>
+                      {% endif %}
+                  </form>
+                </div>
+                
+                {% comment %} <div  class="col-10" style="border-bottom: solid;border-color: blue;">
                     <label style="color: black" for="AutoRenew">Auto Renew</label>
                     <div  class="col-5" style="padding-left: 8px;">
                       <form method="POST" id="myForm">
                         {% csrf_token %}
                         <div class="col-5">
                           {% if org %}
-                            <input type="checkbox" id="autoRenewField" name="Auto-Renew" {% if form2.AutoRenew.value %} checked {% endif %} >{% comment %}  {% endcomment %}
+                            <input type="checkbox" id="autoRenewField" name="Auto-Renew" {% if form2.AutoRenew.value %} checked {% endif %} >
                           {% endif %}
                         </div>
                       </form>
                     </div>
+                </div> {% endcomment %}
+                <div class="col-45" >
+                  {% if org %}<button id="orginfo" style="width: 60%; float: right;" class="fa fa-arrow-circle-o-down btn" onclick="info()"> Organization Info</button> {% endif %}
                 </div>
-                  
-                <div class="col-25" >
+                <div class="col-45" >   
                     <form method="POST">
                       {% csrf_token %}
                       <input type="hidden" name="form_id" value="{{choosed_org}}">
@@ -72,12 +121,18 @@
                     </form>
                 </div>
 
-                <div class="col-20" >
-                  {% if org %}<button id="orginfo" style="width: 60%; float: right;" class="fa fa-arrow-circle-o-down btn" onclick="info()"> Organization Info</button> {% endif %}
-                </div>
+                
                 
   </div> 
-     
+  <div>
+    {% if messages %}
+      <div class="messages" id="message">
+            {% for message in messages %}
+              <a id="fade-msg" {% if message.tags %} class="messages {{ message.tags }} alert {% if message.level_tag == 'error' %} error{% endif %}"{% endif %}>{{ message }}</a><br>
+            {% endfor %}
+      </div>
+    {% endif %}
+  </div> 
   <form method = 'POST' action="" id="org-form" enctype="multipart/form-data">
     {% csrf_token %}
       
@@ -289,6 +344,23 @@
   });
 </script>
 <script>
+  window.addEventListener("resize", resizeCurtainMenu);
+  function resizeCurtainMenu() {
+  var w = window.innerWidth;
+  if (document.getElementById("orgNav").style.width != "0%")
+    {if( w >= 1025 )
+      {document.getElementById("orgNav").style.width = "30%";}
+      else 
+      {
+          if(w > 800 && w < 1025)
+            {document.getElementById("orgNav").style.width = "40%";}
+            else
+            {document.getElementById("orgNav").style.width = "60%";}
+    }
+  }
+  }
+</script>
+<script>
   document. addEventListener('mouseup', function(e) {
     var container = document. getElementById('orgNav');
     if (! container. contains(e. target)) {
@@ -296,6 +368,32 @@
     
     }
     });
+</script>
+
+<script>
+  // Wait for the DOM to load
+  document.addEventListener('DOMContentLoaded', function() {
+      // Select all the messages with the 'alert' class
+      var messages = document.querySelectorAll('.alert');
+
+      // Loop through each message and set a timeout to remove it after 3 seconds,
+      // except for error messages
+      messages.forEach(function(message) {
+          if (!message.classList.contains('error')) {
+              setTimeout(function() {
+                  message.remove();
+              }, 3000);
+          }
+      });
+  });
+</script>
+<script>
+  var message = document.getElementById('fade-msg');
+  if (!message.classList.contains('error')) {
+      setTimeout(function() {
+        message.style.opacity = '0';
+      }, 1250);
+  }
 </script>
    {% endblock additional %}
 
