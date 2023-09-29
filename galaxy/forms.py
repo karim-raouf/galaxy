@@ -80,3 +80,8 @@ class SystemUserForm(forms.ModelForm):
             raise forms.ValidationError("This field is required.")
         return password
     
+
+class promocodeForm(forms.ModelForm):
+    class Meta:
+        model = PromoCode
+        fields = ['code']

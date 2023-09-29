@@ -167,8 +167,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
               </div>
               <div class="title" style="font-size:large;padding-top:20px;padding-left:20px;text-align: left;" >
                     <div style="display: flex; align-items: center;"><span style="margin-right: 5px;">Sub Total : $</span><div id="subtotal">{{total}}</div></div>
-                    <div >Apply Promo : <input type="text" style="width:40px;padding-right:10px"></div>
-                    <div style="display: flex; align-items: center;"><span style="margin-right: 5px;">Grand Total : $</span><div id="grandtotal">550</div></div>
+                    <div >Promo Code : <input name="promo-code" id="promo-code" type="text" style="width:80px;height:1.5px;"><button style="height:26px" class = "add-promo">Add</button><button style="height:26px" class = "remove-promo" onclick="removePromo()">Remove</button><span id="promo-error" style="color: red; padding-left: 5px; font-size: small;"></span></div>
+                    <div style="display: flex; align-items: center;"><span style="margin-right: 5px;">Grand Total : $</span><div id="grandtotal">{{total}}</div></div>
                     <div style="align-content: center;font-size:large;padding-right: 10%"> <input id="checkout" onclick="location.href='{% url 'galaxy:payment' %}'" type="submit" value="Continue to checkout" class="btn" style="width:90%;" ></div>
                 </div>
             </div>
@@ -308,7 +308,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     // Handle the response data
                     // For example, display a success message or update the cart UI
                     if (data.success) {
-                      // Product deleted successfully
+                    
+                            
+                    // Product deleted successfully
                     console.log('approved3')
                       // Remove the product element from the cart UI
                       const inCart =  document.getElementById('in-cart')
@@ -461,6 +463,18 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                       if (cartItems.length === 0) {
                         cartInfoElement.innerHTML = '<div id="empty-el" class="orgrow"><center><h1>Empty</h1></center></div>';
                       }
+    //----------------------------------------------------------------------------------------------------------------------------
+                      const storedPromoCode = localStorage.getItem('promoCode');
+                      const addPromoButton = document.querySelector('.add-promo');
+                      // Check if there is a promo code in local storage
+                      if (storedPromoCode) {
+                        // Set the value of the promo code input field
+                        document.getElementById('promo-code').value = storedPromoCode;
+                          
+                        // Programmatically trigger the click event of the add button
+                        addPromoButton.click();
+                        }
+//--------------------------------------------------------------------------------------------------------------------                     
 
                     }
                   })
@@ -471,6 +485,97 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
               });
             });
           </script>
+          <script>
+            // Get a reference to the delete button
+            const addPromoButton = document.querySelector('.add-promo');
+            console.log(addPromoButton);
+          
+            // Attach an event listener to the delete button
+            addPromoButton.addEventListener('click', (event) => {
+              event.preventDefault(); // Prevent the default behavior of the button click
+          
+              // Get the product ID associated with the delete button
+              const totalPrice = document.getElementById('subtotal').textContent;
+              console.log(totalPrice);
+              // Get the confirmation code from the input field
+              const promoCode = document.getElementById('promo-code').value;          
+              // Construct the URL with the confirmation code as a query parameter
+              const url = `/promo_code/${encodeURIComponent(promoCode)}/${totalPrice}`;
+              
+              // Make an asynchronous request to delete the product from the server
+              fetch(url, {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+                },
+              })
+                .then(response => response.json())
+                .then(data => {
+                  // Handle the response data
+                  // For example, display a success message or update the cart UI
+                  if (data.success) {
+                    // Handle the success response
+                    console.log('success');
+                    const grandTotalEl = document.getElementById('grandtotal');
+                    grandTotalEl.textContent = data.grandtotal
+                    // Store the promo code in local storage
+                    localStorage.setItem('promoCode', promoCode);
+                    console.log(localStorage.getItem('promoCode'))
+                    const removePromoButton = document.querySelector('.remove-promo');
+
+                    addPromoButton.style.display = 'none';
+                    removePromoButton.style.display = 'block';
+                    document.getElementById('promo-error').textContent = ''
+
+                  } else if (data.error) {
+                    console.log('error');
+                    const errorEl = document.getElementById('promo-error')
+                    
+                    errorEl.textContent = '• Invalid Promo Code!'
+                    
+                    
+                  }
+                })
+                .catch(error => {
+                  // Handle any errors that occurred during the request
+                  console.error(error);
+                });
+            });
+            const storedPromoCode = localStorage.getItem('promoCode');
+            const removePromoButton = document.querySelector('.remove-promo');
+            
+            // Check if there is a promo code in local storage
+            if (storedPromoCode) {
+              // Set the value of the promo code input field
+              document.getElementById('promo-code').value = storedPromoCode;
+              addPromoButton.style.display = 'none';
+              removePromoButton.style.display = 'block';
+              document.getElementById('promo-error').textContent = ''
+              // Programmatically trigger the click event of the add button
+              addPromoButton.click();
+            }else{
+              addPromoButton.style.display = 'block';
+              removePromoButton.style.display = 'none';
+            }
+          </script>
+          <script>
+
+            const grandTotalEl = document.getElementById('grandtotal');
+
+            console.log('remove script')
+            function removePromo(){
+              localStorage.removeItem('promoCode')
+              document.getElementById('promo-code').value = ''
+              grandTotalEl.textContent = document.getElementById('subtotal').textContent;
+              document.querySelector('.add-promo').style.display = 'block';
+              document.querySelector('.remove-promo').style.display = 'none';
+
+            }
+          </script>
+
+          
+          
           
         
           

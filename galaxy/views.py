@@ -1121,7 +1121,22 @@ def manage_org(request):
         form2 = None
         
     pass_error = []    
-    
+    del_btn = request.GET.get('del')
+    print(del_btn)
+    if del_btn :
+        code = secrets.token_hex(4)
+        # Send the email with the code
+        email=EmailMessage(
+            'Organization Delete Confirmation',
+            f'Your organization delete confirmation code is: {code}',
+            settings.EMAIL_HOST_USER,
+            [request.user.email],
+        )
+        email.fail_silently = False
+        email.send()
+        # Store the code in the session
+        request.session['delete_code'] = code
+        
     if request.method == 'POST':  
             if 'save-btn' in request.POST:
                 form = OrgForm(request.POST , request.FILES , instance=org)
@@ -1144,22 +1159,7 @@ def manage_org(request):
                     
                     url = f'/my_products/organizations?id={choosed_org}'
                     return redirect(url)
-            elif 'delete-btn' in request.POST:
-                code = secrets.token_hex(4)
-            # Send the email with the code
-                email=EmailMessage(
-                    'Organization Delete Confirmation',
-                    f'Your organization delete confirmation code is: {code}',
-                    settings.EMAIL_HOST_USER,
-                    [request.user.email],
-                )
-                email.fail_silently = False
-                email.send()
-                # Store the code in the session
-                request.session['delete_code'] = code
-                
-                url = f'/my_products/organizations/delete_org?id={choosed_org}'
-                return redirect(url)
+   
             elif 'Auto-Renew' in request.POST:
                 
                 form2 = AutoRenew(request.POST , instance=org.SubscriptionID)
@@ -1275,17 +1275,15 @@ def manage_org(request):
     return render(request , 'galaxy/manage_org.html' , context)
 
 
-def delete_org(request):
-    error_message = None
-    if request.method == 'POST':
+def delete_org(request , id):
         # Get the code entered by the user
-        user_code = request.POST.get('code')
+        user_code = request.GET.get('code')
 
         # Get the code stored in the session
         stored_code = request.session.get('delete_code')
 
         if user_code == stored_code:
-            org_id = request.GET.get('id')
+            org_id = id
             organisation = Organization.objects.get(id=org_id)
             sub_id = organisation.SubscriptionID.id
             organisation.OrganizationName = None
@@ -1314,13 +1312,22 @@ def delete_org(request):
             delete_user_database(db_name)
             create_user_database(db_name)
             # Redirect the user to a success page
-            return redirect('galaxy:manage_org')
+            messages.success(request , 'Organization Deleted Successfully!')
+            response_data = {
+                'success': True,
+            }
+            # Delete the stored code from the session
+            # del request.session['delete_code']
+            # Redirect the user to a success page
         else:
-            error_message = 'Invalid code, please try again.'
+            response_data = {
+                'error': True ,
+            }
+            
     
-    
-    context = {'error_message' : error_message}
-    return render(request , 'galaxy/org_delete.html' , context)
+        
+        
+        return JsonResponse(response_data)
 
 
 
@@ -1690,3 +1697,20 @@ def pass_reset(request):
     return render(request , 'galaxy/user_pass_reset.html' , context)
 
 
+
+def applying_promocode(request , code , total):
+    
+    try:
+        promotion = PromoCode.objects.get(code=code , usercode = request.user)
+        grandtotal = int(total)-(int(total)*promotion.discount)
+        response_data = {
+        'success': True,
+        'grandtotal' : grandtotal
+        
+        }
+    except:
+        response_data = {
+        'error': True,
+        }
+    
+    return JsonResponse(response_data)

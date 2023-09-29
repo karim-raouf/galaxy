@@ -5,42 +5,21 @@
     <script src="{% static 'js/products_managment.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-      .passerror{        
-        color: red;
-        text-align:left;
-        padding-left: 200px;
+      button {
+        background-color: #04AA6D;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
       }
       
-      
-      .messages {
-        margin-bottom: 0px; 
-        padding-top: 5px;
-        margin-left: 10px;
-        margin-right: 10px;
-        text-align:center;
-        opacity: 1;
-        transition: opacity 1.25s ease;
-        font-size: medium;
-
-    }
-    
-    .message {
-        padding: 4px;
-        margin-bottom: 0px;
-        border: 1px solid #ccc;
-        
-    }
-    
-    .success {
-        color: #dff0d8;
-        color: #3c763d;
-    }
-    
-    .error {
-        color: #f2dede;
-        color: #a94442;
-    }
-    </style>
+      button:hover {
+        opacity:1;
+      }
+    </style> 
     {% endblock header %}
     
 
@@ -113,12 +92,10 @@
                 <div class="col-45" >
                   {% if org %}<button id="orginfo" style="width: 60%; float: right;" class="fa fa-arrow-circle-o-down btn" onclick="info()"> Organization Info</button> {% endif %}
                 </div>
-                <div class="col-45" >   
-                    <form method="POST">
-                      {% csrf_token %}
-                      <input type="hidden" name="form_id" value="{{choosed_org}}">
-                      {% if org.OrganizationName %}<button name="delete-btn" type="submit" style="width: 60%; float: right;" class="fa fa-remove btn"> Delete Organization</button>{% endif %}
-                    </form>
+                <div class="col-45" style="text-align: center;">
+      
+                  {% if org.OrganizationEmail %}<button type="button" style="width: 60%; float: right;" onclick="document.getElementById('orgdeleteconfirm').style.display='block'" class="fa fa-remove btn"> Delete Organization</button>{% endif %}
+                
                 </div>
 
                 
@@ -133,6 +110,39 @@
       </div>
     {% endif %}
   </div> 
+  <div id="orgdeleteconfirm" class="deletemodal">
+    <span onclick="document.getElementById('orgdeleteconfirm').style.display='none';document.getElementById('deleteconfirmation').style.display='none'" class="deletemodel_close" title="Close Modal">x</span>
+    <form class="deletemodal-content">
+      <div class="container"  style="padding: 5px;text-align: center;">
+        <h1 style="color: black;">Organiation Data Delete Confirmation</h1>
+        <p style="color: black;">Are you sure you want to delete Organization Data?</p>
+        <p></p>
+        <strong><h2 style="color: black;">Warning:</h2></strong>
+        <Label style="color: black;"> Organization data will be permanently erased and you will not be able to access it again</label>
+        <br>
+        <div class="clearfix">
+          <button id="remove-button" type="button" onclick="document.getElementById('orgdeleteconfirm').style.display='none';document.getElementById('deleteconfirmation').style.display='none'" class="modeldelete_cancelbtn">Cancel</button>
+          
+          <button id="org-delete-btn" name="org-delete-btn" type="button" onclick="document.getElementById('deleteconfirmation').style.display='block'" class="modeldelete_deletebtn">Delete</button>
+          
+          <div id="deleteconfirmation" style="display:none">
+              <h4 style="color: black;">a confirmation code has been sent to your email</h4>
+                  {% if error_message %}
+                  <p style="color: red;">{{ error_message }}</p>
+                  {% endif %}
+  
+                    <label style="color: black;" for="code">Confirmation Code:</label>
+                    <input style="margin-bottom: 10px" type="text" id="code" name="code" required>
+                    <a id="code-error" style="color: red"></a><br>
+                    <button class="modeldelete_deletebtn orgdel" data-org-id = "{{org.id}}" type="submit">Confirm Delete</button>
+                  
+                  
+  
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
   <form method = 'POST' action="" id="org-form" enctype="multipart/form-data">
     {% csrf_token %}
       
@@ -395,26 +405,112 @@
       }, 1250);
   }
 </script>
+<script>
+  // Get the user delete modal
+var modal = document.getElementById('orgdeleteconfirm');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target === modal) {
+    modal.style.display = "none";
+    document.getElementById('deleteconfirmation').style.display='none';
+  };
+};
+</script>
+
+<script>
+  // Get references to the buttons
+  const specificButton = document.getElementById('org-delete-btn');
+  const removeButton = document.getElementById('remove-button');
+
+  // Attach an event listener to the add button
+  specificButton.addEventListener('click', () => {
+    // Get the current URL
+    const url = new URL(window.location.href);
+
+    // Add the query parameter to the URL
+    url.searchParams.append('del', 'true');
+
+    // Modify the browser history with triggering a page reload
+    window.location.href = url.href;
+  });
+
+  // Check if the 'del' query parameter exists in the URL
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('del')) {
+    const delEl = document.getElementById('orgdeleteconfirm');
+    const delEl2 = document.getElementById('deleteconfirmation');
+
+    // Show the delEl element by modifying its style
+    delEl.style.display = 'block';
+    delEl2.style.display = 'block';
+  }
+
+  // Attach an event listener to the remove button
+  removeButton.addEventListener('click', () => {
+    // Get the current URL
+    const url = new URL(window.location.href);
+
+    // Remove the query parameter from the URL
+    url.searchParams.delete('del');
+
+    // Modify the browser history without triggering a page reload
+    window.history.pushState({}, '', url.href);
+  });
+</script>
+
+<script>
+  // Get a reference to the delete button
+  const deleteButton = document.querySelector('.orgdel');
+  console.log(deleteButton);
+
+  // Attach an event listener to the delete button
+  deleteButton.addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent the default behavior of the button click
+
+    // Get the product ID associated with the delete button
+    const orgId = deleteButton.dataset.orgId;
+    console.log(orgId);
+
+    // Get the confirmation code from the input field
+    const confirmationCode = document.getElementById('code').value;
+
+    // Construct the URL with the confirmation code as a query parameter
+    const url = `/my_products/organizations/delete_org/${orgId}?code=${encodeURIComponent(confirmationCode)}`;
+
+    // Make an asynchronous request to delete the product from the server
+    fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response data
+        // For example, display a success message or update the cart UI
+        if (data.success) {
+          // Handle the success response
+          console.log('success');
+          const url = new URL(window.location.href);
+
+          // Remove the query parameter from the URL
+          url.searchParams.delete('del');
+
+          // Modify the browser history without triggering a page reload
+          window.location.href = url.href;
+        } else if (data.error) {
+          console.log('error');
+          const errorEl = document.getElementById('code-error')
+          errorEl.textContent = '• Invalid Code!'
+        }
+      })
+      .catch(error => {
+        // Handle any errors that occurred during the request
+        console.error(error);
+      });
+  });
+</script>
    {% endblock additional %}
 
-
-   {% comment %} <div id="OrgInfo" class="subcontainer" >
-        {% csrf_token %}
-        {% for field in form %}
-        <div class="orgrow">
-          <div class="col-35">
-            {{ field.label_tag }}
-          </div>
-            {% if field.field.choices %}
-              <div class="col-11">
-                {{ field }}
-              </div>
-            {% else %}
-              <div class="col-45">
-                {{ field }}
-              </div>
-            {% endif %}
-          
-        </div>
-        <br>
-        {% endfor %} {% endcomment %}

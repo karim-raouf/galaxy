@@ -14,5 +14,7 @@ admin.site.register(Currency)
 admin.site.register(Tax)
 admin.site.register(UsersType)
 admin.site.register(Language)
+admin.site.register(PromoCode)
+
 
 

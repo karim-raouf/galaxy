@@ -367,26 +367,22 @@
   
           </script>
           <script>
-              document.addEventListener("DOMContentLoaded", function(event) {
+            document.addEventListener("DOMContentLoaded", function(event) {
+              const cartButtons = document.querySelectorAll('.cart-button');
           
-          
-                  const cartButtons = document.querySelectorAll('.cart-button');
-          
-                  cartButtons.forEach(button => {
-          
-                          button.addEventListener('click',cartClick);
-          
-                  });
-          
-                  function cartClick(){
-                  let button =this;
-                  button.classList.add('clicked');
-                  /* button.classList.remove('clicked');*/
-                  }
-                  
-                  
-                  
+              cartButtons.forEach(button => {
+                button.addEventListener('click', cartClick);
               });
+          
+              function cartClick() {
+                let button = this;
+                button.classList.add('clicked');
+          
+                setTimeout(function() {
+                  button.classList.remove('clicked');
+                }, 2500);
+              }
+            });
           </script>
           <script>
               function delayedAction(url) {
@@ -447,6 +443,7 @@
                   // For example, display a success message or update the cart UI
                   const cartInfoElement = document.getElementById('cartinfo');
                   if (data.success) {
+                    
                     // Product added to the cart successfully
                             
                     const cartItems = cartInfoElement.getElementsByClassName('items');
@@ -508,74 +505,96 @@
                     console.log(newInCart)
                     
                     if (productId === '8') {
-                            
-                        crmMonthly.textContent = 'Item added'
-                        crmAnually.textContent = 'Item added'
+                                            
                         crmMonthlyBtn.disabled = true
                         crmAnuallyBtn.disabled = true
-                        
+                        setTimeout(function() {
+                            crmMonthly.textContent = 'Item added'
+                            crmAnually.textContent = 'Item added'
+                          }, 2000);
 
                          
                       }
                         
                         else if(productId === '4') {
                           
-                          crmAnually.textContent = 'Item added'
-                          crmMonthly.textContent = 'Item added'
+                          
                           crmAnuallyBtn.disabled = true
                           crmMonthlyBtn.disabled = true
+                          setTimeout(function() {
+                            crmAnually.textContent = 'Item added'
+                            crmMonthly.textContent = 'Item added'
+                          }, 2000);
+                          
                           
                         }
                         else if(productId === '2') {
-                          
-                          posAnually.textContent = 'Item added'
-                          posMonthly.textContent = 'Item added'
+                        
                           posAnuallyBtn.disabled = true
                           posMonthlyBtn.disabled = true
+                          setTimeout(function() {
+                            posAnually.textContent = 'Item added'
+                            posMonthly.textContent = 'Item added'
+                          }, 2000);
                         
                         }
                         else if(productId === '6') {
                           
-                          posAnually.textContent = 'Item added'
-                          posMonthly.textContent = 'Item added'
+                          
                           posAnuallyBtn.disabled = true
                           posMonthlyBtn.disabled = true
+                          setTimeout(function() {
+                            posAnually.textContent = 'Item added'
+                            posMonthly.textContent = 'Item added'
+                          }, 2000);
                         
                         }
 
                         else if(productId === '3') {
                           
-                          imAnually.textContent = 'Item added'
-                          imMonthly.textContent = 'Item added'
+                          
                           imAnuallyBtn.disabled = true
                           imMonthlyBtn.disabled = true
+                          setTimeout(function() {
+                            imAnually.textContent = 'Item added'
+                            imMonthly.textContent = 'Item added'
+                          }, 2000);
                        
                         }
 
                         else if(productId === '7') {
                           
-                          imAnually.textContent = 'Item added'
-                          imMonthly.textContent = 'Item added'
+                          
                           imAnuallyBtn.disabled = true
                           imMonthlyBtn.disabled = true
+                          setTimeout(function() {
+                            imAnually.textContent = 'Item added'
+                            imMonthly.textContent = 'Item added'
+                          }, 2000);
                         
                         }
 
                         else if(productId === '5') {
                           
-                          aAnually.textContent = 'Item added'
-                          aMonthly.textContent = 'Item added'
+                          
                           aAnuallyBtn.disabled = true
                           aMonthlyBtn.disabled = true
+                          setTimeout(function() {
+                            aAnually.textContent = 'Item added'
+                            aMonthly.textContent = 'Item added'
+                          }, 2000);
                         
                         }
 
                         else if(productId === '9') {
                           
-                          aAnually.textContent = 'Item added'
-                          aMonthly.textContent = 'Item added'
+                          
                           aAnuallyBtn.disabled = true
                           aMonthlyBtn.disabled = true
+                          setTimeout(function() {
+                            aAnually.textContent = 'Item added'
+                            aMonthly.textContent = 'Item added'
+                          }, 2000);
                         
                         }
                         else{
@@ -608,6 +627,7 @@
                           // Handle the response data
                           // For example, display a success message or update the cart UI
                           if (data.success) {
+                              
                             // Product deleted successfully
                           console.log('approved3')
                             // Remove the product element from the cart UI
@@ -761,6 +781,18 @@
                             if (cartItems.length === 0) {
                               cartInfoElement.innerHTML = '<div id="empty-el" class="orgrow"><center><h1>Empty</h1></center></div>';
                             }
+              //-----------------------------------------------------------------------------------------------------------------------
+                            const storedPromoCode = localStorage.getItem('promoCode');
+                            const addPromoButton = document.querySelector('.add-promo');
+                            // Check if there is a promo code in local storage
+                            if (storedPromoCode) {
+                              // Set the value of the promo code input field
+                              document.getElementById('promo-code').value = storedPromoCode;
+                                
+                              // Programmatically trigger the click event of the add button
+                              addPromoButton.click();
+                              }
+   //--------------------------------------------------------------------------------------------------------------------                 
       
                           }
                         })
@@ -786,6 +818,17 @@
                     grandTotalElement.textContent = data.grandTotal;
           
                     // Update the checkout button or any other UI elements as needed
+                    const storedPromoCode = localStorage.getItem('promoCode');
+                    const addPromoButton = document.querySelector('.add-promo');
+                     // Check if there is a promo code in local storage
+                    if (storedPromoCode) {
+                      // Set the value of the promo code input field
+                      document.getElementById('promo-code').value = storedPromoCode;
+                        
+                      // Programmatically trigger the click event of the add button
+                      addPromoButton.click();
+                      }
+    //--------------------------------------------------------------------------------------------------------------------  
                   }
                     const cartItems = cartInfoElement.getElementsByClassName('items');
                         if (cartItems.length === 0) {

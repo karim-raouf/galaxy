@@ -12,7 +12,7 @@ urlpatterns = [
     path('contact_us/', views.contact_us , name = 'contact_us'),
     path('my_products/', views.my_products , name = 'my_products'),
     path('my_products/organizations', views.manage_org , name = 'manage_org'),
-    path('my_products/organizations/delete_org', views.delete_org , name = 'delete_org'),
+    path('my_products/organizations/delete_org/<int:id>', views.delete_org , name = 'delete_org'),
     path('my_products/users', views.manage_user , name = 'manage_user'),
     path('my_products/users/delete_user/<int:id>', views.delete_user , name = 'delete_user'),
 
@@ -25,9 +25,10 @@ urlpatterns = [
     path('register/', views.signup_page , name = 'signup'),
     path('logout/', views.signout , name = 'logout'),
     path('pass_reset', views.pass_reset , name = 'pass_reset'),
-    # path('profile/', views.profile , name = 'profile'),
-    #  
+    # path('profile/', views.profile , name = 'profile'),  
     path('payment/', views.payment , name = 'payment'),
+    path('promo_code/<str:code>/<int:total>', views.applying_promocode , name = 'apply_promo'),
+
     path('organization/', views.choose_org , name = 'org_choose'),
     path('success/', views.success , name = 'success_m'),
     path('upgrade_success/', views.update_success , name = 'u_success_m'),
