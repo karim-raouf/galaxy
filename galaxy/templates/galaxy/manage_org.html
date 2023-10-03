@@ -53,7 +53,7 @@
   <div id="manage" class="orgrow" style="text-align: center;font-size:medium;font-weight:bold;">
                 <div class="col-25" style="border-bottom: solid;border-color: blue">
                   <label for="Status">Subscription Status</label>
-                  <a id="Status" name="Status" style=" color:blue; ">{% if sub_status %}Active{% elif sub_status == 'False' %}Inactive<span style="color: black; padding-left: 10px;">│</span>{% endif %}</a>
+                  <a id="Status" name="Status" style=" color:blue; ">{% if sub_status %}Active{% else %}Inactive{% endif %}</a>
                 </div>
                 
                 <div  class="col-25" style="border-bottom: solid;border-color: blue">
@@ -101,15 +101,7 @@
                 
                 
   </div> 
-  <div>
-    {% if messages %}
-      <div class="messages" id="message">
-            {% for message in messages %}
-              <a id="fade-msg" {% if message.tags %} class="messages {{ message.tags }} alert {% if message.level_tag == 'error' %} error{% endif %}"{% endif %}>{{ message }}</a><br>
-            {% endfor %}
-      </div>
-    {% endif %}
-  </div> 
+  
   <div id="orgdeleteconfirm" class="deletemodal">
     <span onclick="document.getElementById('orgdeleteconfirm').style.display='none';document.getElementById('deleteconfirmation').style.display='none'" class="deletemodel_close" title="Close Modal">x</span>
     <form class="deletemodal-content">
@@ -500,6 +492,8 @@ window.onclick = function(event) {
 
           // Modify the browser history without triggering a page reload
           window.location.href = url.href;
+          alertify.set('notifier', 'position', 'top-center');
+          alertify.success(data.message);
         } else if (data.error) {
           console.log('error');
           const errorEl = document.getElementById('code-error')

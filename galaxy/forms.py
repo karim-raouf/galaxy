@@ -14,6 +14,10 @@ class ProfileForm(forms.ModelForm):
         
         
 class OrgForm(forms.ModelForm):
+    OrganizationName = forms.CharField(widget=widgets.TextInput(attrs={'placeholder': 'Enter Organization Name...'} ), required = False)
+    OrganizationEmail = forms.EmailField(widget=widgets.EmailInput(attrs={'placeholder' : 'Enter Organization\'s Email... '}), required = False)
+    Address = forms.CharField(widget=widgets.TextInput(attrs={'placeholder': 'Enter Organization\'s Address...'}), required = False)
+    
     class Meta:
         model = Organization
         fields = '__all__'
@@ -33,14 +37,14 @@ class SystemUserForm(forms.ModelForm):
     ]
     
     
-    Birth_Date = forms.DateField(widget=widgets.DateInput(attrs={'type': 'date'}) , required=False)
+    Birth_Date = forms.DateField(widget=widgets.DateInput(attrs={'type': 'date' , 'id' : 'birth-date'}) , required=False)
     password = forms.CharField(widget=forms.PasswordInput(attrs={'onfocus': 'showPswMsg()', 'onblur': 'hidePswMsg()', 'onkeyup': 'ChangePswMsgStatus(this.value)' , 'id': 'psw', 'name': 'psw' , 'placeholder':'Enter Password...'}))
     avatar = forms.ImageField(widget=widgets.FileInput(attrs={'hidden': 'True'}) , required=False)
     email = forms.EmailField(widget=widgets.EmailInput(attrs={'id': 'user-email', 'name': 'user-email' , 'placeholder' : 'Enter User\'s Email... '}))
-    username = forms.CharField(widget=widgets.TextInput(attrs={'placeholder': 'Enter Username...'}))
-    last_name = forms.CharField(widget=widgets.TextInput(attrs={'placeholder': 'Enter Last Name...'}))
-    first_name = forms.CharField(widget=widgets.TextInput(attrs={'placeholder': 'Enter First Name...'}))
-    Telephone = forms.CharField(widget=widgets.TextInput(attrs={'placeholder': 'Enter Telephone Number...'}) , required=False)
+    username = forms.CharField(widget=widgets.TextInput(attrs={'placeholder': 'Enter Username...' , 'id' : 'username    '}))
+    last_name = forms.CharField(widget=widgets.TextInput(attrs={'placeholder': 'Enter Last Name...' , 'id' : 'last-name'}))
+    first_name = forms.CharField(widget=widgets.TextInput(attrs={'placeholder': 'Enter First Name...' , 'id' : 'first-name'}))
+    Telephone = forms.CharField(widget=widgets.TextInput(attrs={'placeholder': 'Enter Telephone Number...', 'id' : 'tele-number'}) , required=False)
     Gender = forms.ChoiceField(widget=forms.RadioSelect(attrs={'class': 'gender-radio'}),choices=GENDER) 
     
     def save(self, commit=True):

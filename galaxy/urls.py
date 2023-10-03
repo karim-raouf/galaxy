@@ -27,7 +27,12 @@ urlpatterns = [
     path('pass_reset', views.pass_reset , name = 'pass_reset'),
     # path('profile/', views.profile , name = 'profile'),  
     path('payment/', views.payment , name = 'payment'),
-    path('promo_code/<str:code>/<int:total>', views.applying_promocode , name = 'apply_promo'),
+    path('promo_code/<str:code>/<int:total>', views.applying_promocode , name='apply_promo'),
+    path('add_allow_module/', views.add_allow_module , name='add_allow_module'),
+    path('delete_allow_module/', views.delete_allow_module , name='delete_allow_module'),
+
+
+    
 
     path('organization/', views.choose_org , name = 'org_choose'),
     path('success/', views.success , name = 'success_m'),
@@ -37,6 +42,8 @@ urlpatterns = [
     path('activate_done/', views.activation_done , name = 'activate_done'),
     path('add_cart/<int:id>/<str:type>/<str:b_type>', views.add_cart , name = 'add_cart'),
     path('delete_cart/<int:id>', views.delete_cart , name = 'delete_cart'),
+    path('change_pass/', views.pass_change , name = 'change_pass'),
+
     
     
     

@@ -100,82 +100,82 @@ def index(request):
                 userform.save()
             else:
                 print(userform.errors)
-        elif 'save-password' in request.POST:
-            print('1')
-            current_password = request.POST.get('currentpsw')
-            password = request.POST.get('psw')
-            password2 = request.POST.get('psw-repeat')
-            if check_password(current_password, request.user.password):
-                print('2')
-                if password:
-                    print('3')
-                    if password == password2 and password != current_password and len(password) > 8 and re.search(r'\d', password) and re.search(r'[!@#$%^&*(),.?":{}|<>]', password) and re.search(r'[a-z]', password) and re.search(r'[A-Z]', password):
-                        print('4')
-                        request.user.set_password(password) 
-                        request.user.save()
-                        update_session_auth_hash(request, request.user)
-                        messages.success(request, 'Password Updated Successfully!')
-                        current_url = request.build_absolute_uri()
-                        redirect_url = f"{current_url}?auto_open=true"
-                        return redirect(redirect_url)
+        # elif 'save-password' in request.POST:
+        #     print('1')
+        #     current_password = request.POST.get('currentpsw')
+        #     password = request.POST.get('psw')
+        #     password2 = request.POST.get('psw-repeat')
+        #     if check_password(current_password, request.user.password):
+        #         print('2')
+        #         if password:
+        #             print('3')
+        #             if password == password2 and password != current_password and len(password) > 8 and re.search(r'\d', password) and re.search(r'[!@#$%^&*(),.?":{}|<>]', password) and re.search(r'[a-z]', password) and re.search(r'[A-Z]', password):
+        #                 print('4')
+        #                 request.user.set_password(password) 
+        #                 request.user.save()
+        #                 update_session_auth_hash(request, request.user)
+        #                 messages.success(request, 'Password Updated Successfully!')
+        #                 current_url = request.build_absolute_uri()
+        #                 redirect_url = f"{current_url}?auto_open=true"
+        #                 return redirect(redirect_url)
                         
-                    elif password == current_password:
-                        print('5')
-                        messages.error(request, '• Can\'t Use The Same Old Password!')
-                        current_url = request.build_absolute_uri()
-                        redirect_url = f"{current_url}?auto_open=true"
-                        return redirect(redirect_url)
+        #             elif password == current_password:
+        #                 print('5')
+        #                 messages.error(request, '• Can\'t Use The Same Old Password!')
+        #                 current_url = request.build_absolute_uri()
+        #                 redirect_url = f"{current_url}?auto_open=true"
+        #                 return redirect(redirect_url)
                     
-                    else:
-                        print('6')
-                        messages.error(request, '• Couldn\'t Save Password!')
-                        if len(password) < 8:
-                            pass_error.append('• Password is less than 8 Characters!')
-                            print('7')
+        #             else:
+        #                 print('6')
+        #                 messages.error(request, '• Couldn\'t Save Password!')
+        #                 if len(password) < 8:
+        #                     pass_error.append('• Password is less than 8 Characters!')
+        #                     print('7')
                         
-                        # Check if password contains a number
-                        if not re.search(r'\d', password):
-                            pass_error.append('• Password doesn\'t contain numbers!')
-                            print('8')
+        #                 # Check if password contains a number
+        #                 if not re.search(r'\d', password):
+        #                     pass_error.append('• Password doesn\'t contain numbers!')
+        #                     print('8')
                         
-                        # Check if password contains a special character
-                        if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
-                            pass_error.append('• Password doesn\'t contain special character!')
-                            print('9')
+        #                 # Check if password contains a special character
+        #                 if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+        #                     pass_error.append('• Password doesn\'t contain special character!')
+        #                     print('9')
                         
-                        # Check if password contains lowercase letters
-                        if not re.search(r'[a-z]', password):
-                            pass_error.append('• Password doesn\'t contain lower letter!')
-                            print('10')
+        #                 # Check if password contains lowercase letters
+        #                 if not re.search(r'[a-z]', password):
+        #                     pass_error.append('• Password doesn\'t contain lower letter!')
+        #                     print('10')
                         
-                        # Check if password contains uppercase letters
-                        if not re.search(r'[A-Z]', password):
-                            pass_error.append('• Password doesn\'t contain upper letter!')
-                            print('11')
+        #                 # Check if password contains uppercase letters
+        #                 if not re.search(r'[A-Z]', password):
+        #                     pass_error.append('• Password doesn\'t contain upper letter!')
+        #                     print('11')
                         
                         
-                        if password != password2:
-                            pass_error.append('• Passwords Didn\'t Match!')
-                            print('12')
+        #                 if password != password2:
+        #                     pass_error.append('• Passwords Didn\'t Match!')
+        #                     print('12')
                         
-                        print(pass_error)
-                        current_url = request.build_absolute_uri()
-                        redirect_url = f"{current_url}?auto_open=true"
-                        return redirect(redirect_url)
+        #                 print(pass_error)
+        #                 current_url = request.build_absolute_uri()
+        #                 redirect_url = f"{current_url}?auto_open=true"
+        #                 return redirect(redirect_url)
             
-                else:
-                    print('13')
-                    messages.error(request , '• Add New Password!')
-                    current_url = request.build_absolute_uri()
-                    redirect_url = f"{current_url}?auto_open=true"
-                    return redirect(redirect_url)
+        #         else:
+        #             print('13')
+        #             messages.error(request , '• Add New Password!')
+        #             current_url = request.build_absolute_uri()
+        #             redirect_url = f"{current_url}?auto_open=true"
+        #             return redirect(redirect_url)
                 
-            else:
-                print('14')
-                messages.error(request , '• Current Password Is Invalid!')
-                current_url = request.build_absolute_uri()
-                redirect_url = f"{current_url}?auto_open=true"
-                return redirect(redirect_url)
+        #     else:
+        #         print('14')
+        #         messages.error(request , '• Current Password Is Invalid!')
+        #         current_url = request.build_absolute_uri()
+        #         redirect_url = f"{current_url}?auto_open=true"
+        #         return redirect(redirect_url)
 
                 
             
@@ -1315,6 +1315,7 @@ def delete_org(request , id):
             messages.success(request , 'Organization Deleted Successfully!')
             response_data = {
                 'success': True,
+                'message' : 'Organization Deleted Successfully'
             }
             # Delete the stored code from the session
             # del request.session['delete_code']
@@ -1361,7 +1362,7 @@ def manage_user(request):
             p_ids.append(item.ProductID.id)
     
     user = request.user
-    user_subs = Subscription.objects.filter(UserID=user , ProductID__Code = 203)
+    user_subs_basic = Subscription.objects.filter(UserID=user , Bundle_T = 'Basic')
     users = User.objects.filter(SubscriptionID__UserID = user)
     current_date = datetime.now().date()
     the_user = None
@@ -1400,12 +1401,20 @@ def manage_user(request):
         form2 = AutoRenew(instance=the_user.SubscriptionID)
     except:
         form2 = None
+    
+    try:
+        user_module = AllowedModule.objects.filter(UserId = the_user)
+        print(user_module)
+    except:
+        user_module = None
+    
+    
+    
     pass_error_user=[]
     
     pass_error= []
     
     del_btn = request.GET.get('del')
-    print(del_btn)
     if del_btn :
             print('done')
             code = secrets.token_hex(4)
@@ -1584,7 +1593,7 @@ def manage_user(request):
                'sub_autorenew' : sub_autorenew ,
                'form2' : form2 ,
                'choosed_user' : choosed_user ,
-               'user_subs' : user_subs ,
+               'user_subs_basic' : user_subs_basic ,
                'in_cart' : in_cart,
                'total' : total,
                'the_user' : the_user ,
@@ -1593,6 +1602,7 @@ def manage_user(request):
                's_a' : s_a ,
                'pass_error' : pass_error ,
                'pass_error_user' : pass_error_user ,
+               'user_module' : user_module ,
                }
     return render(request , 'galaxy/manage_user.html' , context)
 
@@ -1631,6 +1641,7 @@ def delete_user(request , id):
         else:
             response_data = {
                 'error': True ,
+                'message' : 'User Deleted Successfully!'
             }
             
     
@@ -1701,16 +1712,187 @@ def pass_reset(request):
 def applying_promocode(request , code , total):
     
     try:
-        promotion = PromoCode.objects.get(code=code , usercode = request.user)
-        grandtotal = int(total)-(int(total)*promotion.discount)
-        response_data = {
-        'success': True,
-        'grandtotal' : grandtotal
-        
-        }
+        promotion = PromoCode.objects.get(code=code)
+         
+        if promotion.usercode :
+            if promotion.usercode == request.user:
+                if promotion.code == code and promotion.status == True:
+                    grandtotal = total-((promotion.discount/100)*total)
+                    response_data = {
+                    'success': True,
+                    'grandtotal' : grandtotal,
+                    
+                    }
+                elif promotion.code != code:
+                    response_data = {
+                'error': True,
+                }
+                    
+                elif promotion.status == False and promotion.code == code:
+                    response_data = {
+                'expired': True,
+                }
+            elif promotion.usercode != request.user:
+                response_data = {
+            'error': True,
+            }
+        else:
+            if promotion.code == code and promotion.status == True:
+                    grandtotal = total-((promotion.discount/100)*total)
+                    response_data = {
+                    'success': True,
+                    'grandtotal' : grandtotal,
+                    
+                    }
+            elif promotion.code != code:
+                    response_data = {
+                'error': True,
+                }
+                    
+            elif promotion.status == False and promotion.code == code:
+                    response_data = {
+                'expired': True,
+                }
     except:
         response_data = {
         'error': True,
         }
     
+    return JsonResponse(response_data)
+
+
+def pass_change(request):
+            print('1')
+            pass_error = []
+            current_password = request.GET.get('cpsw') 
+            password = request.GET.get('npsw')  
+            password2 = request.GET.get('rpsw') 
+            
+            if check_password(current_password, request.user.password):
+                print('2')
+                if password:
+                    print('3')
+                    if password == password2 and password != current_password and len(password) > 8 and re.search(r'\d', password) and re.search(r'[!@#$%^&*(),.?":{}|<>]', password) and re.search(r'[a-z]', password) and re.search(r'[A-Z]', password):
+                        print('4')
+                        request.user.set_password(password) 
+                        request.user.save()
+                        update_session_auth_hash(request, request.user)
+                        
+                        # current_url = request.build_absolute_uri()
+                        # redirect_url = f"{current_url}?auto_open=true"
+                        # return redirect(redirect_url)
+                        response_data = {
+                            'success': True,
+                            'message' : 'Password Updated Successfully!'
+                        }
+                        
+                        
+                    elif password == current_password:
+                        print('5')
+                        
+                        # current_url = request.build_absolute_uri()
+                        # redirect_url = f"{current_url}?auto_open=true"
+                        # return redirect(redirect_url)
+                        response_data = {
+                            'samePswError': True,
+                            'message' : '• Can\'t Use The Same Old Password!'
+                        }
+                    
+                    else:
+                        print('6')
+                        
+                        if len(password) < 8:
+                            pass_error.append('• Password is less than 8 Characters!')
+                            print('7')
+                        
+                        # Check if password contains a number
+                        if not re.search(r'\d', password):
+                            pass_error.append('• Password doesn\'t contain numbers!')
+                            print('8')
+                        
+                        # Check if password contains a special character
+                        if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+                            pass_error.append('• Password doesn\'t contain special character!')
+                            print('9')
+                        
+                        # Check if password contains lowercase letters
+                        if not re.search(r'[a-z]', password):
+                            pass_error.append('• Password doesn\'t contain lower letter!')
+                            print('10')
+                        
+                        # Check if password contains uppercase letters
+                        if not re.search(r'[A-Z]', password):
+                            pass_error.append('• Password doesn\'t contain upper letter!')
+                            print('11')
+                        
+                        
+                        if password != password2:
+                            pass_error.append('• Passwords Didn\'t Match!')
+                            print('12')
+                        
+                        print(pass_error)
+                        response_data = {
+                            'pswError': True,
+                            'pass_error' : pass_error,
+                            'message' : '• Couldn\'t Save Password!'
+                        }           
+                        # current_url = request.build_absolute_uri()
+                        # redirect_url = f"{current_url}?auto_open=true"
+                        # return redirect(redirect_url)
+            
+                else:
+                    print('13')
+                    
+                    response_data = {
+                            'noPassError': True,
+                            'message' : '• Add New Password!'
+                        }     
+                
+            else:
+                print('14')
+               
+                # current_url = request.build_absolute_uri()
+                # redirect_url = f"{current_url}?auto_open=true"
+                # return redirect(redirect_url)
+                
+                response_data = {
+                    'cPswError': True,
+                    'message' : '• Current Password Is Invalid!'
+                }
+    
+            return JsonResponse(response_data)
+        
+        
+        
+        
+def add_allow_module(request):
+ 
+    id = request.GET.get('id')
+    user = User.objects.get(id = id)
+    module_name = request.GET.get('module_name')
+    module = Product.objects.get(Name = module_name , Type = 'Monthly')
+    adding_module = AllowedModule.objects.create(UserId = user , module_code = module.Code , module_name = module_name)
+ 
+    response_data = {
+                    'success': True,
+                    'message' : 'Module Added!'
+                }
+    
+    return JsonResponse(response_data)
+
+def delete_allow_module(request):
+    
+    id = request.GET.get('id')
+    user = User.objects.get(id = id)
+    module_name = request.GET.get('module_name')
+    module = Product.objects.get(Name = module_name , Type = 'Monthly')
+    user_module = AllowedModule.objects.get(UserId = user , module_code = module.Code , module_name = module_name)
+    user_module.delete()
+    
+    
+    response_data = {
+                    'success': True,
+                    'message' : 'Module Removed!'
+                }
+  
     return JsonResponse(response_data)

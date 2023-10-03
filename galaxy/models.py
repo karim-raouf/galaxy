@@ -158,9 +158,18 @@ class PromoCode(models.Model):
     code = models.CharField(max_length = 20 , null=True , blank=True)
     discount = models.DecimalField(max_digits=5, decimal_places=2)
     usercode = models.ForeignKey(User, on_delete=models.CASCADE , null=True , blank=True)
+    status = models.BooleanField(default=True)
     
     def __str__(self):
-        return str(self.discount)
+        return str(self.discount)+'-'+str(self.usercode)
     
+    
+class AllowedModule(models.Model):
+    UserId = models.ForeignKey(User , on_delete=models.CASCADE)
+    module_code = models.IntegerField(null=True)
+    module_name = models.CharField(max_length=50 , null=True)
+    
+    def __str__(self):
+        return str(self.UserId)+"-"+"("+str(self.module_name)+'-'+str(self.module_code)+")"
     
     

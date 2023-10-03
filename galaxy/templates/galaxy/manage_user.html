@@ -87,15 +87,7 @@
                     
                 </div>
               </div>
-  <div>
-    {% if messages %}
-      <div class="messages" id="message">
-            {% for message in messages %}
-              <a id="fade-msg" {% if message.tags %} class="messages {{ message.tags }} alert {% if message.level_tag == 'error' %} error{% endif %}"{% endif %}>{{ message }}</a><br>
-            {% endfor %}
-      </div>
-    {% endif %}
-  </div>
+
   <div id="userdeleteconfirm" class="deletemodal">
     <span onclick="document.getElementById('userdeleteconfirm').style.display='none';document.getElementById('deleteconfirmation').style.display='none'" class="deletemodel_close" title="Close Modal">x</span>
     <form class="deletemodal-content" action="/action_page.php">
@@ -129,11 +121,11 @@
       </div>
     </form>
   </div>
-  <form method = 'POST' id="user-form" enctype="multipart/form-data">
+  <form method = 'POST' id="system-user-form" enctype="multipart/form-data">
   {% csrf_token %}
    
   <div id="info" class="subcontainer" >
-      <a id="Div1" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('basicinfo'),showdiv('subbasicinfo') ,arrowdirection(id) , showdiv('password')"> Basic Info </a>
+      <a id="Div1" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('basicinfo'),showdiv('subbasicinfo') ,arrowdirection(id) , showdiv('password-basic')"> Basic Info </a>
     <div id="basicinfo" class="smallcontainer">
       <div id="subbasicinfo" class="smallcontainer">
       <div class="orgrow">  
@@ -294,12 +286,9 @@
             </div>
           </div>
       </div>
-           
-    
-    
     </div>
       <p></p>
-      <div id="password" class="smallcontainer">
+      <div id="password-basic" class="smallcontainer">
         <div class="password-container">
           <div class="orgrow">
             <div class="col-15">
@@ -357,11 +346,11 @@
       <div class="orgrow">
         <button style="float: right" class="btn" id="cancel-btn" type="button">Cancel</button><a>&nbsp;</a><button style="float: right;margin-right: 10px;" class="btn" name="user-save-btn" type="submit" value="Save" >{% if the_user.username %}Update {% else %}Save{% endif %}</button>
       </div>
-    </div>
+  </div>
     <p></p>
       
-      <a id="Div2" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('rolls') ,arrowdirection(id)"> Rules </a>
-      <div id="rolls" class="smallcontainer">
+      <a id="Div2" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('rules') ,arrowdirection(id)"> Rules </a>
+      <div id="rules" class="smallcontainer">
       </div>
       <p></p>
       
@@ -376,9 +365,9 @@
               </div>
               <div class="col-25">
                 <select id="module" name="module">
-                    <option value="POS">POS</option>
-                    <option value="Accounting">Accounting</option>
-                    <option value="CRM">CRM</option>
+                  {% for sub in user_subs_basic %}
+                    <option id="{{sub.ProductID.Name}}" value="{{sub.ProductID.Name}}">{{sub.ProductID.Name}}</option>
+                  {% endfor %}
                 </select>
               </div>
               <div class="col-15" style="display: inline-block;color :green;padding-left: 20px">
@@ -389,7 +378,11 @@
              </div>
              <div class="col-25">
                     <ul id="mymoduleUL">
-
+                      {% if user_module %}
+                        {% for module in user_module %}
+                        <li class="{{module.module_name}}" data-module-name="{{module.module_name}}">{{module.module_name}}<span class="closeLI">×</span></li>
+                        {% endfor %}
+                      {% endif %}
                     </ul>
                         
              </div>
@@ -631,7 +624,7 @@
     }
     document.getElementById("ips").value = "";
   
-    var span = document.createElement("SPAN");
+    var span = document.createElement("span");
     var txt = document.createTextNode("\u00D7");
     span.className = "closeLI";
     span.appendChild(txt);
@@ -644,32 +637,175 @@
       };
     }
   }
+  
+  document.getElementById("module").value = "";
   function addnewmodule() {
     var li = document.createElement("li");
     var inputValue = document.getElementById("module").value;
+    li.id = inputValue;
     var t = document.createTextNode(inputValue);
     li.appendChild(t);
+
+
     if (inputValue === '') {
-      alert("You must write something!");
-    } else {
-      document.getElementById("mymoduleUL").appendChild(li);
+      alertify.set('notifier', 'position', 'top-center');
+      alertify.error('You must add a module!');
+      return;
     }
-    document.getElementById("module").value = "";
   
-    var span = document.createElement("SPAN");
-    var txt = document.createTextNode("\u00D7");
-    span.className = "closeLI";
-    span.appendChild(txt);
-    li.appendChild(span);
+    var ul = document.getElementById("mymoduleUL");
+    var lis = ul.getElementsByTagName("li");
+    var specificId = inputValue;
   
-    for (i = 0; i < close.length; i++) {
-      close[i].onclick = function() {
-        var div = this.parentElement;
-        div.style.display = "none";
+    for (var i = 0; i < lis.length; i++) {
+      var lii = lis[i];
+      var liId = lii.getAttribute("id");
+  
+      if (liId === specificId) {
+        alertify.set('notifier', 'position', 'top-center');
+        alertify.error('User already allowed to this module!');
+        return;
+      }
+    }
+  
+    ul.appendChild(li);
+
+    var queryString = window.location.search;
+    // Create a new instance of URLSearchParams with the query string
+    var searchParams = new URLSearchParams(queryString);
+    // Get the value of the "param" query parameter
+    var paramValue = searchParams.get('id');
+    
+    const url = `/add_allow_module?id=${encodeURIComponent(paramValue)}&module_name=${encodeURIComponent(inputValue)}`;
+
+    // Make an asynchronous request to delete the product from the server
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response data
+        // For example, display a success message or update the cart UI
+        if (data.success) {
+          // Handle the success response
+          alertify.set('notifier', 'position', 'top-center');
+          alertify.success(data.message);
+        }
+      })
+      .catch(error => {
+        // Handle any errors that occurred during the request
+        console.error(error);
+      });
+
+      document.getElementById("module").value = "";
+
+  var span = document.createElement("span");
+  var txt = document.createTextNode("\u00D7");
+  span.setAttribute("data-module-name", `${inputValue}`);
+  span.className = "closeLI";
+ 
+  span.appendChild(txt);
+  li.appendChild(span);
+  console.log(span)
+  console.log(ul)
+  var close = document.getElementsByClassName("closeLI");
+  for (var i = 0; i < close.length; i++) {
+    close[i].onclick = function(event) {
+      var span = event.target;
+      var div = span.parentElement;
+      var moduleName = span.dataset.moduleName; // Retrieve the module name from the parent li element
+      console.log(moduleName)
+      div.remove();
+
+        const url = `/delete_allow_module?id=${encodeURIComponent(paramValue)}&module_name=${moduleName}`;
+
+        // Make an asynchronous request to delete the product from the server
+        fetch(url, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+          },
+        })
+          .then(response => response.json())
+          .then(data => {
+            // Handle the response data
+            // For example, display a success message or update the cart UI
+            if (data.success) {
+              // Handle the success response
+              alertify.set('notifier', 'position', 'top-center');
+              alertify.success(data.message);
+            }
+          })
+          .catch(error => {
+            // Handle any errors that occurred during the request
+            console.error(error);
+          });
+
+
       };
     }
   }
-  </script>
+</script>
+
+<script>
+  
+  const removeButtons = document.querySelectorAll('.closeLI');
+  console.log(removeButtons);
+
+  // Attach an event listener to the delete button
+  removeButtons.forEach(span => {
+    span.addEventListener('click', (event) => {
+      event.preventDefault(); // Prevent the default behavior of the button click
+
+    // Get the product ID associated with the delete button
+    li = span.parentElement
+    
+    const moduleName = li.dataset.moduleName;
+    console.log(moduleName);
+    
+    // Construct the URL with the confirmation code as a query parameter
+    var queryString = window.location.search;
+    // Create a new instance of URLSearchParams with the query string
+    var searchParams = new URLSearchParams(queryString);
+    // Get the value of the "param" query parameter
+    var paramValue = searchParams.get('id');
+
+    const url = `/delete_allow_module?id=${encodeURIComponent(paramValue)}&module_name=${moduleName}`;
+
+    // Make an asynchronous request to delete the product from the server
+    fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response data
+        // For example, display a success message or update the cart UI
+        if (data.success) {
+          // Handle the success response
+          li.remove()
+          alertify.set('notifier', 'position', 'top-center');
+          alertify.success('Module Removed!');
+        }
+        })
+    
+      .catch(error => {
+        // Handle any errors that occurred during the request
+        console.error(error);
+      });
+  });
+  });
+</script>
+
+
 <script>
   // Get the user delete modal
 var modal = document.getElementById('userdeleteconfirm');
@@ -727,16 +863,12 @@ window.onclick = function(event) {
 <script>
   // Get a reference to the delete button
   const deleteButton = document.querySelector('.userdel');
-  console.log(deleteButton);
-
   // Attach an event listener to the delete button
   deleteButton.addEventListener('click', (event) => {
     event.preventDefault(); // Prevent the default behavior of the button click
 
     // Get the product ID associated with the delete button
     const userId = deleteButton.dataset.userId;
-    console.log(userId);
-
     // Get the confirmation code from the input field
     const confirmationCode = document.getElementById('code').value;
 
@@ -757,7 +889,6 @@ window.onclick = function(event) {
         // For example, display a success message or update the cart UI
         if (data.success) {
           // Handle the success response
-          console.log('success');
           const url = new URL(window.location.href);
 
           // Remove the query parameter from the URL
@@ -765,6 +896,8 @@ window.onclick = function(event) {
 
           // Modify the browser history without triggering a page reload
           window.location.href = url.href;
+          alertify.set('notifier', 'position', 'top-center');
+          alertify.success(data.message);
         } else if (data.error) {
           console.log('error');
           const errorEl = document.getElementById('code-error')

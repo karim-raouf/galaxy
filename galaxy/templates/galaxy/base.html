@@ -20,8 +20,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         <script src="{% static 'js/products_managment.js' %}"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-        
-        
+        {% comment %} --------------------------------for alertify---------------------------------- {% endcomment %}
+        <!-- JavaScript -->
+        <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+        <!-- CSS -->
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+        <!-- Default theme -->
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
         {% block header %}{% endblock header %}
         <style>
             .right-align {
@@ -54,6 +59,23 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             .image-container img {
                 width: 375px;
                 height: 350px;
+            }
+            
+            .input-wrapper {
+              position: relative;
+              display: inline-block;
+            }
+          
+            .input-wrapper input {
+              transform: rotate(90deg);
+              transform-origin: left top;
+              width: 100px;
+              height: 20px;
+              padding: 5px;
+              position: absolute;
+              left: -45px;
+              top: 40px;
+              border: 1px solid #ccc;
             }
             
         </style>
@@ -166,9 +188,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 </div>
               </div>
               <div class="title" style="font-size:large;padding-top:20px;padding-left:20px;text-align: left;" >
-                    <div style="display: flex; align-items: center;"><span style="margin-right: 5px;">Sub Total : $</span><div id="subtotal">{{total}}</div></div>
-                    <div >Promo Code : <input name="promo-code" id="promo-code" type="text" style="width:80px;height:1.5px;"><button style="height:26px" class = "add-promo">Add</button><button style="height:26px" class = "remove-promo" onclick="removePromo()">Remove</button><span id="promo-error" style="color: red; padding-left: 5px; font-size: small;"></span></div>
-                    <div style="display: flex; align-items: center;"><span style="margin-right: 5px;">Grand Total : $</span><div id="grandtotal">{{total}}</div></div>
+                    <div style="display: flex; align-items: center;"><span style="margin-right: 5px;">Sub Total : $</span><div id="subtotal">{{total|floatformat:2}}</div></div>
+                    <div style="display: flex; align-items: center;">Promo Code : <input class="input-wrapper" name="promo-code" id="promo-code" type="text" style="width:80px;height:1.5px; margin-left: 5px;"><button style="height:26px" class = "add-promo">Apply</button><button style="height:26px" class = "remove-promo" onclick="removePromo()">Remove</button><span id="promo-error" style="color: red; padding-left: 5px; font-size: small;"></span><span id="promo-success" style="color: green; padding-left: 5px; font-size: large;"></span></div>
+                    <div style="display: flex; align-items: center;"><span style="margin-right: 5px;">Grand Total : $</span><div id="grandtotal">{{total|floatformat:2}}</div></div>
                     <div style="align-content: center;font-size:large;padding-right: 10%"> <input id="checkout" onclick="location.href='{% url 'galaxy:payment' %}'" type="submit" value="Continue to checkout" class="btn" style="width:90%;" ></div>
                 </div>
             </div>
@@ -183,9 +205,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             
             {% block additional %}
             {% endblock additional %}
-          
-          {% include 'galaxy/profile.html' %}
           {% include "galaxy/password.html" %}
+          {% include 'galaxy/profile.html' %}
+          
           <Script> 
             function displaycartcontent()
             {
@@ -286,12 +308,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
           <script>
             // Get a reference to the delete buttons
             const deleteButtons = document.querySelectorAll('.delete-btn');
-            console.log('approved1')
             // Attach an event listener to each delete button
             deleteButtons.forEach(button => {
               button.addEventListener('click', (event) => {
                 event.preventDefault(); // Prevent the default behavior of the button click
-                console.log('approved2')
                 // Get the product ID associated with the delete button
                 const productId = button.dataset.productId;
           
@@ -441,7 +461,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                             
                             
                             else{
-                              console.log('no00')
                               productElement.remove();
                               inCart.textContent -= 1
                               quantityElement.textContent = currentQuantity - 1;
@@ -455,8 +474,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                       const totalPriceElement = document.getElementById('subtotal');
                       const grandTotalElement = document.getElementById('grandtotal');
             
-                      totalPriceElement.textContent = data.subTotal;
-                      grandTotalElement.textContent = data.grandTotal;
+                      totalPriceElement.textContent = data.subTotal.toFixed(2);;
+                      grandTotalElement.textContent = data.grandTotal.toFixed(2);
 
                       const cartInfoElement = document.getElementById('cartinfo');
                       const cartItems = cartInfoElement.getElementsByClassName('items');
@@ -488,19 +507,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
           <script>
             // Get a reference to the delete button
             const addPromoButton = document.querySelector('.add-promo');
-            console.log(addPromoButton);
-          
+
             // Attach an event listener to the delete button
             addPromoButton.addEventListener('click', (event) => {
               event.preventDefault(); // Prevent the default behavior of the button click
           
               // Get the product ID associated with the delete button
               const totalPrice = document.getElementById('subtotal').textContent;
-              console.log(totalPrice);
               // Get the confirmation code from the input field
               const promoCode = document.getElementById('promo-code').value;          
               // Construct the URL with the confirmation code as a query parameter
-              const url = `/promo_code/${encodeURIComponent(promoCode)}/${totalPrice}`;
+              const url = `/promo_code/${encodeURIComponent(promoCode)}/${Math.floor(totalPrice)}`;
               
               // Make an asynchronous request to delete the product from the server
               fetch(url, {
@@ -516,25 +533,33 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                   // For example, display a success message or update the cart UI
                   if (data.success) {
                     // Handle the success response
-                    console.log('success');
                     const grandTotalEl = document.getElementById('grandtotal');
                     grandTotalEl.textContent = data.grandtotal
                     // Store the promo code in local storage
                     localStorage.setItem('promoCode', promoCode);
-                    console.log(localStorage.getItem('promoCode'))
                     const removePromoButton = document.querySelector('.remove-promo');
 
                     addPromoButton.style.display = 'none';
                     removePromoButton.style.display = 'block';
+                    document.getElementById('promo-success').textContent = '✔'
                     document.getElementById('promo-error').textContent = ''
-
+                    
                   } else if (data.error) {
-                    console.log('error');
                     const errorEl = document.getElementById('promo-error')
                     
                     errorEl.textContent = '• Invalid Promo Code!'
+                    setTimeout(function() {
+                      errorEl.textContent = ''                  
+                    }, 2500);
                     
                     
+                  } else if(data.expired){   
+                    if (storedPromoCode) {
+                      document.getElementById('promo-error').textContent = '• Code Expired!'
+                    } else {
+                      document.getElementById('promo-error').textContent = '• Invalid Promo Code!'
+                    }
+
                   }
                 })
                 .catch(error => {
@@ -563,16 +588,30 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
             const grandTotalEl = document.getElementById('grandtotal');
 
-            console.log('remove script')
             function removePromo(){
               localStorage.removeItem('promoCode')
               document.getElementById('promo-code').value = ''
+              document.getElementById('promo-success').textContent = ''
+              document.getElementById('promo-error').textContent = ''
               grandTotalEl.textContent = document.getElementById('subtotal').textContent;
               document.querySelector('.add-promo').style.display = 'block';
               document.querySelector('.remove-promo').style.display = 'none';
 
             }
           </script>
+          <script>
+            {% for message in messages %}
+              alertify.set('notifier', 'position', 'top-center');
+              {% if message.tags == 'success' %}
+                alertify.success('{{ message }}');
+              {% elif message.tags == 'error' %}
+                alertify.error('{{ message }}');
+              {% else %}
+                alertify.message('{{ message }}');
+              {% endif %}
+            {% endfor %}
+          </script>
+          
 
           
           

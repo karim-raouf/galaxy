@@ -46,8 +46,15 @@ function openleftNav(y) {
         }
   
   function closerightNav(z) {
-        document.getElementById(z).style.width = "0%";
-    
+    if(z == 'changepasswordNav'){  
+      document.getElementById(z).style.width = "0%";
+      document.querySelector('.c-psw').value = '';
+      document.querySelector('.n-psw').value = '';
+      document.querySelector('.r-psw').value = '';
+      document.querySelector('.psw-msg').textContent = ''
+    } else {
+      document.getElementById(z).style.width = "0%";
+    }
     }
 // function openNav(y) {
   
