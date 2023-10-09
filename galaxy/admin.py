@@ -16,6 +16,9 @@ admin.site.register(UsersType)
 admin.site.register(Language)
 admin.site.register(PromoCode)
 admin.site.register(AllowedModule)
+admin.site.register(AllowedIp)
+admin.site.register(TimeRestriction)
+
 
 
 

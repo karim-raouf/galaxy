@@ -53,7 +53,7 @@
   <div id="manage" class="orgrow" style="text-align: center;font-size:medium;font-weight:bold;">
                 <div class="col-25" style="border-bottom: solid;border-color: blue">
                   <label for="Status">Subscription Status</label>
-                  <a id="Status" name="Status" style=" color:blue; ">{% if sub_status %}Active{% else %}Inactive{% endif %}</a>
+                  <a id="Status" name="Status" style=" color:blue; ">{% if choosed_org %}{% if sub_status %}Active{% else %}Inactive{% endif %}{% else %}{% endif %}</a>
                 </div>
                 
                 <div  class="col-25" style="border-bottom: solid;border-color: blue">
@@ -67,13 +67,12 @@
                 </div>
                 
                 <div  class="col-25" style="border-bottom: solid;border-color: blue">
-                  <form method="POST" id="myForm">
-                    {% csrf_token %}
+                  
                       <label for="AutoRenew" >Auto Renew</label>
                       {% if org %}  
                         <input type="checkbox" id="autoRenewField" name="Auto-Renew" style=" color:blue " {% if form2.AutoRenew.value %} checked {% endif %}>
                       {% endif %}
-                  </form>
+                  
                 </div>
                 
                 {% comment %} <div  class="col-10" style="border-bottom: solid;border-color: blue;">
@@ -338,12 +337,75 @@
    {% endblock body %}
    {% block additional %}
 <script>
-   $(document).ready(function() {
-    $('#autoRenewField').on('change', function() {
-      // Submit the form
-      $('#myForm').submit();
+    document.getElementById('autoRenewField').addEventListener('change', function() {
+      // Check if the checkbox is checked
+      var autoRenewCheckbox = document.getElementById('autoRenewField');
+      var isAutoRenewChecked = autoRenewCheckbox.checked;
+      console.log('hello')
+      // Construct the URL with the confirmation code as a query parameter
+      var queryString = window.location.search;
+      // Create a new instance of URLSearchParams with the query string
+      var searchParams = new URLSearchParams(queryString);
+      // Get the value of the "param" query parameter
+      var paramValue = searchParams.get('id');
+      
+      // Do something based on the checkbox state
+      if (isAutoRenewChecked) {
+        console.log('hello2')
+        
+        const url = `/org_autorenow_on?id=${encodeURIComponent(paramValue)}`;
+        // Make an asynchronous request to delete the product from the server
+        fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+          },
+        })
+          .then(response => response.json())
+          .then(data => {
+            // Handle the response data
+            // For example, display a success message or update the cart UI
+            if (data.success) {
+              // Handle the success response
+              alertify.set('notifier', 'position', 'top-center');
+              alertify.success(data.message);
+            }
+          })
+          .catch(error => {
+            // Handle any errors that occurred during the request
+            console.error(error);
+          });
+        
+      } else {
+        console.log('hello3')
+        
+        const url = `/org_autorenow_off?id=${encodeURIComponent(paramValue)}`;
+        // Make an asynchronous request to delete the product from the server
+        fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+          },
+        })
+          .then(response => response.json())
+          .then(data => {
+            // Handle the response data
+            // For example, display a success message or update the cart UI
+            if (data.success) {
+              // Handle the success response
+              alertify.set('notifier', 'position', 'top-center');
+              alertify.error(data.message);
+            }
+          })
+          .catch(error => {
+            // Handle any errors that occurred during the request
+            console.error(error);
+          });
+       
+      }
     });
-  });
 </script>
 <script>
   window.addEventListener("resize", resizeCurtainMenu);

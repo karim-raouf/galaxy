@@ -54,7 +54,7 @@
               <div id="manage" class="orgrow" style="text-align: center;font-size:medium;font-weight:bold;">
                 <div class="col-25" style="border-bottom: solid;border-color: blue">
                   <label for="Status">Subscription Status</label>
-                  <a id="Status" name="Status" style=" color:blue; ">{% if sub_status %}Active{% elif sub_status == 'False' %}Inactive<span style="color: black; padding-left: 10px;">│</span>{% endif %}</a>
+                  <a id="Status" name="Status" style=" color:blue; ">{% if the_user %}{% if sub_status %}Active{% else %}Inactive{% endif %}{% else %}{% endif %}</a>
                 </div>
                 
                 <div  class="col-25" style="border-bottom: solid;border-color: blue">
@@ -68,13 +68,12 @@
                 </div>
                 
                 <div  class="col-25" style="border-bottom: solid;border-color: blue">
-                  <form method="POST" id="myForm">
-                    {% csrf_token %}
+                  
                       <label for="AutoRenew" >Auto Renew</label>
                       {% if the_user %}  
                         <input type="checkbox" id="autoRenewField" name="Auto-Renew" style=" color:blue " {% if form2.AutoRenew.value %} checked {% endif %}>
                       {% endif %}
-                  </form>
+                  
                 </div>
               </div>
               <div id="manage1" class="orgrow" style="text-align: center;font-size:medium;font-weight:bold;">
@@ -371,7 +370,7 @@
                 </select>
               </div>
               <div class="col-15" style="display: inline-block;color :green;padding-left: 20px">
-                  <span onclick="addnewmodule()" class="btn1" style="text-align: center;padding: 12px 12px 12px 0;display: inline-block;text-align: center;">Add</span>
+                  <span onclick="addnewmodule()" class="btn1" style="padding: 12px 12px 12px 0;display: inline-block;text-align: center;">Add</span>
               </div>
              <div class="col-20">
                 <label >Allowed Modules :</label> 
@@ -380,7 +379,7 @@
                     <ul id="mymoduleUL">
                       {% if user_module %}
                         {% for module in user_module %}
-                        <li class="{{module.module_name}}" data-module-name="{{module.module_name}}">{{module.module_name}}<span class="closeLI">×</span></li>
+                        <li class="{{module.module_name}}" data-module-name="{{module.module_name}}" id="{{module.module_name}}">{{module.module_name}}<span class="closeLI module-del">×</span></li>
                         {% endfor %}
                       {% endif %}
                     </ul>
@@ -402,24 +401,24 @@
               <div id="weekdays" class="col-60">
                 <dl>
                     <dt>Saturday</dt>
-                    <dd><a> From :</a> <input type="time" name="aftertime" > <a> To :</a> <input type="time" name="befortime" ></dd>
+                    <dd><a> From :</a> <input type="time" name="aftertime" value="{{ time_restrictions.Saturday.0 }}"> <a> To :</a> <input type="time" name="befortime" value="{{ time_restrictions.Saturday.1 }}"></dd>
                     <dt>Sunday</dt>
-                    <dd><a> From :</a> <input type="time" name="aftertime" > <a> To :</a> <input type="time" name="befortime" ></dd>
+                    <dd><a> From :</a> <input type="time" name="aftertime" value="{{ time_restrictions.Sunday.0 }}"> <a> To :</a> <input type="time" name="befortime" value="{{ time_restrictions.Sunday.1 }}"></dd>
                     <dt>Monday</dt>
-                    <dd><a> From :</a> <input type="time" name="aftertime" > <a> To :</a> <input type="time" name="befortime" ></dd>
+                    <dd><a> From :</a> <input type="time" name="aftertime" value="{{ time_restrictions.Monday.0 }}"> <a> To :</a> <input type="time" name="befortime" value="{{ time_restrictions.Monday.1 }}"></dd>
                     <dt>Tuesday</dt>
-                    <dd><a> From :</a> <input type="time" name="aftertime" > <a> To :</a> <input type="time" name="befortime" ></dd>
+                    <dd><a> From :</a> <input type="time" name="aftertime" value="{{ time_restrictions.Tuesday.0 }}"> <a> To :</a> <input type="time" name="befortime" value="{{ time_restrictions.Tuesday.1 }}"></dd>
                     <dt>Wednesday</dt>
-                    <dd><a> From :</a> <input type="time" name="aftertime" > <a> To :</a> <input type="time" name="befortime" ></dd>
+                    <dd><a> From :</a> <input type="time" name="aftertime" value="{{ time_restrictions.Wednesday.0 }}"> <a> To :</a> <input type="time" name="befortime" value="{{ time_restrictions.Wednesday.1 }}"></dd>
                     <dt>Thursday</dt>
-                    <dd><a> From :</a> <input type="time" name="aftertime" > <a> To :</a> <input type="time" name="befortime" ></dd>
+                    <dd><a> From :</a> <input type="time" name="aftertime" value="{{ time_restrictions.Thursday.0 }}"> <a> To :</a> <input type="time" name="befortime" value="{{ time_restrictions.Thursday.1 }}"></dd>
                     <dt>Friday</dt>
-                    <dd><a> From :</a> <input type="time" name="aftertime" > <a> To :</a> <input type="time" name="befortime" ></dd>
+                    <dd><a> From :</a> <input type="time" name="aftertime" value="{{ time_restrictions.Friday.0 }}"> <a> To :</a> <input type="time" name="befortime" value="{{ time_restrictions.Friday.1 }}"></dd>
                 </dl>  
 
               </div>
                <div class="col-45"> 
-                <button style="float: left" class="btn" id="weekdays-btn" type="button">Save</button>
+                <button style="float: left" class="btn" id="time-restrict-btn" type="button">Save</button><button style="float: left; margin-left: 17px;" class="btn" id="remove-restrict-btn" type="button">Remove all</button>
                </div>
 
           </div>
@@ -428,20 +427,27 @@
       <a id="Div6" class="fa fa-arrow-circle-down"  style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('restrictip') ,arrowdirection(id)"> Restrict IP </a>
 
       <div id="restrictip" class="smallcontainer">
-          <input type="radio" id="allowips" name="age" value="Allow" checked="" onclick="document.getElementById('restrictipssection').style.display='none'">
+            
+            <input type="radio" id="allowips" name="age" value="Allow" onclick="document.getElementById('restrictipssection').style.display='none'" {% if not the_user.ip_restricted %}checked{% endif %}>
             <label for="allowips">Allow all IPs</label><br>
-            <input type="radio" id="restrictips" name="age" value="Restrict" onclick="document.getElementById('restrictipssection').style.display='block'">
-            <label for="restrictips">Restrict user login to the IPs specified here.</label><br>  
+            <input type="radio" id="restrictips" name="age" value="Restrict" {% if the_user.ip_restricted %}checked {% endif %}>
+            <label for="restrictips">Restrict user login to the IPs specified here.</label><br>   
 
+            {% comment %} {% if ip_addresses %}
+            <script>
+              console.log('horaaay')
+              document.getElementById('restrictipssection').style.display = 'block';
+            </script>
+            {% endif %} {% endcomment %}
 
 
             <div class="orgrow" id="restrictipssection" style="display:none">
-            <label >Multiple IPs can be added separated by commas.</label><br>
-            <div class="col-5">
+            {% comment %} <label >Multiple IPs can be added separated by commas.</label><br> {% endcomment %}
+              <div class="col-5">
                 <label for="ips">IPs :</label>
               </div>
               <div class="col-25">
-                  <input type="text" id="ips" name="ips" placeholder="IP...">
+                  <input type="text" id="ips" name="ips" placeholder="IP Address...">
               </div>
               <div class="col-20" style="display: inline-block;color :green;padding-left: 20px">
                   <span onclick="ValidateIPaddress(ips)" class="btn1" style="text-align: center;padding: 12px 12px 12px 0;display: inline-block;text-align: center;">Add</span>
@@ -451,12 +457,17 @@
              </div>
                 <div class="col-25">
                     <ul id="myipUL">
+                      {% if ip_addresses %}
+                        {% for address in ip_addresses %}
+                        <li class="ip-address" data-ip-address="{{address.ip_address}}" id="{{address.ip_address}}">{{address.ip_address}}<span id = "{{address.ip_address}}" class="closeLI ip-del">×</span></li>
+                        {% endfor %}
+                      {% endif %}
 
                     </ul>
                         
              </div>
             </div>
-
+        
       </div>
       
       
@@ -505,13 +516,77 @@
 </script>
 
 <script>
-  $(document).ready(function() {
-    $('#autoRenewField').on('change', function() {
-      // Submit the form
-      $('#myForm').submit();
-    });
+  document.getElementById('autoRenewField').addEventListener('change', function() {
+    // Check if the checkbox is checked
+    var autoRenewCheckbox = document.getElementById('autoRenewField');
+    var isAutoRenewChecked = autoRenewCheckbox.checked;
+    console.log('hello')
+    // Construct the URL with the confirmation code as a query parameter
+    var queryString = window.location.search;
+    // Create a new instance of URLSearchParams with the query string
+    var searchParams = new URLSearchParams(queryString);
+    // Get the value of the "param" query parameter
+    var paramValue = searchParams.get('id');
+    
+    // Do something based on the checkbox state
+    if (isAutoRenewChecked) {
+      console.log('hello2')
+      
+      const url = `/user_autorenow_on?id=${encodeURIComponent(paramValue)}`;
+      // Make an asynchronous request to delete the product from the server
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          // Handle the response data
+          // For example, display a success message or update the cart UI
+          if (data.success) {
+            // Handle the success response
+            alertify.set('notifier', 'position', 'top-center');
+            alertify.success(data.message);
+          }
+        })
+        .catch(error => {
+          // Handle any errors that occurred during the request
+          console.error(error);
+        });
+      
+    } else {
+      console.log('hello3')
+      
+      const url = `/user_autorenow_off?id=${encodeURIComponent(paramValue)}`;
+      // Make an asynchronous request to delete the product from the server
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          // Handle the response data
+          // For example, display a success message or update the cart UI
+          if (data.success) {
+            // Handle the success response
+            alertify.set('notifier', 'position', 'top-center');
+            alertify.error(data.message);
+          }
+        })
+        .catch(error => {
+          // Handle any errors that occurred during the request
+          console.error(error);
+        });
+     
+    }
   });
 </script>
+
 <script>
   document. addEventListener('mouseup', function(e) {
     var container = document. getElementById('userNav');
@@ -564,10 +639,9 @@
     });
   }
   </script>  
-      <script>
-          
-          function ValidateIPaddress(inputText)
-   {
+  <script>
+  // ------------------- add ip address --------------------------------------------------------------------------------------------------       
+   function ValidateIPaddress(inputText){
    var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
    if(inputText.value.match(ipformat))
    {
@@ -576,67 +650,122 @@
    }
    else
    {
-   alert("You have entered an invalid IP address!");
+    alertify.set('notifier', 'position', 'top-center');
+    alertify.error("Invalid IP Address!");
    document.getElementById("ips").focus();return false;
    }
    }
-   
-   
-  // Create a "close" button and append it to each list item
-  var myNodelist = document.getElementsByTagName("LI");
-  var i;
-  for (i = 0; i < myNodelist.length; i++) {
-    var span = document.createElement("SPAN");
-    var txt = document.createTextNode("\u00D7");
-    span.className = "closeLI";
-    span.appendChild(txt);
-    myNodelist[i].appendChild(span);
-  }
   
-  // Click on a close button to hide the current list item
-  var close = document.getElementsByClassName("closeLI");
-  var i;
-  for (i = 0; i < close.length; i++) {
-    close[i].onclick = function() {
-      var div = this.parentElement;
-      div.style.display = "none";
-    };
-  }
-  
-  // Add a "checked" symbol when clicking on a list item
-  var list = document.querySelector('ul');
-  list.addEventListener('click', function(ev) {
-    if (ev.target.tagName === 'LI') {
-      ev.target.classList.toggle('checked');
-    }
-  }, false);
-  
-  // Create a new list item when clicking on the "Add" button
+  // Create a new list item when clicking on the "Add" button--------
   function addnewip() {
     var li = document.createElement("li");
     var inputValue = document.getElementById("ips").value;
+    li.id = inputValue;
     var t = document.createTextNode(inputValue);
     li.appendChild(t);
+    
+    
     if (inputValue === '') {
-      alert("You must write something!");
-    } else {
-      document.getElementById("myipUL").appendChild(li);
+      alertify.set('notifier', 'position', 'top-center');
+      alertify.error('You must add IP Address!');
+      return;
     }
-    document.getElementById("ips").value = "";
+    var ul = document.getElementById("myipUL");
+    var lis = ul.getElementsByTagName("li");
+    var specificIp = inputValue;
+
+    for (var i = 0; i < lis.length; i++) {
+      var lii = lis[i];
+      var liId = lii.getAttribute("id");
+    
+      if (liId === specificIp) {
+        alertify.set('notifier', 'position', 'top-center');
+        alertify.error('IP Address already allowed to this user !');
+        return;
+      }
+    }
+      
+    ul.appendChild(li);
+    
+    var queryString = window.location.search;
+    // Create a new instance of URLSearchParams with the query string
+    var searchParams = new URLSearchParams(queryString);
+    // Get the value of the "param" query parameter
+    var paramValue = searchParams.get('id');
+    
+    const url = `/add_allow_ip?id=${encodeURIComponent(paramValue)}&ip_address=${encodeURIComponent(inputValue)}`;
+
+    // Make an asynchronous request to delete the product from the server
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response data
+        // For example, display a success message or update the cart UI
+        if (data.success) {
+          // Handle the success response
+          alertify.set('notifier', 'position', 'top-center');
+          alertify.success(data.message);
+        }
+      })
+      .catch(error => {
+        // Handle any errors that occurred during the request
+        console.error(error);
+      });
+    
+      document.getElementById("ips").value = "";
   
     var span = document.createElement("span");
     var txt = document.createTextNode("\u00D7");
+    span.setAttribute("data-ip-address", `${inputValue}`);
     span.className = "closeLI";
+    
     span.appendChild(txt);
     li.appendChild(span);
-  
+    var close = document.getElementsByClassName("closeLI");
     for (i = 0; i < close.length; i++) {
-      close[i].onclick = function() {
-        var div = this.parentElement;
-        div.style.display = "none";
+      close[i].onclick = function(event) {
+        var span = event.target;
+        var div = span.parentElement;
+        var ipAddress = span.dataset.ipAddress; // Retrieve the module name from the parent li element
+        console.log(ipAddress)
+        div.remove();
+
+        const url = `/delete_allow_ip?id=${encodeURIComponent(paramValue)}&ip_address=${ipAddress}`;
+
+        // Make an asynchronous request to delete the product from the server
+        fetch(url, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+          },
+        })
+          .then(response => response.json())
+          .then(data => {
+            // Handle the response data
+            // For example, display a success message or update the cart UI
+            if (data.success) {
+              // Handle the success response
+              alertify.set('notifier', 'position', 'top-center');
+              alertify.error(data.message);
+            }
+          })
+          .catch(error => {
+            // Handle any errors that occurred during the request
+            console.error(error);
+          });
+
+
       };
-    }
+     }
   }
+  //------------------ add module ------------------------------------------------------------------------------------------------------
   
   document.getElementById("module").value = "";
   function addnewmodule() {
@@ -649,7 +778,7 @@
 
     if (inputValue === '') {
       alertify.set('notifier', 'position', 'top-center');
-      alertify.error('You must add a module!');
+      alertify.error('You must select a module!');
       return;
     }
   
@@ -710,8 +839,7 @@
  
   span.appendChild(txt);
   li.appendChild(span);
-  console.log(span)
-  console.log(ul)
+ 
   var close = document.getElementsByClassName("closeLI");
   for (var i = 0; i < close.length; i++) {
     close[i].onclick = function(event) {
@@ -738,7 +866,7 @@
             if (data.success) {
               // Handle the success response
               alertify.set('notifier', 'position', 'top-center');
-              alertify.success(data.message);
+              alertify.error(data.message);
             }
           })
           .catch(error => {
@@ -753,9 +881,8 @@
 </script>
 
 <script>
-  
-  const removeButtons = document.querySelectorAll('.closeLI');
-  console.log(removeButtons);
+
+  const removeButtons = document.querySelectorAll('.module-del');
 
   // Attach an event listener to the delete button
   removeButtons.forEach(span => {
@@ -793,7 +920,56 @@
           // Handle the success response
           li.remove()
           alertify.set('notifier', 'position', 'top-center');
-          alertify.success('Module Removed!');
+          alertify.error('Module Removed!');
+        }
+        })
+    
+      .catch(error => {
+        // Handle any errors that occurred during the request
+        console.error(error);
+      });
+  });
+  });
+
+
+  const removeBtns = document.querySelectorAll(".ip-del");
+  // Attach an event listener to the delete button
+  removeBtns.forEach(span => {
+    span.addEventListener('click', (event) => {
+      event.preventDefault(); // Prevent the default behavior of the button click
+
+    // Get the product ID associated with the delete button
+    li = span.parentElement
+    
+    const ipAddress = li.dataset.ipAddress;
+    console.log(ipAddress);
+    
+    // Construct the URL with the confirmation code as a query parameter
+    var queryString = window.location.search;
+    // Create a new instance of URLSearchParams with the query string
+    var searchParams = new URLSearchParams(queryString);
+    // Get the value of the "param" query parameter
+    var paramValue = searchParams.get('id');
+
+    const url = `/delete_allow_ip?id=${encodeURIComponent(paramValue)}&ip_address=${ipAddress}`;
+
+    // Make an asynchronous request to delete the product from the server
+    fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response data
+        // For example, display a success message or update the cart UI
+        if (data.success) {
+          // Handle the success response
+          li.remove()
+          alertify.set('notifier', 'position', 'top-center');
+          alertify.error(data.message);
         }
         })
     
@@ -804,7 +980,6 @@
   });
   });
 </script>
-
 
 <script>
   // Get the user delete modal
@@ -909,6 +1084,196 @@ window.onclick = function(event) {
         console.error(error);
       });
   });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var allowIpsRadio = document.getElementById('allowips');
+    var restrictIpsRadio = document.getElementById('restrictips');
+    
+    // Construct the URL with the confirmation code as a query parameter
+    var queryString = window.location.search;
+    // Create a new instance of URLSearchParams with the query string
+    var searchParams = new URLSearchParams(queryString);
+    // Get the value of the "param" query parameter
+    var paramValue = searchParams.get('id');
+    
+    allowIpsRadio.addEventListener('change', function() {
+      
+      const url = `/allow_all_ip?id=${encodeURIComponent(paramValue)}`;
+      // Make an asynchronous request to delete the product from the server
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          // Handle the response data
+          // For example, display a success message or update the cart UI
+          if (data.success) {
+            // Handle the success response
+            alertify.set('notifier', 'position', 'top-center');
+            alertify.success(data.message);
+          }
+        })
+        .catch(error => {
+          // Handle any errors that occurred during the request
+          console.error(error);
+        });
+      });
+    
+    restrictIpsRadio.addEventListener('change', function() {
+      
+      const url = `/restrict_ip?id=${encodeURIComponent(paramValue)}`;
+      // Make an asynchronous request to delete the product from the server
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          // Handle the response data
+          // For example, display a success message or update the cart UI
+          if (data.success) {
+            // Handle the success response
+            alertify.set('notifier', 'position', 'top-center');
+            alertify.success(data.message);
+          }
+        })
+        .catch(error => {
+          // Handle any errors that occurred during the request
+          console.error(error);
+        });
+    });
+  });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var restrictIpsRadio = document.getElementById('restrictips');
+      var restrictIpsSection = document.getElementById('restrictipssection');
+      
+      restrictIpsRadio.addEventListener('change', function() {
+        if (restrictIpsRadio.checked) {
+          restrictIpsSection.style.display = 'block';
+        } else {
+          restrictIpsSection.style.display = 'none';
+        }
+      });
+      
+      // Initial check when the page loads
+      if (restrictIpsRadio.checked) {
+        restrictIpsSection.style.display = 'block';
+      } else {
+        restrictIpsSection.style.display = 'none';
+      }
+    });
+  </script>
+<script>
+    console.log('first step')
+  // Construct the URL with the confirmation code as a query parameter
+  var queryString = window.location.search;
+  // Create a new instance of URLSearchParams with the query string
+  var searchParams = new URLSearchParams(queryString);
+  // Get the value of the "param" query parameter
+  var paramValue = searchParams.get('id');
+
+  document.getElementById('time-restrict-btn').addEventListener('click', function() {
+    var daysOfWeek = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    var timeRestrictions = {};
+    var validFormat = true;
+
+    console.log('allah akbr')
+    for (var i = 0; i < daysOfWeek.length; i++) {
+      var startTime = document.getElementsByName('aftertime')[i].value;
+      var endTime = document.getElementsByName('befortime')[i].value;
+      
+      if (!isValidTimeFormat(startTime) || !isValidTimeFormat(endTime)) {
+        validFormat = false;
+        alertify.set('notifier', 'position', 'top-center');
+        alertify.error('Complete all days restrictions!');
+        break;
+      }
+      
+      timeRestrictions[daysOfWeek[i]] = [startTime, endTime];
+    }
+    if (validFormat) {
+    // Send an AJAX request to the server to save the time restrictions
+    var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', `/time_restrictions/?id=${encodeURIComponent(paramValue)}`, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('X-CSRFToken', csrfToken);
+    xhr.send(JSON.stringify(timeRestrictions));
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        var response = JSON.parse(xhr.responseText);
+        if (response.success) {
+          // Time restrictions saved successfully
+          alertify.set('notifier', 'position', 'top-center');
+          alertify.success(response.message);
+        } else if (response.error){
+          // Handle the error case
+          console.error(response.message);
+        }
+      } else {
+        // Handle the error case
+        console.error('Error:', xhr.status);
+      }
+    };
+  }
+  });
+
+  // Function to validate the time format
+  function isValidTimeFormat(time) {
+  var timeRegex = /^(?:2[0-3]|[01][0-9]):[0-5][0-9](:[0-5][0-9](?:\.[0-9]{1,6})?)?$/;
+  return timeRegex.test(time);
+}
+
+document.getElementById('remove-restrict-btn').addEventListener('click', function() {
+
+  const url = `/remove_time_restrictions?id=${encodeURIComponent(paramValue)}`;
+      // Make an asynchronous request to delete the product from the server
+      fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          // Handle the response data
+          // For example, display a success message or update the cart UI
+          if (data.success) {
+            // Handle the success response
+            alertify.set('notifier', 'position', 'top-center');
+            alertify.success(data.message);
+            var aftertimeElements = document.getElementsByName('aftertime');
+            var befortimeElements = document.getElementsByName('befortime');
+
+            for (var i = 0; i < aftertimeElements.length; i++) {
+              aftertimeElements[i].value = '';
+            }
+
+            for (var j = 0; j < befortimeElements.length; j++) {
+              befortimeElements[j].value = '';
+            }
+          } else if(data.error) {
+            alertify.set('notifier', 'position', 'top-center');
+            alertify.error(data.message);
+          }
+        })
+        .catch(error => {
+          // Handle any errors that occurred during the request
+          console.error(error);
+        });
+
+});
 </script>
 
 

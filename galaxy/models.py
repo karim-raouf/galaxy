@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
+from .timeformatfield import TimeFormatField
+
 # Create your models here.
 
 SUBTYPE = (
@@ -36,7 +38,8 @@ class User(AbstractUser):
     Birth_Date = models.DateField(verbose_name="Birth Date" , null=True , blank=True)
     Gender = models.IntegerField(choices=GENDER , null=True, blank=True)
     Telephone = models.CharField(max_length=100 , unique=True , null=True , blank=True)
-    
+    ip_restricted = models.BooleanField(default=False)
+
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -172,4 +175,21 @@ class AllowedModule(models.Model):
     def __str__(self):
         return str(self.UserId)+"-"+"("+str(self.module_name)+'-'+str(self.module_code)+")"
     
+
+class AllowedIp(models.Model):
+    UserId = models.ForeignKey(User , on_delete=models.CASCADE)
+    ip_address = models.GenericIPAddressField(null = True)
+    
+    def __str__(self):
+        return str(self.UserId)+"-"+"("+str(self.ip_address)+")"
+    
+    
+class TimeRestriction(models.Model):
+    UserID = models.ForeignKey(User, on_delete=models.CASCADE)
+    day_of_week = models.CharField(max_length=10 , null=True , blank=True)
+    start_time = TimeFormatField()
+    end_time = TimeFormatField()
+    
+    def __str__(self):
+        return str(self.UserID)+'('+str(self.day_of_week)+')'
     

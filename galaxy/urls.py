@@ -30,6 +30,21 @@ urlpatterns = [
     path('promo_code/<str:code>/<int:total>', views.applying_promocode , name='apply_promo'),
     path('add_allow_module/', views.add_allow_module , name='add_allow_module'),
     path('delete_allow_module/', views.delete_allow_module , name='delete_allow_module'),
+    path('add_allow_ip/', views.add_allow_ip , name='add_allow_ip'),
+    path('delete_allow_ip/', views.delete_allow_ip , name='delete_allow_ip'),
+    path('allow_all_ip/', views.allow_all_ip , name='allow_all_ip'),
+    path('restrict_ip/', views.restrict_ip , name='restrict_ip'),
+    
+    path('user_autorenow_on/', views.user_renew_on , name='user_renew_on'),
+    path('user_autorenow_off/', views.user_renew_off , name='user_renew_off'),
+    path('org_autorenow_on/', views.org_renew_on , name='org_renew_on'),
+    path('org_autorenow_off/', views.org_renew_off , name='org_renew_off'),
+    path('time_restrictions/',views.time_restrictions, name='time_restrictions'),
+    path('remove_time_restrictions/',views.remove_time_restrictions, name='remove_time_restrictions'),
+
+
+
+
 
 
     

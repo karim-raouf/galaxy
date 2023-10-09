@@ -77,6 +77,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
               top: 40px;
               border: 1px solid #ccc;
             }
+
+            .promoBtn{
+              color : black;
+              background-color : #c8c389;
+              width: 8%;
+              padding: 0px;
+              margin: 0px;
+              border: none;
+              cursor: pointer;
+            }
             
         </style>
         
@@ -189,7 +199,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
               </div>
               <div class="title" style="font-size:large;padding-top:20px;padding-left:20px;text-align: left;" >
                     <div style="display: flex; align-items: center;"><span style="margin-right: 5px;">Sub Total : $</span><div id="subtotal">{{total|floatformat:2}}</div></div>
-                    <div style="display: flex; align-items: center;">Promo Code : <input class="input-wrapper" name="promo-code" id="promo-code" type="text" style="width:80px;height:1.5px; margin-left: 5px;"><button style="height:26px" class = "add-promo">Apply</button><button style="height:26px" class = "remove-promo" onclick="removePromo()">Remove</button><span id="promo-error" style="color: red; padding-left: 5px; font-size: small;"></span><span id="promo-success" style="color: green; padding-left: 5px; font-size: large;"></span></div>
+                    <div style="display: flex; align-items: center;">Promo Code : <input class="input-wrapper" name="promo-code" id="promo-code" type="text" style="width:80px;height:1.5px; margin-left: 5px;"><button style="height:26px" class = "add-promo promoBtn">Apply</button><button style="height:26px" class = "remove-promo promoBtn" onclick="removePromo()">Remove</button><span id="promo-error" style="color: red; padding-left: 5px; font-size: small;"></span><span id="promo-success" style="color: green; padding-left: 5px; font-size: large;"></span></div>
                     <div style="display: flex; align-items: center;"><span style="margin-right: 5px;">Grand Total : $</span><div id="grandtotal">{{total|floatformat:2}}</div></div>
                     <div style="align-content: center;font-size:large;padding-right: 10%"> <input id="checkout" onclick="location.href='{% url 'galaxy:payment' %}'" type="submit" value="Continue to checkout" class="btn" style="width:90%;" ></div>
                 </div>

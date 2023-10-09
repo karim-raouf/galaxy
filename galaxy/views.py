@@ -13,7 +13,7 @@ from project.settings import switch_to_user_database
 from django.contrib.auth.decorators import login_required
 import subprocess
 from django.db import connections
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta , time
 # for email sending----------------------------------------
 from django.core.mail import EmailMessage
 from django.conf import settings
@@ -35,6 +35,11 @@ import re
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import update_session_auth_hash
 from django.views.decorators.csrf import csrf_exempt
+import json
+from dateutil import parser
+from django.contrib.sessions.models import Session
+from django.utils import timezone
+from django.contrib.sessions.backends.db import SessionStore
 
 # Create your views here.
 
@@ -100,87 +105,7 @@ def index(request):
                 userform.save()
             else:
                 print(userform.errors)
-        # elif 'save-password' in request.POST:
-        #     print('1')
-        #     current_password = request.POST.get('currentpsw')
-        #     password = request.POST.get('psw')
-        #     password2 = request.POST.get('psw-repeat')
-        #     if check_password(current_password, request.user.password):
-        #         print('2')
-        #         if password:
-        #             print('3')
-        #             if password == password2 and password != current_password and len(password) > 8 and re.search(r'\d', password) and re.search(r'[!@#$%^&*(),.?":{}|<>]', password) and re.search(r'[a-z]', password) and re.search(r'[A-Z]', password):
-        #                 print('4')
-        #                 request.user.set_password(password) 
-        #                 request.user.save()
-        #                 update_session_auth_hash(request, request.user)
-        #                 messages.success(request, 'Password Updated Successfully!')
-        #                 current_url = request.build_absolute_uri()
-        #                 redirect_url = f"{current_url}?auto_open=true"
-        #                 return redirect(redirect_url)
-                        
-        #             elif password == current_password:
-        #                 print('5')
-        #                 messages.error(request, '• Can\'t Use The Same Old Password!')
-        #                 current_url = request.build_absolute_uri()
-        #                 redirect_url = f"{current_url}?auto_open=true"
-        #                 return redirect(redirect_url)
-                    
-        #             else:
-        #                 print('6')
-        #                 messages.error(request, '• Couldn\'t Save Password!')
-        #                 if len(password) < 8:
-        #                     pass_error.append('• Password is less than 8 Characters!')
-        #                     print('7')
-                        
-        #                 # Check if password contains a number
-        #                 if not re.search(r'\d', password):
-        #                     pass_error.append('• Password doesn\'t contain numbers!')
-        #                     print('8')
-                        
-        #                 # Check if password contains a special character
-        #                 if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
-        #                     pass_error.append('• Password doesn\'t contain special character!')
-        #                     print('9')
-                        
-        #                 # Check if password contains lowercase letters
-        #                 if not re.search(r'[a-z]', password):
-        #                     pass_error.append('• Password doesn\'t contain lower letter!')
-        #                     print('10')
-                        
-        #                 # Check if password contains uppercase letters
-        #                 if not re.search(r'[A-Z]', password):
-        #                     pass_error.append('• Password doesn\'t contain upper letter!')
-        #                     print('11')
-                        
-                        
-        #                 if password != password2:
-        #                     pass_error.append('• Passwords Didn\'t Match!')
-        #                     print('12')
-                        
-        #                 print(pass_error)
-        #                 current_url = request.build_absolute_uri()
-        #                 redirect_url = f"{current_url}?auto_open=true"
-        #                 return redirect(redirect_url)
-            
-        #         else:
-        #             print('13')
-        #             messages.error(request , '• Add New Password!')
-        #             current_url = request.build_absolute_uri()
-        #             redirect_url = f"{current_url}?auto_open=true"
-        #             return redirect(redirect_url)
                 
-        #     else:
-        #         print('14')
-        #         messages.error(request , '• Current Password Is Invalid!')
-        #         current_url = request.build_absolute_uri()
-        #         redirect_url = f"{current_url}?auto_open=true"
-        #         return redirect(redirect_url)
-
-                
-            
-            
-    
     context = {'user' : user , 'subed' : subed , 'org' : org , 'org_num' : org_num , 'cart' : cart , 'in_cart' : in_cart , 'total' : total , 'cart_basic' : cart_basic , 'userform' : userform , 's_a' : s_a , 'pass_error' : pass_error}
     return render(request , 'galaxy/index.html' , context)
 #update user--------------------------------------------------------------------------------------------------------------------------------------
@@ -236,68 +161,6 @@ def about_us(request):
             userform = ProfileForm(request.POST , request.FILES , instance=request.user)
             if userform.is_valid():
                 userform.save()
-        elif 'save-password' in request.POST:
-            current_password = request.POST.get('currentpsw')
-            password = request.POST.get('psw')
-            password2 = request.POST.get('psw-repeat')
-            if check_password(current_password, request.user.password):
-                if password:
-                    if password == password2 and password != current_password and len(password) > 8 and re.search(r'\d', password) and re.search(r'[!@#$%^&*(),.?":{}|<>]', password) and re.search(r'[a-z]', password) and re.search(r'[A-Z]', password):
-                        request.user.set_password(password) 
-                        request.user.save()
-                        update_session_auth_hash(request, request.user)
-                        messages.success(request, 'Password Updated Successfully!')
-                        current_url = request.build_absolute_uri()
-                        redirect_url = f"{current_url}?auto_open=true"
-                        return redirect(redirect_url)
-                        
-                    elif password == current_password:
-                        messages.error(request, '• Can\'t Use The Same Old Password!')
-                        current_url = request.build_absolute_uri()
-                        redirect_url = f"{current_url}?auto_open=true"
-                        return redirect(redirect_url)
-                    
-                    else:
-                        
-                        messages.error(request, '• Couldn\'t Save Password!')
-                        if len(password) < 8:
-                            pass_error.append('• Password is less than 8 Characters!')
-                        
-                        # Check if password contains a number
-                        if not re.search(r'\d', password):
-                            pass_error.append('• Password doesn\'t contain numbers!')
-                        
-                        # Check if password contains a special character
-                        if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
-                            pass_error.append('• Password doesn\'t contain special character!')
-                        
-                        # Check if password contains lowercase letters
-                        if not re.search(r'[a-z]', password):
-                            pass_error.append('• Password doesn\'t contain lower letter!')
-                        
-                        # Check if password contains uppercase letters
-                        if not re.search(r'[A-Z]', password):
-                            pass_error.append('• Password doesn\'t contain upper letter!')
-                        
-                        
-                        if password != password2:
-                            pass_error.append('• Passwords Didn\'t Match!')
-                        
-                        current_url = request.build_absolute_uri()
-                        redirect_url = f"{current_url}?auto_open=true"
-                        return redirect(redirect_url)
-            
-                else:
-                    messages.error(request , 'Add New Password!')
-                    current_url = request.build_absolute_uri()
-                    redirect_url = f"{current_url}?auto_open=true"
-                    return redirect(redirect_url)
-                
-            else:
-                messages.error(request , 'Current Password Is Invalid!')
-                current_url = request.build_absolute_uri()
-                redirect_url = f"{current_url}?auto_open=true"
-                return redirect(redirect_url)
     #-----------------------------------------------------------
     context = {'page_name' : 'About-us' , 'subed' : subed , 'org' : org , 'in_cart' : in_cart , 'cart' : cart , 'total' : total , 'cart_basic' : cart_basic , 'userform' : userform , 's_a' : s_a , 'pass_error' : pass_error}
     return render(request , 'galaxy/about.html' , context)
@@ -370,68 +233,6 @@ def pricing(request):
             userform = ProfileForm(request.POST , request.FILES , instance=request.user)
             if userform.is_valid():
                 userform.save()
-        elif 'save-password' in request.POST:
-            current_password = request.POST.get('currentpsw')
-            password = request.POST.get('psw')
-            password2 = request.POST.get('psw-repeat')
-            if check_password(current_password, request.user.password):
-                if password:
-                    if password == password2 and password != current_password and len(password) > 8 and re.search(r'\d', password) and re.search(r'[!@#$%^&*(),.?":{}|<>]', password) and re.search(r'[a-z]', password) and re.search(r'[A-Z]', password):
-                        request.user.set_password(password) 
-                        request.user.save()
-                        update_session_auth_hash(request, request.user)
-                        messages.success(request, 'Password Updated Successfully!')
-                        current_url = request.build_absolute_uri()
-                        redirect_url = f"{current_url}?auto_open=true"
-                        return redirect(redirect_url)
-                        
-                    elif password == current_password:
-                        messages.error(request, '• Can\'t Use The Same Old Password!')
-                        current_url = request.build_absolute_uri()
-                        redirect_url = f"{current_url}?auto_open=true"
-                        return redirect(redirect_url)
-                    
-                    else:
-                        
-                        messages.error(request, '• Couldn\'t Save Password!')
-                        if len(password) < 8:
-                            pass_error.append('• Password is less than 8 Characters!')
-                        
-                        # Check if password contains a number
-                        if not re.search(r'\d', password):
-                            pass_error.append('• Password doesn\'t contain numbers!')
-                        
-                        # Check if password contains a special character
-                        if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
-                            pass_error.append('• Password doesn\'t contain special character!')
-                        
-                        # Check if password contains lowercase letters
-                        if not re.search(r'[a-z]', password):
-                            pass_error.append('• Password doesn\'t contain lower letter!')
-                        
-                        # Check if password contains uppercase letters
-                        if not re.search(r'[A-Z]', password):
-                            pass_error.append('• Password doesn\'t contain upper letter!')
-                        
-                        
-                        if password != password2:
-                            pass_error.append('• Passwords Didn\'t Match!')
-                        
-                        current_url = request.build_absolute_uri()
-                        redirect_url = f"{current_url}?auto_open=true"
-                        return redirect(redirect_url)
-            
-                else:
-                    messages.error(request , 'Add New Password!')
-                    current_url = request.build_absolute_uri()
-                    redirect_url = f"{current_url}?auto_open=true"
-                    return redirect(redirect_url)
-                
-            else:
-                messages.error(request , 'Current Password Is Invalid!')
-                current_url = request.build_absolute_uri()
-                redirect_url = f"{current_url}?auto_open=true"
-                return redirect(redirect_url)
     #-----------------------------------------------------------
         
         
@@ -714,127 +515,88 @@ def contact_us(request):
             userform = ProfileForm(request.POST , request.FILES , instance=request.user)
             if userform.is_valid():
                 userform.save()
-        elif 'save-password' in request.POST:
-            current_password = request.POST.get('currentpsw')
-            password = request.POST.get('psw')
-            password2 = request.POST.get('psw-repeat')
-            if check_password(current_password, request.user.password):
-                if password:
-                    if password == password2 and password != current_password and len(password) > 8 and re.search(r'\d', password) and re.search(r'[!@#$%^&*(),.?":{}|<>]', password) and re.search(r'[a-z]', password) and re.search(r'[A-Z]', password):
-                        request.user.set_password(password) 
-                        request.user.save()
-                        update_session_auth_hash(request, request.user)
-                        messages.success(request, 'Password Updated Successfully!')
-                        current_url = request.build_absolute_uri()
-                        redirect_url = f"{current_url}?auto_open=true"
-                        return redirect(redirect_url)
-                        
-                    elif password == current_password:
-                        messages.error(request, '• Can\'t Use The Same Old Password!')
-                        current_url = request.build_absolute_uri()
-                        redirect_url = f"{current_url}?auto_open=true"
-                        return redirect(redirect_url)
-                    
-                    else:
-                        
-                        messages.error(request, '• Couldn\'t Save Password!')
-                        if len(password) < 8:
-                            pass_error.append('• Password is less than 8 Characters!')
-                        
-                        # Check if password contains a number
-                        if not re.search(r'\d', password):
-                            pass_error.append('• Password doesn\'t contain numbers!')
-                        
-                        # Check if password contains a special character
-                        if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
-                            pass_error.append('• Password doesn\'t contain special character!')
-                        
-                        # Check if password contains lowercase letters
-                        if not re.search(r'[a-z]', password):
-                            pass_error.append('• Password doesn\'t contain lower letter!')
-                        
-                        # Check if password contains uppercase letters
-                        if not re.search(r'[A-Z]', password):
-                            pass_error.append('• Password doesn\'t contain upper letter!')
-                        
-                        
-                        if password != password2:
-                            pass_error.append('• Passwords Didn\'t Match!')
-                        
-                        current_url = request.build_absolute_uri()
-                        redirect_url = f"{current_url}?auto_open=true"
-                        return redirect(redirect_url)
-            
-                else:
-                    messages.error(request , 'Add New Password!')
-                    current_url = request.build_absolute_uri()
-                    redirect_url = f"{current_url}?auto_open=true"
-                    return redirect(redirect_url)
-                
-            else:
-                messages.error(request , 'Current Password Is Invalid!')
-                current_url = request.build_absolute_uri()
-                redirect_url = f"{current_url}?auto_open=true"
-                return redirect(redirect_url)
     #-----------------------------------------------------------
     
     context = {'page_name' : 'Contact-us' , 'subed' : subed , 'org' : org , 'in_cart' : in_cart , 'cart' : cart , 'total' : total , 'userform' : userform , 's_a' : s_a , 'pass_error' : pass_error}
     return render(request , 'galaxy/contact.html' , context)
 
-
-# def profile(request):
-#     user = request.user
-#     userform = ProfileForm(instance=user)
-    
-        
-#     context = {'userform' : userform}
-#     return render(request , 'galaxy/profile.html' , context)
-
-
-# def profile_edit(request):
-#     user = request.user
-#     form = ProfileForm(instance=user)
-#     if request.method =='POST':
-#         form = ProfileForm(request.POST , request.FILES , instance=user)
-#         if request.POST.get('first_name').isnumeric() or request.POST.get('last_name').isnumeric():
-#             messages.error(request, 'First/Last Name Can’t Be Entirely Numeric')
-#             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-#         if not request.POST.get('first_name') or not request.POST.get('last_name'):
-#             messages.error(request, 'Do Not Leave First/Last Name Blank')
-#             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-#         else:
-#             if form.is_valid():
-#                 form.save()
-#                 return redirect('galaxy:profile')
-#     context = {'form' : form}
-#     return render(request , 'galaxy/profile_edit.html' , context)
-
 #--------------------------------------------------------------------------------
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
 
-# @login_required
-# def make_migrations():
-#     # Run migrations for the current database
-#     call_command('makemigrations')
-#     call_command('migrate')
+def check_time_restrictions(user):
+    try:
+        current_time = datetime.now().time()
+        current_day = datetime.now().strftime('%A')
+
+        time_restrictions = user.timerestriction_set.filter(day_of_week=current_day)
+        if time_restrictions.exists():
+            for restriction in time_restrictions:
+                try:
+                    start_time = restriction.start_time
+                    end_time = restriction.end_time
+                    if start_time <= current_time.strftime('%H:%M:%S') <= end_time:
+                        return True
+                except Exception as e:
+                    print(f"An error occurred while comparing time values: {str(e)}")
+                    return False
+        else:
+            # No time restrictions for the current day
+            return True
+
+        return False
+    except Exception as e:
+        print(f"An error occurred while checking time restrictions: {str(e)}")
+        return False
 
 def login_page(request):
     errors = []
+    user_ip = get_client_ip(request)
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('psw')
-        
         try:
             user = User.objects.get(email=email)
+            allowed_ips = AllowedIp.objects.filter(UserId = user)
             if user.check_password(password):
-                login(request, user)
-                if user.Psw_Flag == 1:
-                    return redirect('galaxy:index')
-                else:
-                    return redirect('galaxy:pass_reset') # return for password page
+                if user.ip_restricted: 
+                    if not allowed_ips:
+                        errors.append("• Your ip address is not allowed to login to this user , please contact your admin!")
+                        errors.append(f"• Your ip address ({user_ip})")
+                    for ip in allowed_ips:
+                        if ip.ip_address == user_ip:
+                            if check_time_restrictions(user):
+                                login(request, user)
+                                request.session['user_id'] = user.id
+                                if user.Psw_Flag == 1:
+                                    return redirect('galaxy:index')
+                                else:
+                                    return redirect('galaxy:pass_reset') # return for password page
+                            else:
+                                errors.append("You are not allowed to login at this time!")
+                        else:
+                            errors.append("• Your ip address is not allowed to login to this user , please contact your admin!")
+                            errors.append(f"• Your ip address ({user_ip})")
+                            
+                else: 
+                    if check_time_restrictions(user):
+                        login(request, user)
+                        request.session['user_id'] = user.id
+                        if user.Psw_Flag == 1:
+                            return redirect('galaxy:index')
+                        else:
+                            return redirect('galaxy:pass_reset') # return for password page
+                    else:
+                        errors.append("You are not allowed to login at this time!")
             else:
-                errors.append("Incorrect Password!")
+                errors.append("Incorrect password!")
         except :
-            errors.append("Incorrect Email address!")
+            errors.append("Incorrect email address!")
     
     context = {'errors': errors}
     return render(request, 'galaxy/login.html', context)
@@ -980,68 +742,6 @@ def my_products(request):
             userform = ProfileForm(request.POST , request.FILES , instance=request.user)
             if userform.is_valid():
                 userform.save()
-        elif 'save-password' in request.POST:
-            current_password = request.POST.get('currentpsw')
-            password = request.POST.get('psw')
-            password2 = request.POST.get('psw-repeat')
-            if check_password(current_password, request.user.password):
-                if password:
-                    if password == password2 and password != current_password and len(password) > 8 and re.search(r'\d', password) and re.search(r'[!@#$%^&*(),.?":{}|<>]', password) and re.search(r'[a-z]', password) and re.search(r'[A-Z]', password):
-                        request.user.set_password(password) 
-                        request.user.save()
-                        update_session_auth_hash(request, request.user)
-                        messages.success(request, 'Password Updated Successfully!')
-                        current_url = request.build_absolute_uri()
-                        redirect_url = f"{current_url}?auto_open=true"
-                        return redirect(redirect_url)
-                        
-                    elif password == current_password:
-                        messages.error(request, '• Can\'t Use The Same Old Password!')
-                        current_url = request.build_absolute_uri()
-                        redirect_url = f"{current_url}?auto_open=true"
-                        return redirect(redirect_url)
-                    
-                    else:
-                        
-                        messages.error(request, '• Couldn\'t Save Password!')
-                        if len(password) < 8:
-                            pass_error.append('• Password is less than 8 Characters!')
-                        
-                        # Check if password contains a number
-                        if not re.search(r'\d', password):
-                            pass_error.append('• Password doesn\'t contain numbers!')
-                        
-                        # Check if password contains a special character
-                        if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
-                            pass_error.append('• Password doesn\'t contain special character!')
-                        
-                        # Check if password contains lowercase letters
-                        if not re.search(r'[a-z]', password):
-                            pass_error.append('• Password doesn\'t contain lower letter!')
-                        
-                        # Check if password contains uppercase letters
-                        if not re.search(r'[A-Z]', password):
-                            pass_error.append('• Password doesn\'t contain upper letter!')
-                        
-                        
-                        if password != password2:
-                            pass_error.append('• Passwords Didn\'t Match!')
-                        
-                        current_url = request.build_absolute_uri()
-                        redirect_url = f"{current_url}?auto_open=true"
-                        return redirect(redirect_url)
-            
-                else:
-                    messages.error(request , 'Add New Password!')
-                    current_url = request.build_absolute_uri()
-                    redirect_url = f"{current_url}?auto_open=true"
-                    return redirect(redirect_url)
-                
-            else:
-                messages.error(request , 'Current Password Is Invalid!')
-                current_url = request.build_absolute_uri()
-                redirect_url = f"{current_url}?auto_open=true"
-                return redirect(redirect_url)
     #-----------------------------------------------------------
     
     sub_basic = Subscription.objects.filter(UserID=request.user ,  Bundle_T='Basic')
@@ -1122,7 +822,7 @@ def manage_org(request):
         
     pass_error = []    
     del_btn = request.GET.get('del')
-    print(del_btn)
+
     if del_btn :
         code = secrets.token_hex(4)
         # Send the email with the code
@@ -1164,11 +864,9 @@ def manage_org(request):
                 
                 form2 = AutoRenew(request.POST , instance=org.SubscriptionID)
                 value = request.POST.get('Auto-Renew')
-                print(value)
                 if value == 'on':
                     auto_value = "True"
                 else:
-                    print('ok')
                     auto_value = "False"
                    
                 org = Organization.objects.get(id = choosed_org)
@@ -1180,76 +878,7 @@ def manage_org(request):
                 userform = ProfileForm(request.POST , request.FILES , instance=request.user)
                 if userform.is_valid():
                     userform.save()  
-            elif 'save-password' in request.POST:
-                current_password = request.POST.get('currentpsw')
-                password = request.POST.get('psw')
-                password2 = request.POST.get('psw-repeat')
-                if check_password(current_password, request.user.password):
-                    if password:
-                        if password == password2 and password != current_password and len(password) > 8 and re.search(r'\d', password) and re.search(r'[!@#$%^&*(),.?":{}|<>]', password) and re.search(r'[a-z]', password) and re.search(r'[A-Z]', password):
-                            request.user.set_password(password) 
-                            request.user.save()
-                            update_session_auth_hash(request, request.user)
-                            messages.success(request, 'Password Updated Successfully!')
-                            current_url = request.build_absolute_uri()
-                            redirect_url = f"{current_url}?auto_open=true"
-                            return redirect(redirect_url)
-                            
-                        elif password == current_password:
-                            messages.error(request, '• Can\'t Use The Same Old Password!')
-                            current_url = request.build_absolute_uri()
-                            redirect_url = f"{current_url}?auto_open=true"
-                            return redirect(redirect_url)
-                        
-                        else:
-                            
-                            messages.error(request, '• Couldn\'t Save Password!')
-                            if len(password) < 8:
-                                pass_error.append('• Password is less than 8 Characters!')
-                            
-                            # Check if password contains a number
-                            if not re.search(r'\d', password):
-                                pass_error.append('• Password doesn\'t contain numbers!')
-                            
-                            # Check if password contains a special character
-                            if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
-                                pass_error.append('• Password doesn\'t contain special character!')
-                            
-                            # Check if password contains lowercase letters
-                            if not re.search(r'[a-z]', password):
-                                pass_error.append('• Password doesn\'t contain lower letter!')
-                            
-                            # Check if password contains uppercase letters
-                            if not re.search(r'[A-Z]', password):
-                                pass_error.append('• Password doesn\'t contain upper letter!')
-                            
-                            
-                            if password != password2:
-                                pass_error.append('• Passwords Didn\'t Match!')
-                            
-                            current_url = request.build_absolute_uri()
-                            redirect_url = f"{current_url}?auto_open=true"
-                            return redirect(redirect_url)
-                
-                    else:
-                        messages.error(request , 'Add New Password!')
-                        current_url = request.build_absolute_uri()
-                        redirect_url = f"{current_url}?auto_open=true"
-                        return redirect(redirect_url)
-                    
-                else:
-                    messages.error(request , 'Current Password Is Invalid!')
-                    current_url = request.build_absolute_uri()
-                    redirect_url = f"{current_url}?auto_open=true"
-                    return redirect(redirect_url) 
-             
-                    
 
-    
- 
- 
-
-            # Redirect the user to the form page
             
     userform = ProfileForm(instance=request.user)       
    
@@ -1331,7 +960,6 @@ def delete_org(request , id):
         return JsonResponse(response_data)
 
 
-
 def manage_user(request):
     switch_to_user_database('Users')
     s_a = UsersType.objects.get(UserTypeCode='1')
@@ -1362,7 +990,7 @@ def manage_user(request):
             p_ids.append(item.ProductID.id)
     
     user = request.user
-    user_subs_basic = Subscription.objects.filter(UserID=user , Bundle_T = 'Basic')
+    user_subs_basic = Subscription.objects.filter(UserID = user , Bundle_T = 'Basic')
     users = User.objects.filter(SubscriptionID__UserID = user)
     current_date = datetime.now().date()
     the_user = None
@@ -1404,19 +1032,26 @@ def manage_user(request):
     
     try:
         user_module = AllowedModule.objects.filter(UserId = the_user)
-        print(user_module)
     except:
         user_module = None
-    
-    
-    
+    try:
+        ip_addresses = AllowedIp.objects.filter(UserId = the_user)
+    except:
+        ip_addresses = None
+
+    time_restrictions = TimeRestriction.objects.filter(UserID=the_user)
+
+    time_restrictions_dict = {}
+    for restriction in time_restrictions:
+        time_restrictions_dict[restriction.day_of_week] = [restriction.start_time, restriction.end_time]
+
+
     pass_error_user=[]
     
     pass_error= []
     
     del_btn = request.GET.get('del')
     if del_btn :
-            print('done')
             code = secrets.token_hex(4)
             # Send the email with the code
             email=EmailMessage(
@@ -1451,6 +1086,19 @@ def manage_user(request):
                         the_user = form.save(commit = False)
                         the_user.Psw_Flag = 0
                         the_user.save()
+                        
+                        session_model = Session.objects.filter(expire_date__gte=timezone.now())
+                        sessions_with_value = []
+
+                        for session in session_model:
+                            session_data = session.get_decoded()
+                            if 'user_id' in session_data and session_data['user_id'] == user.id:
+                                session_store = SessionStore(session_key=session.session_key)
+                                sessions_with_value.append(session_store)
+                                print(sessions_with_value)
+                        for session_store in sessions_with_value:
+                            session_store.delete() 
+                        
                         messages.success(request, 'User saved successfully!')
                         if password and email:
                             email_msg=EmailMessage(
@@ -1509,70 +1157,7 @@ def manage_user(request):
                     if field != 'password': 
                         for error in errors:
                             messages.error(request,f"• {error}" )
-                form = SystemUserForm(request.POST or None, request.FILES  or None, user_id=the_user.id , instance=the_user, initial={'Gender': 1 , 'Language': 1})
-        
-        elif 'save-password' in request.POST:
-            current_password = request.POST.get('currentpsw')
-            password = request.POST.get('psw')
-            password2 = request.POST.get('psw-repeat')
-            if check_password(current_password, request.user.password):
-                if password:
-                    if password == password2 and password != current_password and len(password) > 8 and re.search(r'\d', password) and re.search(r'[!@#$%^&*(),.?":{}|<>]', password) and re.search(r'[a-z]', password) and re.search(r'[A-Z]', password):
-                        request.user.set_password(password) 
-                        request.user.save()
-                        update_session_auth_hash(request, request.user)
-                        messages.success(request, 'Password Updated Successfully!')
-                        current_url = request.build_absolute_uri()
-                        redirect_url = f"{current_url}?auto_open=true"
-                        return redirect(redirect_url)
-                        
-                    elif password == current_password:
-                        messages.error(request, '• Can\'t Use The Same Old Password!')
-                        current_url = request.build_absolute_uri()
-                        redirect_url = f"{current_url}?auto_open=true"
-                        return redirect(redirect_url)
-                    
-                    else:
-                        
-                        messages.error(request, '• Couldn\'t Save Password!')
-                        if len(password) < 8:
-                            pass_error.append('• Password is less than 8 Characters!')
-                        
-                        # Check if password contains a number
-                        if not re.search(r'\d', password):
-                            pass_error.append('• Password doesn\'t contain numbers!')
-                        
-                        # Check if password contains a special character
-                        if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
-                            pass_error.append('• Password doesn\'t contain special character!')
-                        
-                        # Check if password contains lowercase letters
-                        if not re.search(r'[a-z]', password):
-                            pass_error.append('• Password doesn\'t contain lower letter!')
-                        
-                        # Check if password contains uppercase letters
-                        if not re.search(r'[A-Z]', password):
-                            pass_error.append('• Password doesn\'t contain upper letter!')
-                        
-                        
-                        if password != password2:
-                            pass_error.append('• Passwords Didn\'t Match!')
-                        
-                        current_url = request.build_absolute_uri()
-                        redirect_url = f"{current_url}?auto_open=true"
-                        return redirect(redirect_url)
-            
-                else:
-                    messages.error(request , '• Add New Password!')
-                    current_url = request.build_absolute_uri()
-                    redirect_url = f"{current_url}?auto_open=true"
-                    return redirect(redirect_url)
-                
-            else:
-                messages.error(request , '• Current Password Is Invalid!')
-                current_url = request.build_absolute_uri()
-                redirect_url = f"{current_url}?auto_open=true"
-                return redirect(redirect_url)    
+                form = SystemUserForm(request.POST or None, request.FILES  or None, user_id=the_user.id , instance=the_user, initial={'Gender': 1 , 'Language': 1})   
             
         elif 'save-profile' in request.POST:
                 userform = ProfileForm(request.POST , request.FILES , instance=request.user)
@@ -1603,18 +1188,17 @@ def manage_user(request):
                'pass_error' : pass_error ,
                'pass_error_user' : pass_error_user ,
                'user_module' : user_module ,
+               'ip_addresses' : ip_addresses , 
+               'time_restrictions': time_restrictions_dict ,
                }
     return render(request , 'galaxy/manage_user.html' , context)
 
 
 def delete_user(request , id):
-        # Get the code entered by the user     
-        print('two')   
+        # Get the code entered by the user      
         user_code = request.GET.get('code')
-        print(user_code)
         # Get the code stored in the session
         stored_code = request.session.get('delete_code')
-        print(stored_code)
         if user_code == stored_code:
             user_id = id
             user = User.objects.get(id=user_id)
@@ -1713,7 +1297,7 @@ def applying_promocode(request , code , total):
     
     try:
         promotion = PromoCode.objects.get(code=code)
-         
+        
         if promotion.usercode :
             if promotion.usercode == request.user:
                 if promotion.code == code and promotion.status == True:
@@ -1762,18 +1346,14 @@ def applying_promocode(request , code , total):
 
 
 def pass_change(request):
-            print('1')
             pass_error = []
             current_password = request.GET.get('cpsw') 
             password = request.GET.get('npsw')  
             password2 = request.GET.get('rpsw') 
             
             if check_password(current_password, request.user.password):
-                print('2')
                 if password:
-                    print('3')
                     if password == password2 and password != current_password and len(password) > 8 and re.search(r'\d', password) and re.search(r'[!@#$%^&*(),.?":{}|<>]', password) and re.search(r'[a-z]', password) and re.search(r'[A-Z]', password):
-                        print('4')
                         request.user.set_password(password) 
                         request.user.save()
                         update_session_auth_hash(request, request.user)
@@ -1788,7 +1368,6 @@ def pass_change(request):
                         
                         
                     elif password == current_password:
-                        print('5')
                         
                         # current_url = request.build_absolute_uri()
                         # redirect_url = f"{current_url}?auto_open=true"
@@ -1798,39 +1377,30 @@ def pass_change(request):
                             'message' : '• Can\'t Use The Same Old Password!'
                         }
                     
-                    else:
-                        print('6')
-                        
+                    else:  
                         if len(password) < 8:
                             pass_error.append('• Password is less than 8 Characters!')
-                            print('7')
                         
                         # Check if password contains a number
                         if not re.search(r'\d', password):
                             pass_error.append('• Password doesn\'t contain numbers!')
-                            print('8')
                         
                         # Check if password contains a special character
                         if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
                             pass_error.append('• Password doesn\'t contain special character!')
-                            print('9')
                         
                         # Check if password contains lowercase letters
                         if not re.search(r'[a-z]', password):
                             pass_error.append('• Password doesn\'t contain lower letter!')
-                            print('10')
                         
                         # Check if password contains uppercase letters
                         if not re.search(r'[A-Z]', password):
                             pass_error.append('• Password doesn\'t contain upper letter!')
-                            print('11')
                         
                         
                         if password != password2:
                             pass_error.append('• Passwords Didn\'t Match!')
-                            print('12')
                         
-                        print(pass_error)
                         response_data = {
                             'pswError': True,
                             'pass_error' : pass_error,
@@ -1841,7 +1411,6 @@ def pass_change(request):
                         # return redirect(redirect_url)
             
                 else:
-                    print('13')
                     
                     response_data = {
                             'noPassError': True,
@@ -1849,8 +1418,6 @@ def pass_change(request):
                         }     
                 
             else:
-                print('14')
-               
                 # current_url = request.build_absolute_uri()
                 # redirect_url = f"{current_url}?auto_open=true"
                 # return redirect(redirect_url)
@@ -1896,3 +1463,198 @@ def delete_allow_module(request):
                 }
   
     return JsonResponse(response_data)
+
+
+def add_allow_ip(request):
+    
+    id = request.GET.get('id')
+    user = User.objects.get(id = id)
+    ip_address = request.GET.get('ip_address')
+    adding_address = AllowedIp.objects.create(UserId = user , ip_address = ip_address)
+ 
+    response_data = {
+                    'success': True,
+                    'message' : 'IP Address Added!'
+                }
+  
+    return JsonResponse(response_data)
+
+
+def delete_allow_ip(request):
+    
+    id = request.GET.get('id')
+    user = User.objects.get(id = id)
+    ip_address = request.GET.get('ip_address')
+    user_ip = AllowedIp.objects.get(UserId = user , ip_address = ip_address)
+    user_ip.delete()
+    
+    
+    response_data = {
+                    'success': True,
+                    'message' : 'IP Address Removed!'
+                }
+  
+    return JsonResponse(response_data)
+
+
+def allow_all_ip(request):
+    
+    id = request.GET.get('id')
+    user = User.objects.get(id=id)
+    user.ip_restricted = False
+    user.save()
+    
+    response_data = {
+                    'success': True,
+                    'message' : 'All IPs Allowed!'
+                }
+  
+    return JsonResponse(response_data)
+
+
+def restrict_ip(request):
+    user_id = request.GET.get('id')
+    user = User.objects.get(id=user_id)
+    user.ip_restricted = True
+    user.save()
+
+    session_model = Session.objects.filter(expire_date__gte=timezone.now())
+    sessions_with_value = []
+
+    for session in session_model:
+        session_data = session.get_decoded()
+        if 'user_id' in session_data and session_data['user_id'] == user.id:
+            session_store = SessionStore(session_key=session.session_key)
+            sessions_with_value.append(session_store)
+            print(sessions_with_value)
+    for session_store in sessions_with_value:
+        session_store.delete() 
+
+    response_data = {
+        'success': True,
+        'message': 'Login IP Restricted!'
+    }
+
+    return JsonResponse(response_data)
+
+def user_renew_on(request):
+    
+    id = request.GET.get('id')
+    user = User.objects.get(id=id)
+    user.SubscriptionID.AutoRenew = True    
+    user.SubscriptionID.save()
+    
+    response_data = {
+                    'success': True,
+                    'message' : 'Auto Renew ON!'
+                }
+  
+    return JsonResponse(response_data)
+
+def user_renew_off(request):
+    
+    id = request.GET.get('id')
+    user = User.objects.get(id=id)
+    user.SubscriptionID.AutoRenew = False
+    user.SubscriptionID.save()
+    
+    response_data = {
+                    'success': True,
+                    'message' : 'Auto Renew OFF!'
+                }
+  
+    return JsonResponse(response_data)
+
+def org_renew_on(request):
+    
+    id = request.GET.get('id')
+    org = Organization.objects.get(id=id)
+    org.SubscriptionID.AutoRenew = True
+    org.SubscriptionID.save()
+    
+    response_data = {
+                    'success': True,
+                    'message' : 'Auto Renew ON!'
+                }
+  
+    return JsonResponse(response_data)
+
+def org_renew_off(request):
+    
+    id = request.GET.get('id')
+    org = Organization.objects.get(id=id)
+    org.SubscriptionID.AutoRenew = False
+    org.SubscriptionID.save()
+    
+    response_data = {
+                    'success': True,
+                    'message' : 'Auto Renew OFF!'
+                }
+  
+    return JsonResponse(response_data)
+
+def time_restrictions(request):
+    
+    id = request.GET.get('id')
+    user = User.objects.get(id=id)
+    if request.method == 'POST':
+        time_restrictions = json.loads(request.body)
+        for day, times in time_restrictions.items():
+            start_time, end_time = times
+            
+            try:
+                day_access = TimeRestriction.objects.get(UserID=user , day_of_week=day)
+            except:
+                day_access = None
+            
+            if day_access:
+                
+                day_access.start_time = start_time
+                day_access.end_time = end_time
+                day_access.save()
+            else:
+                
+                time_restriction = TimeRestriction.objects.create(UserID=user, day_of_week=day, start_time=start_time, end_time=end_time)
+        
+        session_model = Session.objects.filter(expire_date__gte=timezone.now())
+        sessions_with_value = []
+
+        for session in session_model:
+            session_data = session.get_decoded()
+            if 'user_id' in session_data and session_data['user_id'] == user.id:
+                session_store = SessionStore(session_key=session.session_key)
+                sessions_with_value.append(session_store)
+                print(sessions_with_value)
+        for session_store in sessions_with_value:
+            session_store.delete()   
+            
+        response_data = {
+                'success': True,
+                'message' : 'Access times saved successfully!'
+            }
+        
+        return JsonResponse(response_data)
+    
+
+def remove_time_restrictions(request):
+    
+    id = request.GET.get('id')
+    user = User.objects.get(id=id)
+    
+    time_restrictions = TimeRestriction.objects.filter(UserID=user)
+    if time_restrictions:
+        for restriction in time_restrictions:
+            restriction.delete()
+        
+        response_data = {
+                'success': True,
+                'message' : 'Time restriction removed!'
+            } 
+    else:
+        response_data = {
+                'error': True,
+                'message' : 'No time restriction to remove!'
+            } 
+    return JsonResponse(response_data)
+
+
