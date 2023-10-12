@@ -43,6 +43,13 @@ from django.contrib.sessions.backends.db import SessionStore
 
 # Create your views here.
 
+def get_referer(request):
+    referer = request.META.get('HTTP_REFERER')
+    if not referer:
+        return None
+    return referer
+
+
 def index(request):
     switch_to_user_database('Users')
     s_a = UsersType.objects.get(UserTypeCode='1')
@@ -337,6 +344,8 @@ def pricing(request):
 
 
 def add_cart(request , id , type , b_type):
+    if not get_referer(request):
+        raise Http404
     user = request.user
     try:
         product = Product.objects.get(id=id)
@@ -365,6 +374,8 @@ def add_cart(request , id , type , b_type):
     return JsonResponse(response_data)
 
 def delete_cart(request , id):
+    if not get_referer(request):
+        raise Http404
     obj = Cart.objects.get(UserID=request.user , ProductID=id)
     if obj.Qty > 1:
         obj.Qty -= 1
@@ -395,6 +406,8 @@ def cart_total(request):
     # , id
 @login_required
 def payment(request):
+    if not get_referer(request):
+        raise Http404
     user = request.user
     current_date = datetime.now().date()
     end_date_m = current_date + timedelta(days=30)
@@ -708,6 +721,8 @@ def activation_done(request):
 
 
 def my_products(request):
+    if not get_referer(request):
+        raise Http404
     s_a = UsersType.objects.get(UserTypeCode='1')
     s_u = UsersType.objects.get(UserTypeCode='2')
     w_u = UsersType.objects.get(UserTypeCode='3')
@@ -754,7 +769,9 @@ def my_products(request):
 
         
 def manage_org(request):
-    switch_to_user_database('Users')
+    if not get_referer(request):
+        raise Http404
+    
     s_a = UsersType.objects.get(UserTypeCode='1')
     s_u = UsersType.objects.get(UserTypeCode='2')
     w_u = UsersType.objects.get(UserTypeCode='3')
@@ -905,6 +922,9 @@ def manage_org(request):
 
 
 def delete_org(request , id):
+        if not get_referer(request):
+            raise Http404
+        user = requst.user
         # Get the code entered by the user
         user_code = request.GET.get('code')
 
@@ -961,7 +981,9 @@ def delete_org(request , id):
 
 
 def manage_user(request):
-    switch_to_user_database('Users')
+    if not get_referer(request):
+        raise Http404
+    
     s_a = UsersType.objects.get(UserTypeCode='1')
     s_u = UsersType.objects.get(UserTypeCode='2')
     w_u = UsersType.objects.get(UserTypeCode='3')
@@ -1195,6 +1217,8 @@ def manage_user(request):
 
 
 def delete_user(request , id):
+        if not get_referer(request):
+            raise Http404
         # Get the code entered by the user      
         user_code = request.GET.get('code')
         # Get the code stored in the session
@@ -1235,6 +1259,8 @@ def delete_user(request , id):
 
 
 def pass_reset(request):
+    if not get_referer(request):
+        raise Http404
     current_password = request.POST.get('currentpsw')
     password = request.POST.get('psw')
     password2 = request.POST.get('psw-repeat')
@@ -1346,6 +1372,8 @@ def applying_promocode(request , code , total):
 
 
 def pass_change(request):
+            if not get_referer(request):
+                raise Http404
             pass_error = []
             current_password = request.GET.get('cpsw') 
             password = request.GET.get('npsw')  
