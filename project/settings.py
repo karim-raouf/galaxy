@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
+
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -162,8 +163,6 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/files_images/'
 
 MEDIA_ROOT = BASE_DIR + '/static/files_images'
-
-
 
 
 #SMTP Configuration
