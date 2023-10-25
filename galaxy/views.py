@@ -40,7 +40,7 @@ from dateutil import parser
 from django.contrib.sessions.models import Session
 from django.utils import timezone
 from django.contrib.sessions.backends.db import SessionStore
-
+from django.http import Http404
 # Create your views here.
 
 def get_referer(request):
@@ -110,7 +110,9 @@ def index(request):
             userform = ProfileForm(request.POST , request.FILES , instance=request.user)
             if userform.is_valid():
                 userform.save()
+                messages.success(request, "Profile saved successfully!")
             else:
+                
                 print(userform.errors)
                 
     context = {'user' : user , 'subed' : subed , 'org' : org , 'org_num' : org_num , 'cart' : cart , 'in_cart' : in_cart , 'total' : total , 'cart_basic' : cart_basic , 'userform' : userform , 's_a' : s_a , 'pass_error' : pass_error}
@@ -168,6 +170,7 @@ def about_us(request):
             userform = ProfileForm(request.POST , request.FILES , instance=request.user)
             if userform.is_valid():
                 userform.save()
+                messages.success(request, "Profile saved successfully!")
     #-----------------------------------------------------------
     context = {'page_name' : 'About-us' , 'subed' : subed , 'org' : org , 'in_cart' : in_cart , 'cart' : cart , 'total' : total , 'cart_basic' : cart_basic , 'userform' : userform , 's_a' : s_a , 'pass_error' : pass_error}
     return render(request , 'galaxy/about.html' , context)
@@ -240,8 +243,14 @@ def pricing(request):
             userform = ProfileForm(request.POST , request.FILES , instance=request.user)
             if userform.is_valid():
                 userform.save()
+                messages.success(request, "Profile saved successfully!")
     #-----------------------------------------------------------
-        
+    try:
+        if request.user.user_Type == s_u or request.user.user_Type == w_u :
+            messages.info(request , "• Due to your current user type you can only preview prices,if you want to buy create your own account.")
+    except: 
+        pass
+
         
     POS_M = Product.objects.get(id=6 , Type='Monthly')
     POS_A = Product.objects.get(id=2 , Type='Annually')
@@ -363,8 +372,8 @@ def add_cart(request , id , type , b_type):
     response_data = {
         'success': True,
         'cart_items': list(cart_items.values()),  # Convert queryset to a list of dictionaries
-        'subTotal': sub_total,
-        'grandTotal': grand_total,
+        'subTotal': float(sub_total),
+        'grandTotal': float(grand_total),
         'productName' : product.Name ,
         'quantity' : obj_cart.Qty ,
         'productPrice' : product.Price ,
@@ -391,8 +400,8 @@ def delete_cart(request , id):
     response_data = {
         'success': True,
         'cart_items': list(cart_items.values()),  # Convert queryset to a list of dictionaries
-        'subTotal': sub_total,
-        'grandTotal': grand_total
+        'subTotal': float(sub_total),
+        'grandTotal': float(grand_total)
     }
     
     return JsonResponse(response_data)
@@ -528,6 +537,22 @@ def contact_us(request):
             userform = ProfileForm(request.POST , request.FILES , instance=request.user)
             if userform.is_valid():
                 userform.save()
+                messages.success(request, "Profile saved successfully!")
+        elif 'contact-message' in request.POST:
+            message = request.POST.get('Message')
+            name = request.POST.get('Name')
+            subject = request.POST.get('Subject')
+            user_email = request.POST.get('Email')
+            print(user_email)
+            email=EmailMessage(
+            f'{subject}',
+            f'- Name : {name}\n\n- Email : {user_email}\n\n- Message : {message}',
+            settings.EMAIL_HOST_USER,
+            [settings.EMAIL_HOST_USER],
+            )
+            email.fail_silently = False
+            email.send()
+            messages.success(request , "Email Sent!")
     #-----------------------------------------------------------
     
     context = {'page_name' : 'Contact-us' , 'subed' : subed , 'org' : org , 'in_cart' : in_cart , 'cart' : cart , 'total' : total , 'userform' : userform , 's_a' : s_a , 'pass_error' : pass_error}
@@ -757,6 +782,7 @@ def my_products(request):
             userform = ProfileForm(request.POST , request.FILES , instance=request.user)
             if userform.is_valid():
                 userform.save()
+                messages.success(request, "Profile saved successfully!")
     #-----------------------------------------------------------
     
     sub_basic = Subscription.objects.filter(UserID=request.user ,  Bundle_T='Basic')
@@ -894,7 +920,8 @@ def manage_org(request):
             elif 'save-profile' in request.POST:
                 userform = ProfileForm(request.POST , request.FILES , instance=request.user)
                 if userform.is_valid():
-                    userform.save()  
+                    userform.save() 
+                    messages.success(request, "Profile saved successfully!")
 
             
     userform = ProfileForm(instance=request.user)       
@@ -1184,7 +1211,8 @@ def manage_user(request):
         elif 'save-profile' in request.POST:
                 userform = ProfileForm(request.POST , request.FILES , instance=request.user)
                 if userform.is_valid():
-                    userform.save()   
+                    userform.save()  
+                    messages.success(request, "Profile saved successfully!") 
     
     
     
@@ -1684,5 +1712,4 @@ def remove_time_restrictions(request):
                 'message' : 'No time restriction to remove!'
             } 
     return JsonResponse(response_data)
-
 

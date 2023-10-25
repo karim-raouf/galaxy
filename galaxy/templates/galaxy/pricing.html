@@ -1,6 +1,7 @@
 {% extends 'galaxy/base.html' %}
 {% load static %}
     {% block header %}
+    <title>Pricing</title>
     <link type="text/css" rel="stylesheet" href="{% static 'css/pricing.css' %}"/>
     <link type="text/css" rel="stylesheet" href="{% static 'css/products_managment.css' %}"/>
     {% endblock header %}
@@ -769,8 +770,8 @@
                             const totalPriceElement = document.getElementById('subtotal');
                             const grandTotalElement = document.getElementById('grandtotal');
                   
-                            totalPriceElement.textContent = data.subTotal;
-                            grandTotalElement.textContent = data.grandTotal;
+                            totalPriceElement.textContent = data.subTotal.toFixed(2);
+                            grandTotalElement.textContent = data.grandTotal.toFixed(2);
       
                             const cartInfoElement = document.getElementById('cartinfo');
                             const cartItems = cartInfoElement.getElementsByClassName('items');
@@ -810,8 +811,8 @@
                     const totalPriceElement = document.getElementById('subtotal');
                     const grandTotalElement = document.getElementById('grandtotal');
           
-                    totalPriceElement.textContent = data.subTotal;
-                    grandTotalElement.textContent = data.grandTotal;
+                    totalPriceElement.textContent = data.subTotal.toFixed(2);
+                    grandTotalElement.textContent = data.grandTotal.toFixed(2);
           
                     // Update the checkout button or any other UI elements as needed
                     const storedPromoCode = localStorage.getItem('promoCode');

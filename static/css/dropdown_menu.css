@@ -1,4 +1,8 @@
-body {margin:0;font-family:Arial}
+body {
+  margin:0;
+  font-family:Arial;
+  background : radial-gradient(ellipse at bottom, #1b2735 0%,#090a0f 100%);
+}
 
 .topnav {
   background-color: #8e8a4c;
@@ -50,7 +54,7 @@ body {margin:0;font-family:Arial}
   background-color: white;
   min-width: 262px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
+  z-index: 2;
   right: 0px;
 }
 
@@ -64,7 +68,7 @@ body {margin:0;font-family:Arial}
 }
 
 .topnav a:hover, .dropdown:hover .dropbtn {
-  background-color: darkgreen;
+  background-color: transparent;
   color: #f9f9f9;
 }
 
@@ -180,9 +184,10 @@ body {margin:0;font-family:Arial}
 }
 
 .cart:hover .cartbtn {
-  background-color: darkgreen;
+  background-color: white;
   color: white;
 }
+
 
 .cart-content {
   display: none;

@@ -12,11 +12,28 @@ body {
   
 }
 
+#header {
+  background-color: lightgray;
+  border-radius: 20px;
+  color: blue;
+  font-size: 25px; 
+  font-weight: bold;
+  position: fixed;
+  top: 75px;
+  width: 50%;
+  right: 25%;
+  transition-property : all;
+  transition-duration: 1s;
+  z-index: 1;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+
+}
+
 .cart1 {
   height: auto;
   width: 0;
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   top: 58px;
   right: 0;
   box-shadow: 0px 8px 16px 0px rgba(10, 78, 10, 0.9);
@@ -177,13 +194,13 @@ ul {
 /* Style the list items */
 ul li {
     color:green;
-  cursor: pointer;
-  position: relative;
-  padding: 12px 8px 12px 40px;
-  list-style-type: none;
-  background: #eee;
-  font-size: medium;
-  transition: 0.2s;
+    cursor: pointer;
+    position: relative;
+    padding: 12px 8px 12px 40px;
+    list-style-type: none;
+    background: #eee;
+    font-size: medium;
+    transition: 0.2s;
   
   /* make the list items unselectable */
   -webkit-user-select: none;

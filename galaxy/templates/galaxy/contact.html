@@ -1,0 +1,60 @@
+{% extends 'galaxy/base.html' %}
+    {% block header %}
+        <title>Contact Us</title>
+    {% endblock header %}
+    {% block body %}
+        <!-- Contact Section -->
+        <div  id="contact" style="COLOR:green; FONT-SIZE:15PX;font: arial">
+            <h2 >Contact US</h2>
+            <hr >
+
+            <div style="padding-left: 150px">
+                <p><i ></i> Giza, Egypt</p>
+                <p><i></i> Phone: +20 1551551536</p>
+                <p><i> </i> Email: mail@galaxyerp.com</p>
+            </div><br>
+            <p style="padding-left: 150px">Let's get in touch. Send us a message:</p>
+
+            <form method = "POST" style="padding-left: 150px">
+                {% csrf_token %}
+                <div class="orgrow">
+                    <div class="col-45">
+                        <p><input  type="text" placeholder="Name..." required name="Name"></p>
+                        <p><input  type="EMAIL" placeholder="Email..." required name="Email"></p>
+                        <p><input  type="text" placeholder="Subject..." required name="Subject"></p>
+                        <p><input  type="text" placeholder="Message..." required name="Message"></p>
+                    </div>
+                </div>
+                <p>
+                    <button id="contact-message" name="contact-message" type="submit" class="btn">
+                        <i></i> Send Message
+                    </button>
+                </p>
+            </form>
+            <!-- End Contact Section -->
+        </div>
+
+    {% endblock body %}
+
+
+
+    <!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/html.html to edit this template
+-->
+<html>
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link type="text/css" rel="stylesheet" href="Product_Management.css"/>
+        <link type="text/css" rel="stylesheet" href="w3.css"/>
+        <script src="javascript.js"></script> 
+
+
+    </head>
+    <body>
+        
+    </body>
+</html>

@@ -16,6 +16,7 @@ urlpatterns = [
     path('my_products/users', views.manage_user , name = 'manage_user'),
     path('my_products/users/delete_user/<int:id>', views.delete_user , name = 'delete_user'),
 
+
     
 
     
@@ -34,6 +35,7 @@ urlpatterns = [
     path('delete_allow_ip/', views.delete_allow_ip , name='delete_allow_ip'),
     path('allow_all_ip/', views.allow_all_ip , name='allow_all_ip'),
     path('restrict_ip/', views.restrict_ip , name='restrict_ip'),
+    
     
     path('user_autorenow_on/', views.user_renew_on , name='user_renew_on'),
     path('user_autorenow_off/', views.user_renew_off , name='user_renew_off'),

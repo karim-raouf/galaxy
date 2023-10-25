@@ -1,6 +1,7 @@
 {% extends 'galaxy/base.html' %}
     {% load static %}
     {% block header %}
+    <title>Organization Management</title>
     <link type="text/css" rel="stylesheet" href="{% static 'css/products_managment.css' %}"/>
     <script src="{% static 'js/products_managment.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -24,10 +25,13 @@
     
 
     {% block body %}
-    <div style="text-align: center;  vertical-align: middle;" class="orgrow">
-      <div >
-          <strong><span class="pagetitle" ><Strong>Organization Management</strong></span></strong>
-
+    <div style="padding:25px">
+      <div id ="header">
+          <p id="title" style="text-align: center;"> Organization Management </P>
+          <p id="titleDiv1" onclick="gotodiv('Div1')" style="display:none;text-align: left;cursor:pointer;">•  Name & Address </P>
+          <p id="titleDiv2" onclick="gotodiv('Div2')" style="display:none;text-align: left;cursor:pointer;">•   Uploads </P>
+          <p id="titleDiv3" onclick="gotodiv('Div3')" style="display:none;text-align: left;cursor:pointer;">•   Options </P>
+          <p id="titleDiv4" onclick="gotodiv('Div4')" style="display:none;text-align: left;cursor:pointer;">•   Links </P>
       </div>
     </div>
     <p></p>
@@ -114,7 +118,7 @@
         <div class="clearfix">
           <button id="remove-button" type="button" onclick="document.getElementById('orgdeleteconfirm').style.display='none';document.getElementById('deleteconfirmation').style.display='none'" class="modeldelete_cancelbtn">Cancel</button>
           
-          <button id="org-delete-btn" name="org-delete-btn" type="button" onclick="document.getElementById('deleteconfirmation').style.display='block'" class="modeldelete_deletebtn">Delete</button>
+          <button id="org-delete-btn" name="org-delete-btn" type="button" onclick="document.getElementById('deleteconfirmation').style.display='block';document.getElementById('org-delete-btn').style.display='none'" class="modeldelete_deletebtn">Delete</button>
           
           <div id="deleteconfirmation" style="display:none">
               <h4 style="color: black;">a confirmation code has been sent to your email</h4>
@@ -330,6 +334,7 @@
   </form>
 </div>
 
+     
    
 
    
@@ -498,6 +503,7 @@ window.onclick = function(event) {
     // Show the delEl element by modifying its style
     delEl.style.display = 'block';
     delEl2.style.display = 'block';
+    document.getElementById('org-delete-btn').style.display='none'
   }
 
   // Attach an event listener to the remove button

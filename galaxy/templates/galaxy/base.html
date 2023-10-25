@@ -6,7 +6,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 -->
 <html>
     <head>
-        <title>Galaxy Retail System</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="UTF-8">
         <meta name="description" content="GALAXY Retail system">
@@ -17,9 +16,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         <link type="text/css" rel="stylesheet" href="{% static 'css/avatar.css' %}"/>
         <link type="text/css" rel="stylesheet" href="{% static 'css/dropdown_menu.css' %}"/>
         <link type="text/css" rel="stylesheet" href="{% static 'css/products_managment.css' %}"/>
+        <link type="text/css" rel="stylesheet" href="{% static 'css/background_stars.css' %}"/>
         <script src="{% static 'js/products_managment.js' %}"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+      {% comment %} ----------------------------- for stars background--------------------------- {% endcomment %}
+        <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+
         {% comment %} --------------------------------for alertify---------------------------------- {% endcomment %}
         <!-- JavaScript -->
         <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
@@ -93,8 +96,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         
         
     </head>
-    <body style="font-family: 'Lato': sans-serif; padding-top: 65px; background-image: url('{% static 'files_images/background_image.jpg' %}');">{% comment %} style="background-image: url('{% static 'images/galaxy-bg.jpg' %}');" {% endcomment %}
-        
+    <body style="font-family: 'Lato': sans-serif; padding-top: 65px;" >{% comment %}   background-image: url('{% static 'files_images/background_image.jpg' %}');" {% endcomment %}
+            <section class="wrapper">
+              <div id="stars"></div>
+              <div id="stars2"></div>
+              <div id="stars3"></div>
+              {% comment %} <div id="title">
+                  <span>PURE CSS</span>
+                  <br>
+                  <span>PARALLAX PIXEL BACKGROUND</span>
+              </div> {% endcomment %}
+            </section>
             <div class="topnav" id="myTopnav">
             
                 <a href="{% url 'galaxy:index' %}"  class="active">Home</a>
@@ -135,7 +147,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 {% endif %}
                   
             </div>
+            {% if not request.user.is_authenticated %}
+              <div>
+                <marquee style="color:white;font-stretch:condensed;font-size:x-large; transition: 0.2s;"> Start Now - It's Free </marquee>
+              </div>
+            {% endif %}  
             <div  id="cartNav" class="cart1" style="width: 0%">
+            
               <a href="javascript:void(0)" class="closebtn" onclick="closerightNav('cartNav')" style="font-size: 40px;right: 15px;">&times;</a>
               <div class="pagetitle" style="padding-top:20px;padding-left:20px;text-align: left;">
                     <div>Cart</div>
@@ -200,14 +218,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
               <div class="title" style="font-size:large;padding-top:20px;padding-left:20px;text-align: left;" >
                     <div style="display: flex; align-items: center;"><span style="margin-right: 5px;">Sub Total : $</span><div id="subtotal">{{total|floatformat:2}}</div></div>
                     <div style="display: flex; align-items: center;">Promo Code : <input class="input-wrapper" name="promo-code" id="promo-code" type="text" style="width:80px;height:1.5px; margin-left: 5px;"><button style="height:26px" class = "add-promo promoBtn">Apply</button><button style="height:26px" class = "remove-promo promoBtn" onclick="removePromo()">Remove</button><span id="promo-error" style="color: red; padding-left: 5px; font-size: small;"></span><span id="promo-success" style="color: green; padding-left: 5px; font-size: large;"></span></div>
-                    <div style="display: flex; align-items: center;"><span style="margin-right: 5px;">Grand Total : $</span><div id="grandtotal">{{total|floatformat:2}}</div></div>
-                    <div style="align-content: center;font-size:large;padding-right: 10%"> <input id="checkout" onclick="location.href='{% url 'galaxy:payment' %}'" type="submit" value="Continue to checkout" class="btn" style="width:90%;" ></div>
+                    <div style="display: flex; align-items: center; margin-bottom: 15px;"><span style="margin-right: 5px;">Grand Total : $</span><div id="grandtotal">{{total|floatformat:2}}</div></div>
+                    <div style="align-content: center;font-size:large;padding-right: 10%"><input id="checkout" onclick="location.href='{% url 'galaxy:payment' %}'" type="submit" value="Continue to checkout" class="btn" style="width:90%;" ></div>
                 </div>
             </div>
             
               
             
-            
+           
             
             {% block body %}
             
@@ -215,9 +233,24 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             
             {% block additional %}
             {% endblock additional %}
+
+          
+
           {% include "galaxy/password.html" %}
           {% include 'galaxy/profile.html' %}
-          
+           <!--Start of Tawk.to Script-->
+            <script type="text/javascript">
+              var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+              (function(){
+              var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+              s1.async=true;
+              s1.src='https://embed.tawk.to/652d77566fcfe87d54ba5381/1hcspkb6o';
+              s1.charset='UTF-8';
+              s1.setAttribute('crossorigin','*');
+              s0.parentNode.insertBefore(s1,s0);
+              })();
+            </script>
+            <!--End of Tawk.to Script-->
           <Script> 
             function displaycartcontent()
             {
@@ -302,9 +335,58 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             }
             }
           </script>
+           {% comment %} ---------------------------------------page title------------------------------------------------------------ {% endcomment %}
           <script>
-            var prevScrollpos = window.pageYOffset;
+                      
+            // When the user scrolls down 50px from the top of the document, resize the header's font size
             window.onscroll = function() {
+              topnavdisappear();
+              scrollFunction();
+              
+            };
+            function scrollFunction() {
+              if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+                document.getElementById("header").style.fontSize = "15px";
+                document.getElementById("title").style.fontSize = "20px";
+                document.getElementById("header").style.width = "30%";
+                document.getElementById("header").style.color = "green";
+                document.getElementById("title").style.color = "blue";
+                document.getElementById("header").style.right = "0.8%";
+                document.getElementById("header").style.padding = "10px";
+                document.getElementById("header").style.cursor = "pointer";
+                var Div1top = document.getElementById('Div1').getBoundingClientRect().top;
+                var Div2top = document.getElementById('Div2').getBoundingClientRect().top;
+                var Div3top = document.getElementById('Div3').getBoundingClientRect().top;
+                var Div4top = document.getElementById('Div4').getBoundingClientRect().top;
+                if (document.getElementById('Div5'))  {
+                  var Div5top = document.getElementById('Div5').getBoundingClientRect().top;
+                }
+                var mypos = window.pageXOffset;
+                if (Div1top < mypos) {document.getElementById('titleDiv1').style.display = "block"; } else {document.getElementById('titleDiv1').style.display = "none";};
+                if (Div2top < mypos) {document.getElementById('titleDiv2').style.display = "block"; } else {document.getElementById('titleDiv2').style.display = "none";};
+                if (Div3top < mypos) {document.getElementById('titleDiv3').style.display = "block"; } else {document.getElementById('titleDiv3').style.display = "none";};
+                if (Div4top < mypos) {document.getElementById('titleDiv4').style.display = "block"; } else {document.getElementById('titleDiv4').style.display = "none";};
+                if (Div5top)  {
+                  if (Div5top < mypos) {document.getElementById('titleDiv5').style.display = "block"; } else {document.getElementById('titleDiv5').style.display = "none";};
+                }   
+              } else {
+                document.getElementById("header").style.fontSize = "25px";
+                document.getElementById("header").style.width = "50%";
+                document.getElementById("header").style.color = "blue";
+                document.getElementById("header").style.right = "25%";
+                document.getElementById('titleDiv1').style.display = "none";
+                document.getElementById('titleDiv2').style.display = "none";
+                document.getElementById('titleDiv3').style.display = "none";
+                document.getElementById('titleDiv4').style.display = "none";
+                document.getElementById('titleDiv5').style.display = "none";
+            
+                
+                
+              }
+            }
+            {% comment %} ---------------------------------------------------topnave onscroll function------------------------------------------------------- {% endcomment %}
+            var prevScrollpos = window.pageYOffset;
+            function topnavdisappear() {
             var currentScrollPos = window.pageYOffset;
               if (prevScrollpos > currentScrollPos) {
                 document.getElementById("myTopnav").style.top = "0";
@@ -313,6 +395,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
               }
               prevScrollpos = currentScrollPos;
             }
+          </script>
+          <script>
+                function gotodiv(e) {
+                    var element = document.getElementById(e);
+                    element.scrollIntoView ({behavior: "smooth"});
+              }
           </script>
           
           <script>
@@ -484,7 +572,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                       const totalPriceElement = document.getElementById('subtotal');
                       const grandTotalElement = document.getElementById('grandtotal');
             
-                      totalPriceElement.textContent = data.subTotal.toFixed(2);;
+                      totalPriceElement.textContent = data.subTotal.toFixed(2);
                       grandTotalElement.textContent = data.grandTotal.toFixed(2);
 
                       const cartInfoElement = document.getElementById('cartinfo');
@@ -553,7 +641,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     removePromoButton.style.display = 'block';
                     document.getElementById('promo-success').textContent = '✔'
                     document.getElementById('promo-error').textContent = ''
-                    
+                    alertify.set('notifier', 'position', 'top-center');
+                    alertify.success("promocode applied");
                   } else if (data.error) {
                     const errorEl = document.getElementById('promo-error')
                     
@@ -621,8 +710,29 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
               {% endif %}
             {% endfor %}
           </script>
+          <script>
+            $(document).ready(function() {
+              var inCartElement = document.getElementById('in-cart');
+              var checkoutElement = document.getElementById('checkout');
+            
+              // Function to update the visibility of the checkout input
+              function updateCheckoutVisibility() {
+                if (inCartElement.textContent !== '0') {
+                  checkoutElement.style.display = 'block';
+                } else {
+                  checkoutElement.style.display = 'none';
+                }
+              }
+            
+              // Initial update on page load
+              updateCheckoutVisibility();
+            
+              // Event listener for changes to the in-cart element
+              inCartElement.addEventListener('DOMSubtreeModified', updateCheckoutVisibility);
+            });
+          </script>
+         
           
-
           
           
           

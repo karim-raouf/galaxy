@@ -1,6 +1,7 @@
 {% extends 'galaxy/base.html' %}
     {% load static %}
     {% block header %}
+    <title>User Management</title>
     <link type="text/css" rel="stylesheet" href="{% static 'css/products_managment.css' %}"/>
     <script src="{% static 'js/products_managment.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -25,12 +26,16 @@
 
 {% block body %}
 
-<div style="text-align: center;  vertical-align: middle;" class="orgrow">
-      <div >
-          <strong><span class="pagetitle" ><Strong>User Management</strong></span></strong>
-
-      </div>
-    </div>
+<div style="padding:25px">
+  <div id ="header">
+      <p id="title" style="text-align: center;"> User Management </P>
+      <p id="titleDiv1" onclick="gotodiv('Div1')" style="display:none;text-align: left;cursor:pointer;">•  Basic Info </P>
+      <p id="titleDiv2" onclick="gotodiv('Div2')" style="display:none;text-align: left;cursor:pointer;">•  Rules </P>
+      <p id="titleDiv3" onclick="gotodiv('Div3')" style="display:none;text-align: left;cursor:pointer;">•  Modules Access </P>
+      <p id="titleDiv4" onclick="gotodiv('Div4')" style="display:none;text-align: left;cursor:pointer;">•  Access Times </P>
+      <p id="titleDiv5" onclick="gotodiv('Div5')" style="display:none;text-align: left;cursor:pointer;">•  Restrict IP </P>
+  </div>
+</div>
     <p></p>
     <strong><span class="title" style="color:green;cursor:pointer" onclick="openleftNav('userNav')">&#9776; <Strong>Select User</strong></span></strong>
     <p></p>
@@ -89,7 +94,7 @@
 
   <div id="userdeleteconfirm" class="deletemodal">
     <span onclick="document.getElementById('userdeleteconfirm').style.display='none';document.getElementById('deleteconfirmation').style.display='none'" class="deletemodel_close" title="Close Modal">x</span>
-    <form class="deletemodal-content" action="/action_page.php">
+    <form class="deletemodal-content">
       <div class="container"  style="padding: 5px;text-align: center;">
         <h1 style="color: black;">User Data Delete Confirmation</h1>
         <p style="color: black;">Are you sure you want to delete User Data?</p>
@@ -100,7 +105,7 @@
         <div class="clearfix">
           <button id="remove-button" type="button" onclick="document.getElementById('userdeleteconfirm').style.display='none';document.getElementById('deleteconfirmation').style.display='none'" class="modeldelete_cancelbtn">Cancel</button>
           
-          <button id="user-delete-btn" name="user-delete-btn" type="button" onclick="document.getElementById('deleteconfirmation').style.display='block'" class="modeldelete_deletebtn">Delete</button>
+          <button id="user-delete-btn" name="user-delete-btn" type="button" onclick="document.getElementById('deleteconfirmation').style.display='block';document.getElementById('user-delete-btn').style.display='none'" class="modeldelete_deletebtn">Delete</button>
           
           <div id="deleteconfirmation" style="display:none">
               <h4 style="color: black;">a confirmation code has been sent to your email</h4>
@@ -135,7 +140,7 @@
                 {% if form.is_active.errors %}
                   <ul class="errorlist" style="color: red">
                     {% for error in form.is_active.errors %}
-                      <li>{{ error }}</li>
+                      <span style="color: red; padding-left: 60px;">• {{ error }}</span>
                     {% endfor %}
                   </ul>
                 {% endif %}
@@ -150,7 +155,7 @@
                 {% if form.user_Type.errors %}
                   <ul class="errorlist" style="color: red">
                     {% for error in form.user_Type.errors %}
-                      <li>{{ error }}</li>
+                      <span style="color: red; padding-left: 60px;">• {{ error }}</span>
                     {% endfor %}
                   </ul>
                 {% endif %}
@@ -169,7 +174,7 @@
                 {% if form.username.errors %}
                   <ul class="errorlist" style="color: red">
                     {% for error in form.username.errors %}
-                      <li>{{ error }}</li>
+                      <span style="color: red; padding-left: 60px;">• {{ error }}</span>
                     {% endfor %}
                   </ul>
                 {% endif %}
@@ -184,7 +189,7 @@
                 {% if form.first_name.errors %}
                   <ul class="errorlist" style="color: red">
                     {% for error in form.first_name.errors %}
-                      <li>{{ error }}</li>
+                      <span style="color: red; padding-left: 60px;">• {{ error }}</span><li>{{ error }}</li>
                     {% endfor %}
                   </ul>
                 {% endif %}
@@ -199,7 +204,7 @@
                   {% if form.last_name.errors %}
                   <ul class="errorlist" style="color: red">
                     {% for error in form.last_name.errors %}
-                      <li>{{ error }}</li>
+                      <span style="color: red; padding-left: 60px;">• {{ error }}</span>
                     {% endfor %}
                   </ul>
                 {% endif %}
@@ -214,7 +219,7 @@
                 {% if form.email.errors %}
                   <ul class="errorlist" style="color: red">
                     {% for error in form.email.errors %}
-                      <li>{{ error }}</li>
+                      <span style="color: red; padding-left: 60px;">• {{ error }}</span>
                     {% endfor %}
                   </ul>
                 {% endif %}
@@ -232,7 +237,7 @@
                 {% if form.Language.errors %}
                   <ul class="errorlist" style="color: red">
                     {% for error in form.Language.errors %}
-                      <li>{{ error }}</li>
+                      <span style="color: red; padding-left: 60px;">• {{ error }}</span>
                     {% endfor %}
                   </ul>
                 {% endif %}
@@ -247,7 +252,7 @@
                 {% if form.Gender.errors %}
                   <ul class="errorlist" style="color: red">
                     {% for error in form.Gender.errors %}
-                      <li>{{ error }}</li>
+                      <span style="color: red; padding-left: 60px;">• {{ error }}</span>
                     {% endfor %}
                   </ul>
                 {% endif %}
@@ -262,7 +267,7 @@
                 {% if form.Birth_Date.errors %}
                   <ul class="errorlist" style="color: red">
                     {% for error in form.Birth_Date.errors %}
-                      <li>{{ error }}</li>
+                      <span style="color: red; padding-left: 60px;">• {{ error }}</span>
                     {% endfor %}
                   </ul>
                 {% endif %}
@@ -277,7 +282,7 @@
                 {% if form.Telephone.errors %}
                   <ul class="errorlist" style="color: red">
                     {% for error in form.Telephone.errors %}
-                      <li>{{ error }}</li>
+                      <span style="color: red; padding-left: 60px;">• {{ error }}</span>
                     {% endfor %}
                   </ul>
                 {% endif %}
@@ -298,7 +303,7 @@
               {% if form.password.errors %}
                 <ul class="errorlist" style="color: red">
                   {% for error in form.password.errors %}
-                    <li>{{ error }}</li>
+                  <span style="color: red; padding-left: 60px;">• {{ error }}</span>
                   {% endfor %}
                 </ul>
               {% endif %}
@@ -356,7 +361,7 @@
     
 
       
-      <a id="Div4" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('modulesaccess') ,arrowdirection(id)"> Modules Access </a>
+      <a id="Div3" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('modulesaccess') ,arrowdirection(id)"> Modules Access </a>
       <div id="modulesaccess" class="smallcontainer">
             <div class="orgrow">
               <div class="col-10">
@@ -392,7 +397,7 @@
       </div>
       <p></p>
       
-      <a id="Div5" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('security') ,arrowdirection(id)"> Access Time </a>
+      <a id="Div4" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('security') ,arrowdirection(id)"> Access Time </a>
       <div id="security" class="smallcontainer">
           <div class="orgrow">
               <div class="col-25">
@@ -424,7 +429,7 @@
           </div>
       </div>
       <p></p>
-      <a id="Div6" class="fa fa-arrow-circle-down"  style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('restrictip') ,arrowdirection(id)"> Restrict IP </a>
+      <a id="Div5" class="fa fa-arrow-circle-down"  style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('restrictip') ,arrowdirection(id)"> Restrict IP </a>
 
       <div id="restrictip" class="smallcontainer">
             
@@ -1020,6 +1025,7 @@ window.onclick = function(event) {
     // Show the delEl element by modifying its style
     delEl.style.display = 'block';
     delEl2.style.display = 'block';
+    document.getElementById('user-delete-btn').style.display='none'
   }
 
   // Attach an event listener to the remove button
@@ -1276,6 +1282,4 @@ document.getElementById('remove-restrict-btn').addEventListener('click', functio
 });
 </script>
 
-
- 
 {% endblock additional %}
