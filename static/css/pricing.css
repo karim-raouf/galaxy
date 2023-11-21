@@ -116,7 +116,7 @@ background-color: #04AA6D;
 color: #fff;
 border: none;
 height: 35px;
-width: 200px;
+width: 100%;
 padding: 10px;
 border-radius: 10px;
 line-height: 0px;
@@ -124,6 +124,7 @@ overflow: hidden;
 cursor:pointer}
 .cart-button:focus{
 outline: none !important}
+
 .cart-button .fa-shopping-cart{
 position: absolute;
 z-index: 2;
@@ -131,6 +132,7 @@ top: 50%;
 left: -20%;
 font-size: 1.8em;
 transform: translate(-50%, -50%)}
+
 .cart-button .fa-square{
 position: absolute;
 z-index: 1;
@@ -143,14 +145,19 @@ position: absolute;
 left: 50%;top: 50%;
 color: #fff;
 transform: translate(-50%, -50%)}
+
 .cart-button span.added{
 opacity: 0}
+
 .cart-button.clicked .fa-shopping-cart{
 animation: cart 2s ease-in forwards}
+
 .cart-button.clicked .fa-square{
 animation: box 2s ease-in forwards}
+
 .cart-button.clicked span.add-to-cart{
 animation: addcart 2s ease-in forwards}
+
 .cart-button.clicked span.added{
 animation: added 2s ease-in forwards}
 @keyframes cart{0%{left: -10%}40%, 60%{left: 50%}100%{left: 110%}}
@@ -196,6 +203,6 @@ height: 15px;
 width: 15px;
 }
 .cart-button{
-  width: 100px;
+  width: 100%;
 }
 }

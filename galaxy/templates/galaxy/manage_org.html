@@ -20,40 +20,56 @@
       button:hover {
         opacity:1;
       }
+      .sticky {
+        font-size: 25px; 
+        font-weight: bold;
+        position: fixed;
+        top: 51px;
+        padding: 10px;
+        width: 100%;
+        text-align:center;
+        background-color : lightgray;
+        color: black;
+        transition: all 0.8s;
+        z-index:3 ;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      }
     </style> 
     {% endblock header %}
     
 
     {% block body %}
-    <div style="padding:25px">
-      <div id ="header">
-          <p id="title" style="text-align: center;"> Organization Management </P>
-          <p id="titleDiv1" onclick="gotodiv('Div1')" style="display:none;text-align: left;cursor:pointer;">•  Name & Address </P>
-          <p id="titleDiv2" onclick="gotodiv('Div2')" style="display:none;text-align: left;cursor:pointer;">•   Uploads </P>
-          <p id="titleDiv3" onclick="gotodiv('Div3')" style="display:none;text-align: left;cursor:pointer;">•   Options </P>
-          <p id="titleDiv4" onclick="gotodiv('Div4')" style="display:none;text-align: left;cursor:pointer;">•   Links </P>
+    <div id ="header" class="sticky">
+      <div class="orgrow">
+        <strong><span class="title" style="float:left;color:green;cursor:pointer" onclick="openleftNav('orgNav')">&#9776; <Strong>Select Organization</strong></span></strong>
+        </div>
+        <div class="orgrow">
+        <div class="col-30"><a id="title" name="Orgname" style=" color:darkgreen;font-size: large;font-weight: bold;text-align: left ">{% if org.OrganizationName %}│{{org.OrganizationName|capfirst}}│{% endif %}{% if org and not org.OrganizationName %}New organization {% endif %}{% if not org %}{% endif %}</a></div>
+        </div>
+        <div class="orgrow">
+        <div class="col-15"><a id="titleDiv1" onclick="gotodiv('Div1')" style="color:darkgreen;display:none;text-align: center;cursor:pointer;">•  Name & Address </a></div>
+        <div class="col-15"><a id="titleDiv2" onclick="gotodiv('Div2')" style="color:darkgreen;display:none;text-align: center;cursor:pointer;">•  Uploads </a></div>
+        <div class="col-15"><a id="titleDiv3" onclick="gotodiv('Div3')" style="color:darkgreen;display:none;text-align: center;cursor:pointer;">•  Options </a></div>
+        <div class="col-15"><a id="titleDiv4" onclick="gotodiv('Div4')" style="color:darkgreen;display:none;text-align: center;cursor:pointer;">•  Links </a></div>
+        
       </div>
+      
     </div>
-    <p></p>
-    <strong><span class="title" style="color:green;cursor:pointer" onclick="openleftNav('orgNav')">&#9776; <Strong>Select Organization</strong></span></strong>
-    <p></p>
       
 <div  id="orgNav" class="overlay">
   <a href="javascript:void(0)" class="closebtn" onclick="closeleftNav('orgNav')">&times;</a>
 
   <div class="overlay-content">
     {% for organisation in organisations %} 
-      <a href="{% url 'galaxy:manage_org' %}?id={{organisation.id}}"> {% if organisation.OrganizationName %}{{organisation.OrganizationName}}{% else %}Undefined Org{% endif %}</a>
+      <a href="{% url 'manage_org' %}?id={{organisation.id}}"> {% if organisation.OrganizationName %}{{organisation.OrganizationName}}{% else %}Undefined Org{% endif %}</a>
     {% endfor %} 
-    <a href="{% url 'galaxy:pricing' %}" style="font-size:xx-large;color:blue;" class="fa fa-cart-plus" ></a> 
+    <a href="{% url 'pricing' %}" style="font-size:xx-large;color:blue;" class="fa fa-cart-plus" ></a> 
   </div>
 </div>
 
-<div id="orgSubscription" class="container">
-  
-  <div class="row" style="text-align: left;font-size:medium;font-weight:bold;">
-    <a id="Orgname" name="Orgname" style="font-size: large;font-weight: bold; color: blue;">{% if org.OrganizationName %}│{{org.OrganizationName|capfirst}}│{% endif %}{% if org and not org.OrganizationName %}Undefined organization {% endif %}{% if not org %}Choose Organization{% endif %}</a>
-  </div>
+<div id="orgSubscription" class="container" style="padding-top:100px;position:relative; z-index: 2;">
+
+
   <div id="manage" class="orgrow" style="text-align: center;font-size:medium;font-weight:bold;">
                 <div class="col-25" style="border-bottom: solid;border-color: blue">
                   <label for="Status">Subscription Status</label>
@@ -92,15 +108,16 @@
                       </form>
                     </div>
                 </div> {% endcomment %}
-                <div class="col-45" >
-                  {% if org %}<button id="orginfo" style="width: 60%; float: right;" class="fa fa-arrow-circle-o-down btn" onclick="info()"> Organization Info</button> {% endif %}
+
+
+                <div id="manage1" class="orgrow" style="text-align: center;font-size:medium;font-weight:bold;">
+                  <div class="col-45" style="text-align: center;">
+                    {% if org %}<button id="orginfo" style="width: 50%; float: right;" class="fa fa-arrow-circle-o-down btn" onclick="info()"> Organization Info</button> {% endif %}
                 </div>
                 <div class="col-45" style="text-align: center;">
-      
-                  {% if org.OrganizationEmail %}<button type="button" style="width: 60%; float: right;" onclick="document.getElementById('orgdeleteconfirm').style.display='block'" class="fa fa-remove btn"> Delete Organization</button>{% endif %}
-                
+                   {% if org.OrganizationEmail %}<button type="button" style="width: 50%; float: right;" onclick="document.getElementById('orgdeleteconfirm').style.display='block'" class="fa fa-remove btn"> Delete Organization</button>{% endif %}
                 </div>
-
+              </div>
                 
                 
   </div> 
@@ -116,9 +133,11 @@
         <Label style="color: black;"> Organization data will be permanently erased and you will not be able to access it again</label>
         <br>
         <div class="clearfix">
-          <button id="remove-button" type="button" onclick="document.getElementById('orgdeleteconfirm').style.display='none';document.getElementById('deleteconfirmation').style.display='none'" class="modeldelete_cancelbtn">Cancel</button>
+          <button id="org-delete-btn" name="org-delete-btn" type="button" onclick="document.getElementById('deleteconfirmation').style.display='block';document.getElementById('org-delete-btn').style.display='none'" class="modeldelete_deletebtn" style="margin : 0 auto">Delete</button>
+          <br>
+          <button id="remove-button" type="button" onclick="document.getElementById('orgdeleteconfirm').style.display='none';document.getElementById('deleteconfirmation').style.display='none';document.getElementById('org-delete-btn').style.display='block'" class="modeldelete_cancelbtn">Cancel</button>
           
-          <button id="org-delete-btn" name="org-delete-btn" type="button" onclick="document.getElementById('deleteconfirmation').style.display='block';document.getElementById('org-delete-btn').style.display='none'" class="modeldelete_deletebtn">Delete</button>
+          
           
           <div id="deleteconfirmation" style="display:none">
               <h4 style="color: black;">a confirmation code has been sent to your email</h4>
@@ -138,6 +157,16 @@
       </div>
     </form>
   </div>
+
+  <div id="salestax" class="salestax">
+    <span onclick="document.getElementById('salestax').style.display='none';" class="salestax_close" title="Close salestax">x</span>
+    <form class="salestax-content">
+      <div class="container"  style="padding: 5px;text-align: center;">
+        
+      </div>
+    </form>
+  </div>
+
   <form method = 'POST' action="" id="org-form" enctype="multipart/form-data">
     {% csrf_token %}
       
@@ -145,34 +174,34 @@
       <a id="Div1" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('Adress') ,arrowdirection(id)"> Name & Address </a>
       <div id="Adress" class="smallcontainer">
         <div class="orgrow">
-          <div class="col-15">
-            <label for="orgname" >Organization Name :</label>
-          </div>
-          <div class="col-35">
+          <div class="col-25">
+            <label for="orgname" ><span style="color:red;font-size:medium">*</span> Organization Name :</label>
+          </div> 
+          <div class="col-75">
             {{form.OrganizationName}}
           </div>
         </div>
         <div class="orgrow">
-          <div class="col-15">
+          <div class="col-25">
             <label for="Address">Address :</label>
           </div>
-          <div class="col-65">
+          <div class="col-75">
             {{form.Address}}
           </div>
         </div>
         <div class="orgrow">
-          <div class="col-15">
+          <div class="col-25">
             <label for="country">Country :</label>
           </div>
-          <div class="col-35">
+          <div class="col-75">
             {{form.Country}}
           </div>
         </div>
         <div class="orgrow">
-          <div class="col-15">
-            <label for="OrgEmail">Organization E-mail :</label>
+          <div class="col-25">
+            <label for="OrgEmail"><span style="color:red;font-size:medium">*</span> Organization E-mail :</label>
           </div>
-          <div class="col-35">
+          <div class="col-75">
             {{form.OrganizationEmail}}
           </div>
         </div>
@@ -238,25 +267,29 @@
       <div id="options" class="smallcontainer">
       <div class="row">
         <div class="col-35">
-          <label for="Currency">Currency :</label>
+          <label for="Currency"><span style="color:red;font-size:medium">*</span> Currency :</label>
         </div>
-        <div class="col-10">
+        <div class="col-25">
           {{form.Currency}}
         </div>
       </div>
-      <div class="row">
+      <div class="orgrow">
         <div class="col-35">
-          <label for="tax">Tax :</label>
+          <label for="tax"><span style="color:red;font-size:medium">*</span> Tax :</label>
         </div>
-        <div class="col-10">
+        <div class="col-25">
           {{form.Tax}}
         </div>
+        <div class="col-35">
+          <button style="margin-right: 10px;" onclick="document.getElementById('salestax').style.display='block';" class="btn1" type="button">New</button><button onclick="" class="btn1" type="button">Edit</button>
+        </div>
+
       </div>
       <div class="row">
         <div class="col-35">
-          <label for="costcaculate">Calculate item cost as :</label>
+          <label for="costcaculate"><span style="color:red;font-size:medium">*</span> Calculate item cost as :</label>
         </div>
-        <div class="col-15">
+        <div class="col-25">
           {{form.Cost_Method}}
         </div>
       </div>
@@ -329,6 +362,9 @@
         <button class="btn" style="float: right" id="cancel-btn" type="button" onclick="location.reload()">Cancel</button>
      
         <button class="btn" style="float: right; margin-right: 10px;" name="save-btn" type="submit" value="Save">save</button>
+      </div>
+      <div class="orgrow"
+        <a style="color:red;"> * is required filed </a>
       </div>
     </div> 
   </form>
@@ -412,23 +448,7 @@
       }
     });
 </script>
-<script>
-  window.addEventListener("resize", resizeCurtainMenu);
-  function resizeCurtainMenu() {
-  var w = window.innerWidth;
-  if (document.getElementById("orgNav").style.width != "0%")
-    {if( w >= 1025 )
-      {document.getElementById("orgNav").style.width = "30%";}
-      else 
-      {
-          if(w > 800 && w < 1025)
-            {document.getElementById("orgNav").style.width = "40%";}
-            else
-            {document.getElementById("orgNav").style.width = "60%";}
-    }
-  }
-  }
-</script>
+
 <script>
   document. addEventListener('mouseup', function(e) {
     var container = document. getElementById('orgNav');

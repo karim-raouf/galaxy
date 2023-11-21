@@ -55,6 +55,21 @@ def index(request):
     s_a = UsersType.objects.get(UserTypeCode='1')
     s_u = UsersType.objects.get(UserTypeCode='2')
     w_u = UsersType.objects.get(UserTypeCode='3')
+    # ------------------------------------------------------------------------
+    su_basic_sub = None
+    su_user_sub = None
+    su_org_sub = None
+    su_store_sub = None
+
+    if request.user.is_authenticated:
+        if request.user.user_Type == s_u:
+            admin_user = request.user.SubscriptionID.UserID
+            su_basic_sub = Subscription.objects.filter(Bundle_T='Basic', UserID=admin_user)
+            su_user_sub = Subscription.objects.filter(ProductID__Code = 203, UserID=admin_user)
+            su_org_sub = Subscription.objects.filter(ProductID__Code = 201, UserID=admin_user)
+            su_store_sub = Subscription.objects.filter(ProductID__Code = 202, UserID=admin_user)
+        
+    # ------------------------------------------------------------------------------
     try:
         user = request.user
         current_date = datetime.now().date()
@@ -115,7 +130,7 @@ def index(request):
                 
                 print(userform.errors)
                 
-    context = {'user' : user , 'subed' : subed , 'org' : org , 'org_num' : org_num , 'cart' : cart , 'in_cart' : in_cart , 'total' : total , 'cart_basic' : cart_basic , 'userform' : userform , 's_a' : s_a , 'pass_error' : pass_error}
+    context = {'user' : user , 'subed' : subed , 'org' : org , 'org_num' : org_num , 'cart' : cart , 'in_cart' : in_cart , 'total' : total , 'cart_basic' : cart_basic , 'userform' : userform , 's_a' : s_a , 's_u' : s_u , 'w_u' : w_u , 'pass_error' : pass_error , 'su_basic_sub' : su_basic_sub , 'su_user_sub' : su_user_sub , 'su_org_sub' : su_org_sub , 'su_store_sub' : su_store_sub}
     return render(request , 'galaxy/index.html' , context)
 #update user--------------------------------------------------------------------------------------------------------------------------------------
 def update_subscription_status(user, current_date):
@@ -127,6 +142,21 @@ def about_us(request):
     s_a = UsersType.objects.get(UserTypeCode='1')
     s_u = UsersType.objects.get(UserTypeCode='2')
     w_u = UsersType.objects.get(UserTypeCode='3')
+    # --------------------------------------------------------------------
+    su_basic_sub = None
+    su_user_sub = None
+    su_org_sub = None
+    su_store_sub = None
+    
+    try:
+        admin_user = request.user.SubscriptionID.UserID
+        su_basic_sub = Subscription.objects.filter(Bundle_T='Basic', UserID=admin_user)
+        su_user_sub = Subscription.objects.filter(ProductID__Code = 203, UserID=admin_user)
+        su_org_sub = Subscription.objects.filter(ProductID__Code = 201, UserID=admin_user)
+        su_store_sub = Subscription.objects.filter(ProductID__Code = 202, UserID=admin_user)
+    except:
+        pass
+
     # for total price in cart -----------------------------------------
     total = 0
     try:
@@ -172,7 +202,7 @@ def about_us(request):
                 userform.save()
                 messages.success(request, "Profile saved successfully!")
     #-----------------------------------------------------------
-    context = {'page_name' : 'About-us' , 'subed' : subed , 'org' : org , 'in_cart' : in_cart , 'cart' : cart , 'total' : total , 'cart_basic' : cart_basic , 'userform' : userform , 's_a' : s_a , 'pass_error' : pass_error}
+    context = {'page_name' : 'About-us' , 'subed' : subed , 'org' : org , 'in_cart' : in_cart , 'cart' : cart , 'total' : total , 'cart_basic' : cart_basic , 'userform' : userform , 's_a' : s_a , 's_u' : s_u , 'w_u' : w_u , 'pass_error' : pass_error , 'su_basic_sub' : su_basic_sub , 'su_user_sub' : su_user_sub , 'su_org_sub' : su_org_sub , 'su_store_sub' : su_store_sub}
     return render(request , 'galaxy/about.html' , context)
 
 def get_user_organizations(user_id):
@@ -189,7 +219,7 @@ def choose_org(request):
         organization = Organization.objects.get(id = organization_id)
         user.OrganizationID = organization
         user.save()
-        return redirect('galaxy:index')
+        return redirect('index')
     else:
         organizations = get_user_organizations(user.id)
         
@@ -197,12 +227,26 @@ def choose_org(request):
     context = {'organizations' : organizations}
     return render(request , 'galaxy/org_choose.html' , context)
 
-
 def pricing(request):    
     switch_to_user_database('Users')
     s_a = UsersType.objects.get(UserTypeCode='1')
     s_u = UsersType.objects.get(UserTypeCode='2')
     w_u = UsersType.objects.get(UserTypeCode='3')
+    # ---------------------------------------------------------------------
+    su_basic_sub = None
+    su_user_sub = None
+    su_org_sub = None
+    su_store_sub = None
+    
+    try:
+        admin_user = request.user.SubscriptionID.UserID
+        su_basic_sub = Subscription.objects.filter(Bundle_T='Basic', UserID=admin_user)
+        su_user_sub = Subscription.objects.filter(ProductID__Code = 203, UserID=admin_user)
+        su_org_sub = Subscription.objects.filter(ProductID__Code = 201, UserID=admin_user)
+        su_store_sub = Subscription.objects.filter(ProductID__Code = 202, UserID=admin_user)
+    except:
+        pass
+    
     # for total price in cart -----------------------------------------
     total = 0
     try:
@@ -347,7 +391,13 @@ def pricing(request):
                'sub_basic' : sub_basic,
                'userform' : userform ,
                's_a' : s_a ,
+               's_u' : s_u ,
+               'w_u' : w_u ,
                'pass_error' : pass_error ,
+               'su_basic_sub' : su_basic_sub ,
+               'su_user_sub' : su_user_sub ,
+               'su_org_sub' : su_org_sub ,
+               'su_store_sub' : su_store_sub
                }
     return render(request , 'galaxy/pricing.html' , context)
 
@@ -457,11 +507,12 @@ def payment(request):
             # except:
             #     pass
             cart_items.delete()
-            return redirect('galaxy:success_m')
+            return redirect('success_m')
             
     context = {}
     return render(request , 'galaxy/payment.html' , context)
 
+@login_required
 def success(request):
     template = render_to_string('galaxy/email_message.html' ,{'name' : request.user.username})
     
@@ -476,6 +527,7 @@ def success(request):
     context = {}
     return render(request , 'galaxy/subscribe_success.html' , context)
 
+@login_required
 def update_success(request):
     template = render_to_string('galaxy/update_message.html' ,{'name' : request.user.username})
     
@@ -496,6 +548,21 @@ def contact_us(request):
     s_a = UsersType.objects.get(UserTypeCode='1')
     s_u = UsersType.objects.get(UserTypeCode='2')
     w_u = UsersType.objects.get(UserTypeCode='3')
+    # -------------------------------------------------------------------
+    su_basic_sub = None
+    su_user_sub = None
+    su_org_sub = None
+    su_store_sub = None
+
+    try:
+        admin_user = request.user.SubscriptionID.UserID
+        su_basic_sub = Subscription.objects.filter(Bundle_T='Basic', UserID=admin_user)
+        su_user_sub = Subscription.objects.filter(ProductID__Code = 203, UserID=admin_user)
+        su_org_sub = Subscription.objects.filter(ProductID__Code = 201, UserID=admin_user)
+        su_store_sub = Subscription.objects.filter(ProductID__Code = 202, UserID=admin_user)
+    except:
+        pass
+
     # for total price in cart -----------------------------------------
     total = 0
     try:
@@ -555,7 +622,7 @@ def contact_us(request):
             messages.success(request , "Email Sent!")
     #-----------------------------------------------------------
     
-    context = {'page_name' : 'Contact-us' , 'subed' : subed , 'org' : org , 'in_cart' : in_cart , 'cart' : cart , 'total' : total , 'userform' : userform , 's_a' : s_a , 'pass_error' : pass_error}
+    context = {'page_name' : 'Contact-us' , 'subed' : subed , 'org' : org , 'in_cart' : in_cart , 'cart' : cart , 'total' : total , 'userform' : userform , 's_a' : s_a , 's_u' : s_u , 'w_u' : w_u , 'pass_error' : pass_error,  'su_basic_sub' : su_basic_sub , 'su_user_sub' : su_user_sub , 'su_org_sub' : su_org_sub , 'su_store_sub' : su_store_sub}
     return render(request , 'galaxy/contact.html' , context)
 
 #--------------------------------------------------------------------------------
@@ -593,46 +660,80 @@ def check_time_restrictions(user):
         return False
 
 def login_page(request):
+    s_a = UsersType.objects.get(UserTypeCode='1')
+    s_u = UsersType.objects.get(UserTypeCode='2')
+    w_u = UsersType.objects.get(UserTypeCode='3')
     errors = []
     user_ip = get_client_ip(request)
+    session_model = Session.objects.filter(expire_date__gte=timezone.now())
+    users_logged = 1
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('psw')
         try:
             user = User.objects.get(email=email)
             allowed_ips = AllowedIp.objects.filter(UserId = user)
-            if user.check_password(password):
-                if user.ip_restricted: 
-                    if not allowed_ips:
-                        errors.append("• Your ip address is not allowed to login to this user , please contact your admin!")
-                        errors.append(f"• Your ip address ({user_ip})")
-                    for ip in allowed_ips:
-                        if ip.ip_address == user_ip:
-                            if check_time_restrictions(user):
+            try:    
+                users_purchased = Subscription.objects.filter(UserID=user.SubscriptionID.UserID , ProductID__Code=203 , Status=True)
+            except:
+                pass
+            if user.user_Type == s_a:
+                if user.check_password(password):
+                    login(request, user)
+                    request.session['user_id'] = user.id
+                    return redirect('index')
+                else:
+                    errors.append("Incorrect password!")
+            else:
+                if user.check_password(password):
+                    if user.ip_restricted: 
+                        if not allowed_ips:
+                            errors.append("• Your ip address is not allowed to login to this user , please contact your admin!")
+                            errors.append(f"• Your ip address ({user_ip})")
+                        for ip in allowed_ips:
+                            if ip.ip_address == user_ip:
+                                if check_time_restrictions(user):
+                                    for session in session_model:
+                                        session_data = session.get_decoded()
+                                        if 'user_id' in session_data and session_data['user_id'] == user.id:
+                                            users_logged += 1
+                                    if users_logged > len(users_purchased):
+                                        errors.append('• Another device already logged in to this user, please contact your admin for further info!')
+                                    else:    
+                                        login(request, user)
+                                        request.session['user_id'] = user.id
+                                        if user.Psw_Flag == 1:
+                                            return redirect('index')
+                                        else:
+                                            return redirect('pass_reset') # return for password page
+                                else:
+                                    errors.append("You are not allowed to login at this time!")
+                            else:
+                                errors.append("• Your ip address is not allowed to login to this user , please contact your admin!")
+                                errors.append(f"• Your ip address ({user_ip})")
+                                
+                    else: 
+                        if check_time_restrictions(user):
+                            for session in session_model:
+                                session_data = session.get_decoded()
+                                print('loop')
+                                if 'user_id' in session_data and session_data['user_id'] == user.id:
+                                    users_logged += 1
+                                    print('inner loop')
+                            print(users_logged)
+                            if users_logged > len(users_purchased):
+                                errors.append('• Another device already logged in to this user, please contact your admin for further info!')
+                            else:    
                                 login(request, user)
                                 request.session['user_id'] = user.id
                                 if user.Psw_Flag == 1:
-                                    return redirect('galaxy:index')
+                                    return redirect('index')
                                 else:
-                                    return redirect('galaxy:pass_reset') # return for password page
-                            else:
-                                errors.append("You are not allowed to login at this time!")
+                                    return redirect('pass_reset') # return for password page
                         else:
-                            errors.append("• Your ip address is not allowed to login to this user , please contact your admin!")
-                            errors.append(f"• Your ip address ({user_ip})")
-                            
-                else: 
-                    if check_time_restrictions(user):
-                        login(request, user)
-                        request.session['user_id'] = user.id
-                        if user.Psw_Flag == 1:
-                            return redirect('galaxy:index')
-                        else:
-                            return redirect('galaxy:pass_reset') # return for password page
-                    else:
-                        errors.append("You are not allowed to login at this time!")
-            else:
-                errors.append("Incorrect password!")
+                            errors.append("You are not allowed to login at this time!")
+                else:
+                    errors.append("Incorrect password!")
         except :
             errors.append("Incorrect email address!")
     
@@ -651,10 +752,10 @@ def activate(request , uidb64 , token):
         user.save()
         
         messages.success(request , 'your email is successfully activated, now you can login.')
-        return redirect('galaxy:activate_done') 
+        return redirect('activate_done') 
     else:
         messages.error(request , 'Activation link is invalid!')
-    return redirect('galaxy:index')   
+    return redirect('index')   
     
     
     
@@ -719,7 +820,7 @@ def signup_page(request):
             # connections['default'].settings_dict['NAME'] = 'Users'
             # connections['default'].cursor()
             #switch_to_user_database('Users')
-            return redirect('galaxy:activate_msg')
+            return redirect('activate_msg')
     else:
         errors = []
 
@@ -727,12 +828,20 @@ def signup_page(request):
     return render(request, 'galaxy/register.html', context)
 
 
-
-
 def signout(request):
-    
+    # session_model = Session.objects.filter(expire_date__gte=timezone.now())
+    # sessions_with_value = []
+
+    # for session in session_model:
+    #     session_data = session.get_decoded()
+    #     if 'user_id' in session_data and session_data['user_id'] == request.user.id:
+    #         session_store = SessionStore(session_key=session.session_key)
+    #         sessions_with_value.append(session_store)
+    #         print(sessions_with_value)
+    # for session_store in sessions_with_value:
+    #     session_store.delete()
     logout(request)
-    return redirect('galaxy:index')
+    return redirect('index')
 
 def activation_msg(request):
     context = {}
@@ -740,17 +849,32 @@ def activation_msg(request):
 
 def activation_done(request):
     if request.method == 'POST':
-        return redirect('galaxy:login')
+        return redirect('login')
     context = {}
     return render(request , 'galaxy/activation_done.html' , context)
 
-
+@login_required
 def my_products(request):
     if not get_referer(request):
         raise Http404
     s_a = UsersType.objects.get(UserTypeCode='1')
     s_u = UsersType.objects.get(UserTypeCode='2')
     w_u = UsersType.objects.get(UserTypeCode='3')
+    # ------------------------------------------------------------------
+    su_basic_sub = None
+    su_user_sub = None
+    su_org_sub = None
+    su_store_sub = None
+
+    try:
+        admin_user = request.user.SubscriptionID.UserID
+        su_basic_sub = Subscription.objects.filter(Bundle_T='Basic', UserID=admin_user)
+        su_user_sub = Subscription.objects.filter(ProductID__Code = 203, UserID=admin_user)
+        su_org_sub = Subscription.objects.filter(ProductID__Code = 201, UserID=admin_user)
+        su_store_sub = Subscription.objects.filter(ProductID__Code = 202, UserID=admin_user)
+    except:
+        pass
+
     # for total price in cart -----------------------------------------
     total = 0
     try:
@@ -790,10 +914,10 @@ def my_products(request):
     userform = ProfileForm(instance=request.user)
     
     
-    context = {'sub_basic' : sub_basic,'sub_add' : sub_add ,'in_cart' : in_cart , 'cart' : cart , 'total' : total , 'userform' : userform , 's_a' : s_a , 'pass_error' : pass_error }
+    context = {'sub_basic' : sub_basic,'sub_add' : sub_add ,'in_cart' : in_cart , 'cart' : cart , 'total' : total , 'userform' : userform , 's_a' : s_a , 's_u' : s_u , 'w_u' : w_u , 'pass_error' : pass_error,  'su_basic_sub' : su_basic_sub , 'su_user_sub' : su_user_sub , 'su_org_sub' : su_org_sub , 'su_store_sub' : su_store_sub}
     return render(request , 'galaxy/my_products.html' , context)
 
-        
+@login_required      
 def manage_org(request):
     if not get_referer(request):
         raise Http404
@@ -801,6 +925,21 @@ def manage_org(request):
     s_a = UsersType.objects.get(UserTypeCode='1')
     s_u = UsersType.objects.get(UserTypeCode='2')
     w_u = UsersType.objects.get(UserTypeCode='3')
+    # ------------------------------------------------------------------
+    su_basic_sub = None
+    su_user_sub = None
+    su_org_sub = None
+    su_store_sub = None
+
+    try:
+        admin_user = request.user.SubscriptionID.UserID
+        su_basic_sub = Subscription.objects.filter(Bundle_T='Basic', UserID=admin_user)
+        su_user_sub = Subscription.objects.filter(ProductID__Code = 203, UserID=admin_user)
+        su_org_sub = Subscription.objects.filter(ProductID__Code = 201, UserID=admin_user)
+        su_store_sub = Subscription.objects.filter(ProductID__Code = 202, UserID=admin_user)
+    except:
+        pass
+    
     # for total price in cart -----------------------------------------
     total = 0
     try:
@@ -856,7 +995,17 @@ def manage_org(request):
         sub_id = org.SubscriptionID.id
     except:
         sub_id = None
-    form = OrgForm(instance=org)
+    # know the names of orgs of an user---------------------------------------
+    # org_names = []
+    orgs = Organization.objects.filter(UserID=request.user).exclude(id=choosed_org)
+
+    # for org in orgs:
+    #     if org.OrganizationName:
+    #         org_names.append(org.OrganizationName)
+
+        
+    #------------------------------------------------------------------------------------
+    form = OrgForm(instance=org, initial={'Currency': 1})
     
     try:
         form2 = AutoRenew(instance=org.SubscriptionID)
@@ -887,18 +1036,30 @@ def manage_org(request):
                 org_username = request.POST.get('OrganizationName')
                 org_tax = request.POST.get('Tax')
                 org_cost_method = request.POST.get('Cost_Method')
+                
                 if form.is_valid():
                     if not org_email:
                         messages.error(request,'• Organization Email Required')
                     if not org_username:
                         messages.error(request,'• Organization Username Required')
+                    if any(org_username.lower() == name.OrganizationName.lower() for name in orgs):
+                        messages.error(request,'• already using this organization name!')
+                        url = f'/my_products/organizations?id={choosed_org}'
+                        return redirect(url)
                     if not org_cost_method:
                         messages.error(request,'• Organization Cost Method Required')  
                     if not org_tax:
                         messages.error(request,'• Organization Tax Required')
-                    if org_email and org_username and org_tax and org_cost_method:
+                    if org_email and org_username and org_tax and org_cost_method and any(org_username.lower() != name.OrganizationName.lower() for name in orgs):
                         messages.success(request,'Organization Saved Successfully!')
                         org=form.save()
+
+                else:
+                    # Form is not valid, handle errors
+                    for field, errors in form.errors.items():
+                        for error in errors:
+                            if error == "Organization with this OrganizationEmail already exists.":
+                                messages.error(request, '• Organization email already exists!')
                     
                     url = f'/my_products/organizations?id={choosed_org}'
                     return redirect(url)
@@ -941,17 +1102,22 @@ def manage_org(request):
                'userform' : userform ,
                'cart' : cart , 
                's_a' : s_a ,
+               's_u' : s_u ,
+               'w_u' : w_u ,
                'pass_error' : pass_error ,
+               'su_basic_sub' : su_basic_sub ,
+               'su_user_sub' : su_user_sub ,
+               'su_org_sub' : su_org_sub ,
+               'su_store_sub' : su_store_sub
                }
     
     
     return render(request , 'galaxy/manage_org.html' , context)
 
-
 def delete_org(request , id):
         if not get_referer(request):
             raise Http404
-        user = requst.user
+        user = request.user
         # Get the code entered by the user
         user_code = request.GET.get('code')
 
@@ -1006,7 +1172,7 @@ def delete_org(request , id):
         
         return JsonResponse(response_data)
 
-
+@login_required
 def manage_user(request):
     if not get_referer(request):
         raise Http404
@@ -1014,6 +1180,21 @@ def manage_user(request):
     s_a = UsersType.objects.get(UserTypeCode='1')
     s_u = UsersType.objects.get(UserTypeCode='2')
     w_u = UsersType.objects.get(UserTypeCode='3')
+    # ------------------------------------------------------------------
+    su_basic_sub = None
+    su_user_sub = None
+    su_org_sub = None
+    su_store_sub = None
+    
+    try:
+        admin_user = request.user.SubscriptionID.UserID
+        su_basic_sub = Subscription.objects.filter(Bundle_T='Basic', UserID=admin_user)
+        su_user_sub = Subscription.objects.filter(ProductID__Code = 203, UserID=admin_user)
+        su_org_sub = Subscription.objects.filter(ProductID__Code = 201, UserID=admin_user)
+        su_store_sub = Subscription.objects.filter(ProductID__Code = 202, UserID=admin_user)
+    except:
+        pass
+
     # for total price in cart -----------------------------------------
     total = 0
     try:
@@ -1039,8 +1220,14 @@ def manage_user(request):
             p_ids.append(item.ProductID.id)
     
     user = request.user
-    user_subs_basic = Subscription.objects.filter(UserID = user , Bundle_T = 'Basic')
-    users = User.objects.filter(SubscriptionID__UserID = user)
+    try:
+        user_subs_basic = Subscription.objects.filter(UserID = user , Bundle_T = 'Basic')
+    except:
+        user_subs_basic = None
+    try:
+        users = User.objects.filter(SubscriptionID__UserID = user)
+    except:
+        users = None
     current_date = datetime.now().date()
     the_user = None
     try:
@@ -1131,7 +1318,10 @@ def manage_user(request):
             
             if form.is_valid():
                 if password:
-                    if password == password2 and len(password) > 8 and re.search(r'\d', password) and re.search(r'[!@#$%^&*(),.?":{}|<>]', password) and re.search(r'[a-z]', password) and re.search(r'[A-Z]', password):
+                    if check_password(password, the_user.password):
+                        messages.error(request, '• Can\'t use the same old password!')
+                        pass_error_user.append('• Can\'t use the same old password!') 
+                    elif password == password2 and len(password) > 8 and re.search(r'\d', password) and re.search(r'[!@#$%^&*(),.?":{}|<>]', password) and re.search(r'[a-z]', password) and re.search(r'[A-Z]', password):
                         the_user = form.save(commit = False)
                         the_user.Psw_Flag = 0
                         the_user.save()
@@ -1141,7 +1331,7 @@ def manage_user(request):
 
                         for session in session_model:
                             session_data = session.get_decoded()
-                            if 'user_id' in session_data and session_data['user_id'] == user.id:
+                            if 'user_id' in session_data and session_data['user_id'] == the_user.id:
                                 session_store = SessionStore(session_key=session.session_key)
                                 sessions_with_value.append(session_store)
                                 print(sessions_with_value)
@@ -1235,11 +1425,17 @@ def manage_user(request):
                'userform' : userform ,
                'cart' : cart ,
                's_a' : s_a ,
+               's_u' : s_u ,
+               'w_u' : w_u ,
                'pass_error' : pass_error ,
                'pass_error_user' : pass_error_user ,
                'user_module' : user_module ,
                'ip_addresses' : ip_addresses , 
                'time_restrictions': time_restrictions_dict ,
+               'su_basic_sub' : su_basic_sub ,
+               'su_user_sub' : su_user_sub ,
+               'su_org_sub' : su_org_sub ,
+               'su_store_sub' : su_store_sub
                }
     return render(request , 'galaxy/manage_user.html' , context)
 
@@ -1303,7 +1499,7 @@ def pass_reset(request):
                         request.user.save()
                         update_session_auth_hash(request, request.user)
                         messages.success(request, 'Password Updated Successfully!')
-                        return redirect('galaxy:index')
+                        return redirect('index')
                         
                     elif password == current_password:
                         messages.error(request, '• Can\'t Use The Same Old Password!')

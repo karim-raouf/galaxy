@@ -10,12 +10,12 @@
     
    
         <div class="orgrow" style="text-align: center;  vertical-align: middle;">
-          <label  class="pagetitle" >Pricing Tables</label><br>
-          <label class="title">Pay only for what you need</label>
+          <label  class="pagetitle" style="color:lightgreen">Pricing Tables</label><br>
+          <label class="title" style="color:lightgreen">Pay only for what you need</label>
         </div>
         <div style="text-align: center; color: black;">
                   <div style="text-align:center">
-                      <label>Monthly
+                      <label style="color:lightgreen">Monthly
                           <label class="switch">
                               <input id="myCheckbox" type="checkbox">
                               <span class="slider round"></span>
@@ -37,73 +37,73 @@
   
                       <div class="smallcontainer" style="display:block;">
                           <div class="orgrow" style="height:50px">
-                               <a style="color:green;"><b>Select Main Product</b> </a>
+                               <a style="font-size:large;color:green;"><b>Select Main Product</b> </a>
                           </div>
                           {% comment %} ----Monthly bundles---- {% endcomment %}
                           <div class="orgrow posM" style="height:50px">
-                              <div class="col-74" >
-                                  <a style="padding-top:10px">Point of Sales</a>
+                            <div style="float: left; width: 65%; margin-top: 6px;" >
+                                  <a style="color:black;font-weight:bold;padding-top:10px">Point of Sales</a>
                               </div>
-                              <div class="col-24">
-                                  <button id="posMonth-btn" style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if POS_M.id in p_ids or POS_A.id in p_ids %} disabled {% endif %}{% if m_pos or a_pos %}disabled{% endif %} data-product-id="6" data-sub-type="Monthly" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="posMonth" class="add-to-cart">{% if POS_M.id in p_ids or POS_A.id in p_ids %}Item added {% elif m_pos or a_pos %}Subscribed{% else %}$ {{POS_M.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                              <div style="float: left; width: 35%; margin-top: 6px; color: black;">
+                                  <button id="posMonth-btn" style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if POS_M.id in p_ids or POS_A.id in p_ids %} disabled {% endif %}{% if m_pos or a_pos %}disabled{% endif %} data-product-id="6" data-sub-type="Monthly" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="posMonth" class="add-to-cart">{% if POS_M.id in p_ids or POS_A.id in p_ids %}Added {% elif m_pos or a_pos %}Subscribed{% else %}$ {{POS_M.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
                               </div>
                           </div>
   
                           <div class="orgrow imM" style="height:50px">
-                              <div class="col-74" >
-                                  <a style="padding-top:10px">Inventory Management</a>
+                              <div style="float: left; width: 65%; margin-top: 6px;" >
+                                  <a style="color:black;font-weight:bold;padding-top:10px">Inventory Management</a>
                               </div>
-                              <div class="col-24">
-                                  <button id="imMonth-btn" style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if IM_M.id in p_ids or IM_A.id in p_ids %} disabled {% endif %}{% if m_im or a_im %}disabled{% endif %} data-product-id="7" data-sub-type="Monthly" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="imMonth" class="add-to-cart">{% if IM_M.id in p_ids or IM_A.id in p_ids %}Item added {% elif m_im or a_im %}Subscribed{% else %}$ {{IM_M.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                              <div style="float: left; width: 35%; margin-top: 6px; color: black;">
+                                  <button id="imMonth-btn" style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if IM_M.id in p_ids or IM_A.id in p_ids %} disabled {% endif %}{% if m_im or a_im %}disabled{% endif %} data-product-id="7" data-sub-type="Monthly" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="imMonth" class="add-to-cart">{% if IM_M.id in p_ids or IM_A.id in p_ids %}Added {% elif m_im or a_im %}Subscribed{% else %}$ {{IM_M.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
                               </div>
                           </div>
                           <div class="orgrow crmM" style="height:50px">
-                              <div class="col-74" >
-                                  <a style="padding-top:10px">CRM</a>
+                              <div style="float: left; width: 65%; margin-top: 6px;" >
+                                  <a style="color:black;font-weight:bold;padding-top:10px">CRM</a>
                               </div>
-                              <div class="col-24">
-                                  <button id="crmMonth-btn" style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if CRM_M.id in p_ids or CRM_A.id in p_ids %} disabled {% endif %}{% if m_crm or a_crm %}disabled{% endif %} data-product-id="8" data-sub-type="Monthly" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="crmMonth" class="add-to-cart">{% if CRM_M.id in p_ids or CRM_A.id in p_ids %}Item added {% elif m_crm or a_crm %}Subscribed{% else %}$ {{CRM_M.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                              <div style="float: left; width: 35%; margin-top: 6px; color: black;">
+                                  <button id="crmMonth-btn" style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if CRM_M.id in p_ids or CRM_A.id in p_ids %} disabled {% endif %}{% if m_crm or a_crm %}disabled{% endif %} data-product-id="8" data-sub-type="Monthly" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="crmMonth" class="add-to-cart">{% if CRM_M.id in p_ids or CRM_A.id in p_ids %}Added {% elif m_crm or a_crm %}Subscribed{% else %}$ {{CRM_M.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
                               </div>
                           </div>
                           <div class="orgrow aM" style="height:50px">
-                              <div class="col-74" >
-                                  <a style="padding-top:10px">Accounting</a>
+                              <div style="float: left; width: 65%; margin-top: 6px;" >
+                                  <a style="color:black;font-weight:bold;padding-top:10px">Accounting</a>
                               </div>
-                              <div class="col-24">
-                                  <button id="aMonth-btn" style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if A_M.id in p_ids or A_A.id in p_ids %} disabled {% endif %}{% if m_a or a_a %}disabled{% endif %} data-product-id="9" data-sub-type="Monthly" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="aMonth" class="add-to-cart">{% if A_M.id in p_ids or A_A.id in p_ids %}Item added {% elif m_a or a_a %}Subscribed{% else %}$ {{A_M.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                              <div style="float: left; width: 35%; margin-top: 6px; color: black;">
+                                  <button id="aMonth-btn" style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if A_M.id in p_ids or A_A.id in p_ids %} disabled {% endif %}{% if m_a or a_a %}disabled{% endif %} data-product-id="9" data-sub-type="Monthly" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="aMonth" class="add-to-cart">{% if A_M.id in p_ids or A_A.id in p_ids %}Added {% elif m_a or a_a %}Subscribed{% else %}$ {{A_M.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
                               </div>
                           </div>
                           {% comment %} ----Anually bundles---- {% endcomment %}
                           <div class="orgrow posA" style="height:50px">
-                              <div class="col-74" >
-                                  <a style="padding-top:10px"> Point of Sales</a>
+                              <div style="float: left; width: 65%; margin-top: 6px;" >
+                                  <a style="color:black;font-weight:bold;padding-top:10px"> Point of Sales</a>
                               </div>
-                              <div class="col-24">
-                                  <button id="posAnnual-btn" style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if POS_A.id in p_ids or POS_M.id in p_ids %} disabled {% endif %}{% if m_pos or a_pos %}disabled{% endif %} data-product-id="2" data-sub-type="Annually" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="posAnnual" class="add-to-cart">{% if POS_A.id in p_ids or POS_M.id in p_ids %}Item added {% elif m_pos or a_pos %}Subscribed{% else %}$ {{POS_A.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                              <div style="float: left; width: 35%; margin-top: 6px; color: black;">
+                                  <button id="posAnnual-btn" style="float:right;" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if POS_A.id in p_ids or POS_M.id in p_ids %} disabled {% endif %}{% if m_pos or a_pos %}disabled{% endif %} data-product-id="2" data-sub-type="Annually" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="posAnnual" class="add-to-cart">{% if POS_A.id in p_ids or POS_M.id in p_ids %}Added {% elif m_pos or a_pos %}Subscribed{% else %}$ {{POS_A.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
                               </div>
                           </div>
                           <div class="orgrow imA" style="height:50px">
-                              <div class="col-74" >
-                                  <a style="padding-top:10px">Inventory Management</a>
+                              <div style="float: left; width: 65%; margin-top: 6px;" >
+                                  <a style="color:black;font-weight:bold;padding-top:10px">Inventory Management</a>
                               </div>
-                              <div class="col-24">
-                                  <button id="imAnnual-btn" style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if IM_A.id in p_ids or IM_M.id in p_ids %} disabled {% endif %}{% if m_im or a_im %}disabled{% endif %} data-product-id="3" data-sub-type="Annually" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="imAnnual" class="add-to-cart">{% if IM_A.id in p_ids or IM_M.id in p_ids %}Item added {% elif m_im or a_im %}Subscribed{% else %}$ {{IM_A.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                              <div style="float: left; width: 35%; margin-top: 6px; color: black;">
+                                  <button id="imAnnual-btn" style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if IM_A.id in p_ids or IM_M.id in p_ids %} disabled {% endif %}{% if m_im or a_im %}disabled{% endif %} data-product-id="3" data-sub-type="Annually" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="imAnnual" class="add-to-cart">{% if IM_A.id in p_ids or IM_M.id in p_ids %}Added {% elif m_im or a_im %}Subscribed{% else %}$ {{IM_A.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
                               </div>
                           </div>
                           <div class="orgrow crmA" style="height:50px">
-                              <div class="col-74" >
-                                  <a style="padding-top:10px">CRM</a>
+                              <div style="float: left; width: 65%; margin-top: 6px;" >
+                                  <a style="color:black;font-weight:bold;padding-top:10px">CRM</a>
                               </div>
-                              <div class="col-24">
-                                  <button id="crmAnnual-btn" style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if CRM_A.id in p_ids or CRM_M.id in p_ids %} disabled {% endif %}{% if m_crm or a_crm %}disabled{% endif %} data-product-id="4" data-sub-type="Annually" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="crmAnnual" class="add-to-cart">{% if CRM_A.id in p_ids or CRM_M.id in p_ids %}Item added {% elif m_crm or a_crm %}Subscribed{% else %}$ {{CRM_A.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                              <div style="float: left; width: 35%; margin-top: 6px; color: black;">
+                                  <button id="crmAnnual-btn" style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if CRM_A.id in p_ids or CRM_M.id in p_ids %} disabled {% endif %}{% if m_crm or a_crm %}disabled{% endif %} data-product-id="4" data-sub-type="Annually" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="crmAnnual" class="add-to-cart">{% if CRM_A.id in p_ids or CRM_M.id in p_ids %}Added {% elif m_crm or a_crm %}Subscribed{% else %}$ {{CRM_A.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
                               </div>
                           </div>
                           <div class="orgrow aA" style="height:50px">
-                              <div class="col-74" >
-                                  <a  style="padding-top:10px">Accounting</a>
+                              <div style="float: left; width: 65%; margin-top: 6px;" >
+                                  <a  style="color:black;font-weight:bold;padding-top:10px">Accounting</a>
                               </div>
-                              <div class="col-24">
-                                  <button id="aAnnual-btn" style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if A_A.id in p_ids or A_M.id in p_ids %} disabled {% endif %}{% if m_a or a_a %}disabled{% endif %} data-product-id="5" data-sub-type="Annually" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="aAnnual" class="add-to-cart">{% if A_A.id in p_ids or A_M.id in p_ids  %}Item added {% elif m_a or a_a %}Subscribed{% else %}$ {{A_A.Price}}{% endif %}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                              <div style="float: left; width: 35%; margin-top: 6px; color: black;">
+                                  <button id="aAnnual-btn" style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if A_A.id in p_ids or A_M.id in p_ids %} disabled {% endif %}{% if m_a or a_a %}disabled{% endif %} data-product-id="5" data-sub-type="Annually" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="aAnnual" class="add-to-cart">{% if A_A.id in p_ids or A_M.id in p_ids  %}Added {% elif m_a or a_a %}Subscribed{% else %}$ {{A_A.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
                               </div>
                           </div>
                       </div>
@@ -129,20 +129,20 @@
                       <p></p>
                       <div class="smallcontainer" style="display:block;">
                             <div class="orgrow" style="height:50px">
-                                <a style="color:green;"><b>Add extra products to your Modules </b></a>
+                                <a style="font-size:large;color:green;"><b>Add extra products to your Modules </b></a>
                             </div>
                           {% comment %} ----Monthly Bundles---- {% endcomment %}
                             <div class="orgrow oM" style="height:50px">
-                                <div class="col-74" >
-                                    <a style="padding-top:10px"> 1 Organization </a>
+                                <div style="float: left; width: 65%; margin-top: 6px;" >
+                                    <a style="color:black;font-weight:bold;padding-top:10px"> 1 Organization </a>
                                 </div>
-                                <div class="col-24">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="17" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{O_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                <div style="float: left; width: 35%; margin-top: 6px; color: black;">
+                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="17" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{O_M.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             <div class="orgrow storeM" style="height:50px">
-                                <div class="col-74" >
-                                    <a style="padding-top:10px"> 1 Store </a>
+                                <div style="float: left; width: 65%; margin-top: 6px;" >
+                                    <a style="color:black;font-weight:bold;padding-top:10px"> 1 Store </a>
                                     <span class="tooltip">
                                         <span style="font-size:large;" class="fa fa-info-circle"></span>
                                         <span style="text-align:left" class="tooltiptext">
@@ -152,109 +152,109 @@
                                         </span>
                                     </span>
                                 </div>
-                                <div class="col-24">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="18" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORE_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                <div style="float: left; width: 35%; margin-top: 6px; color: black;">
+                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="18" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORE_M.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             <div class="orgrow uM" style="height:50px">
-                                <div class="col-74" >
-                                    <a style="padding-top:10px"> 1 User </a>
+                                <div style="float: left; width: 65%; margin-top: 6px;" >
+                                    <a style="color:black;font-weight:bold;padding-top:10px"> 1 User </a>
                                 </div>
-                                <div class="col-24">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="19" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{U_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                <div style="float: left; width: 35%; margin-top: 6px; color: black;">
+                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="19" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{U_M.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             <div class="orgrow rM" style="height:50px">
-                                <div class="col-74" >
-                                    <a style="padding-top:10px"> 5 Reports </a>
+                                <div style="float: left; width: 65%; margin-top: 6px;" >
+                                    <a style="color:black;font-weight:bold;padding-top:10px"> 5 Reports </a>
                                 </div>
-                                <div class="col-24">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="20" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{R_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                <div style="float: left; width: 35%; margin-top: 6px; color: black;">
+                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="20" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{R_M.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
-                            <div class="orgrow tM" style="height:50px">
-                                <div class="col-74" >
-                                    <a style="padding-top:10px"> 10,000 Transactions / Month </a>
+                            <div class="orgrow tM " style="height:50px">
+                                <div style="float: left; width: 65%; margin-top: 6px;" >
+                                    <a style="color:black;font-weight:bold;padding-top:10px"> 10,000 Transactions / Month </a>
                                 </div>
-                                <div class="col-24">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="21" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{T_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                <div style="float: left; width: 35%; margin-top: 6px; color: black;">
+                                    <button style="width:100%;float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="21" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{T_M.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             <div class="orgrow slaM" style="height:50px">
-                                <div class="col-74" >
-                                    <a style="padding-top:10px"> SLA </a>
+                                <div style="float: left; width: 65%; margin-top: 6px;" >
+                                    <a style="color:black;font-weight:bold;padding-top:10px"> SLA </a>
                                 </div>
-                                <div class="col-24">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="22" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{SLA_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                <div style="float: left; width: 35%; margin-top: 6px; color: black;">
+                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="22" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{SLA_M.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             <div class="orgrow storageM" style="height:50px">
-                                <div class="col-74" >
-                                    <a style="padding-top:10px"> 10GB Storage </a>
+                                <div style="float: left; width: 65%; margin-top: 6px;" >
+                                    <a style="color:black;font-weight:bold;padding-top:10px"> 10GB Storage </a>
                                 </div>
-                                <div class="col-24">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="23" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORAGE_M.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                <div style="float: left; width: 35%; margin-top: 6px; color: black;">
+                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="23" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORAGE_M.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             {% comment %} Annually bundles {% endcomment %}
                             <div class="orgrow oA" style="height:50px">
-                                <div class="col-74" >
-                                    <a style="padding-top:10px"> 1 Organization </a>
+                                <div style="float: left; width: 65%; margin-top: 6px;" >
+                                    <a style="color:black;font-weight:bold;padding-top:10px"> 1 Organization </a>
                                 </div>
-                                <div class="col-24">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="10" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{O_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                <div style="float: left; width: 35%; margin-top: 6px; color: black;">
+                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="10" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{O_A.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             <div class="orgrow storeA" style="height:50px">
-                                <div class="col-74" >
-                                    <a style="padding-top:10px"> 1 Store </a>
+                                <div style="float: left; width: 65%; margin-top: 6px;" >
+                                    <a style="color:black;font-weight:bold;padding-top:10px"> 1 Store </a>
                                     <span class="tooltip">
                                         <span style="font-size:large;" class="fa fa-info-circle"></span>
                                         <span style="text-align:left" class="tooltiptext">Each Store Includes:<br>- 10,000 Transactions / Month<br>- 10GB Storage</span>
                                     </span>
                                 </div>
-                                <div class="col-24">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="11" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORE_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                <div style="float: left; width: 35%; margin-top: 6px; color: black;">
+                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="11" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORE_A.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             <div class="orgrow uA" style="height:50px">
-                                <div class="col-74" >
-                                    <a style="padding-top:10px"> 1 User </a>
+                                <div style="float: left; width: 65%; margin-top: 6px;" >
+                                    <a style="color:black;font-weight:bold;padding-top:10px"> 1 User </a>
                                 </div>
-                                <div class="col-24">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="12" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{U_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                <div style="float: left; width: 35%; margin-top: 6px; color: black;">
+                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="12" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{U_A.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             <div class="orgrow rA" style="height:50px">
-                                <div class="col-74" >
-                                    <a style="padding-top:10px"> 5 Reports </a>
+                                <div style="float: left; width: 65%; margin-top: 6px;" >
+                                    <a style="color:black;font-weight:bold;padding-top:10px"> 5 Reports </a>
                                 </div>
-                                <div class="col-24">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="13" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{R_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                <div style="float: left; width: 35%; margin-top: 6px; color: black;">
+                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="13" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{R_A.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             <div class="orgrow tA" style="height:50px">
-                                <div class="col-74" >
-                                    <a style="padding-top:10px"> 10,000 Transactions / Month </a>
+                                <div style="float: left; width: 65%; margin-top: 6px;" >
+                                    <a style="color:black;font-weight:bold;padding-top:10px"> 10,000 Transactions / Month </a>
                                 </div>
-                                <div class="col-24">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="14" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{T_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                <div style="float: left; width: 35%; margin-top: 6px; color: black;">
+                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="14" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{T_A.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             <div class="orgrow slaA" style="height:50px">
-                                <div class="col-74" >
-                                    <a style="padding-top:10px"> SLA </a>
+                                <div style="float: left; width: 65%; margin-top: 6px;" >
+                                    <a style="color:black;font-weight:bold;padding-top:10px"> SLA </a>
                                 </div>
-                                <div class="col-24">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="15" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{SLA_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                <div style="float: left; width: 35%; margin-top: 6px; color: black;">
+                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="15" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{SLA_A.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             <div class="orgrow storageA" style="height:50px">
-                                <div class="col-74" >
-                                    <a style="padding-top:10px"> 10GB Storage </a>
+                                <div style="float: left; width: 65%; margin-top: 6px;" >
+                                    <a style="color:black;font-weight:bold;padding-top:10px"> 10GB Storage </a>
                                 </div>
-                                <div class="col-24">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="16" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORAGE_A.Price}}</span><span class="added">Item added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                <div style="float: left; width: 35%; margin-top: 6px; color: black;">
+                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="16" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORAGE_A.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
 
@@ -443,19 +443,19 @@
                     
                     // Product added to the cart successfully
                             
-                    const cartItems = cartInfoElement.getElementsByClassName('items');
-                    if (cartItems.length === 0) {
-                        cartInfoElement.innerHTML = '<div id="empty-el" class="orgrow"><center><h1>Empty</h1></center></div>';
-                      }
+                    //const cartItems = cartInfoElement.getElementsByClassName('items');
+                    //if (cartItems.length === 0) {
+                     //   cartInfoElement.innerHTML = '<div id="empty-el" class="orgrow"><center><h1>Empty</h1></center></div>';
+                     // }
                     const existingProductRow = document.querySelector(`.id${data.productId}`);
                     //console.log(existingProductRow)
                     if (existingProductRow) {
                         console.log(existingProductRow)
                         
-                        const cartItems = cartInfoElement.getElementsByClassName('items');
-                        if (cartItems.length === 0) {
-                            cartInfoElement.innerHTML = '<div id="empty-el" class="orgrow"><center><h1>Empty</h1></center></div>';
-                      }
+                       // const cartItems = cartInfoElement.getElementsByClassName('items');
+                       // if (cartItems.length === 0) {
+                      //      cartInfoElement.innerHTML = '<div id="empty-el" class="orgrow"><center><h1>Empty</h1></center></div>';
+                       //   }
 
 
                        
@@ -464,9 +464,10 @@
                         const quantityElement = existingProductRow.querySelector('.qty');
                         const inCart =  document.getElementById('in-cart')
                         const inCartQty = parseInt(inCart.textContent);
-                        const newInCart = inCartQty + 1
+                        const newInCart = inCartQty + 1;
                         inCart.textContent = newInCart ;
                         //const nameElement = 
+                        console.log(quantityElement)
                         const currentQuantity = parseInt(quantityElement.textContent);
                         const newQuantity = currentQuantity + 1;
                         quantityElement.textContent = newQuantity ;
@@ -481,17 +482,17 @@
           
                     // Add the necessary HTML content to the new product row
                     newProductRow.innerHTML = `
-                      <div class="col-24">
+                      <div class="col-24"  style="width: 45%;">
                         <a style="alignment: left; font-size: small;color: black;" href="url">${data.productName}</a>
                       </div>
-                      <div class="col-24 a">
-                        <a class="qty" style="font-size: small;color: black;padding-left: 15px;"><center>${data.quantity}</center></a>
+                      <div class="col-24 a" style=" width: 10%;">
+                        <a class="qty" style="font-size: small;color: black;"><center>${data.quantity}</center></a>
                       </div>
-                      <div class="col-24" style="font-size: small ;">
-                        <a style="font-size: small ;padding-left: 55px;color: black;"><center>$${data.productPrice}/${data.productType}</center></a>
+                      <div class="col-24" style=" width: 35%;">
+                        <a style="font-size: small ;color: black;"><center>$${data.productPrice}/${data.productType}</center></a>
                       </div>
-                      <div class="col-24" style="font-size: small ;">
-                        <center><a id="del${productId}" class="fa fa-remove delete-btn" style="font-size: large; padding-top: 10px; padding-left: 60px;color: black;" data-product-id="${data.productId}"></a></center>
+                      <div class="col-24" style=" width: 5%;">
+                        <center><a id="del${productId}" class="fa fa-remove delete-btn" style="font-size: large; padding-top: 10px; color: red;" data-product-id="${data.productId}"></a></center>
                       </div>
                     `;
           
@@ -506,8 +507,8 @@
                         crmMonthlyBtn.disabled = true
                         crmAnuallyBtn.disabled = true
                         setTimeout(function() {
-                            crmMonthly.textContent = 'Item added'
-                            crmAnually.textContent = 'Item added'
+                            crmMonthly.textContent = 'Added'
+                            crmAnually.textContent = 'Added'
                           }, 2000);
 
                          
@@ -519,8 +520,8 @@
                           crmAnuallyBtn.disabled = true
                           crmMonthlyBtn.disabled = true
                           setTimeout(function() {
-                            crmAnually.textContent = 'Item added'
-                            crmMonthly.textContent = 'Item added'
+                            crmAnually.textContent = 'Added'
+                            crmMonthly.textContent = 'Added'
                           }, 2000);
                           
                           
@@ -530,8 +531,8 @@
                           posAnuallyBtn.disabled = true
                           posMonthlyBtn.disabled = true
                           setTimeout(function() {
-                            posAnually.textContent = 'Item added'
-                            posMonthly.textContent = 'Item added'
+                            posAnually.textContent = 'Added'
+                            posMonthly.textContent = 'Added'
                           }, 2000);
                         
                         }
@@ -541,8 +542,8 @@
                           posAnuallyBtn.disabled = true
                           posMonthlyBtn.disabled = true
                           setTimeout(function() {
-                            posAnually.textContent = 'Item added'
-                            posMonthly.textContent = 'Item added'
+                            posAnually.textContent = 'Added'
+                            posMonthly.textContent = 'Added'
                           }, 2000);
                         
                         }
@@ -553,8 +554,8 @@
                           imAnuallyBtn.disabled = true
                           imMonthlyBtn.disabled = true
                           setTimeout(function() {
-                            imAnually.textContent = 'Item added'
-                            imMonthly.textContent = 'Item added'
+                            imAnually.textContent = 'Added'
+                            imMonthly.textContent = 'Added'
                           }, 2000);
                        
                         }
@@ -565,8 +566,8 @@
                           imAnuallyBtn.disabled = true
                           imMonthlyBtn.disabled = true
                           setTimeout(function() {
-                            imAnually.textContent = 'Item added'
-                            imMonthly.textContent = 'Item added'
+                            imAnually.textContent = 'Added'
+                            imMonthly.textContent = 'Added'
                           }, 2000);
                         
                         }
@@ -577,8 +578,8 @@
                           aAnuallyBtn.disabled = true
                           aMonthlyBtn.disabled = true
                           setTimeout(function() {
-                            aAnually.textContent = 'Item added'
-                            aMonthly.textContent = 'Item added'
+                            aAnually.textContent = 'Added'
+                            aMonthly.textContent = 'Added'
                           }, 2000);
                         
                         }
@@ -589,8 +590,8 @@
                           aAnuallyBtn.disabled = true
                           aMonthlyBtn.disabled = true
                           setTimeout(function() {
-                            aAnually.textContent = 'Item added'
-                            aMonthly.textContent = 'Item added'
+                            aAnually.textContent = 'Added'
+                            aMonthly.textContent = 'Added'
                           }, 2000);
                         
                         }
@@ -631,18 +632,17 @@
                             const inCart =  document.getElementById('in-cart')
                             const productIdNum = parseInt(productId)
                             const productElement = document.querySelector(`.id${productIdNum}`);
-                            const quantityElement = productElement.querySelector('.a');
-                            const currentQuantity = parseInt(quantityElement.textContent);
+                            const quantityElement = productElement.querySelector('.qty');
+                            const currentQuantity = quantityElement.textContent;
       
                             if (currentQuantity > 1) {
                               // Decrease the quantity by one
-                              quantityElement.textContent = currentQuantity - 1;
+                              quantityElement.textContent -= 1;
                               inCart.textContent -= 1
                               quantityElement.style.fontSize = 'small';
                               quantityElement.style.textAlign = 'center';
-                              quantityElement.style.marginTop = '15px';
-                              quantityElement.style.marginLeft = '3.5px';
-                              quantityElement.style.marginRight = '-3.59px';
+                              quantityElement.style.marginLeft = '0.1px';
+                              quantityElement.style.marginRight = '-0.2px';
                             } else {
                               // Remove the product element from the cart UI
                               
@@ -672,79 +672,79 @@
       
                                 if (productId === '8') {
                                   productElement.remove();
-                                  crmMonthly.textContent = '$ 50'
-                                  crmAnually.textContent = '$ 150'
-                                  crmMonthlyBtn.disabled = false
-                                  crmAnuallyBtn.disabled = false
-                                  inCart.textContent -= 1
+                                  crmMonthly.textContent = '$ 50';
+                                  crmAnually.textContent = '$ 150';
+                                  crmMonthlyBtn.disabled = false;
+                                  crmAnuallyBtn.disabled = false;
+                                  inCart.textContent -= 1;
                                   quantityElement.textContent = currentQuantity - 1; 
                                 }
                                   
                                   else if(productId === '4') {
                                     productElement.remove();
-                                    crmAnually.textContent = '$ 150'
-                                    crmMonthly.textContent = '$ 50'
-                                    crmAnuallyBtn.disabled = false
-                                    crmMonthlyBtn.disabled = false
-                                    inCart.textContent -= 1 
+                                    crmAnually.textContent = '$ 150';
+                                    crmMonthly.textContent = '$ 50';
+                                    crmAnuallyBtn.disabled = false;
+                                    crmMonthlyBtn.disabled = false;
+                                    inCart.textContent -= 1 ;
                                     quantityElement.textContent = currentQuantity - 1;
                                   }
                                   else if(productId === '2') {
                                     productElement.remove();
-                                    posAnually.textContent = '$ 150'
-                                    posMonthly.textContent = '$ 50'
-                                    posAnuallyBtn.disabled = false
-                                    posMonthlyBtn.disabled = false
-                                    inCart.textContent -= 1 
+                                    posAnually.textContent = '$ 150';
+                                    posMonthly.textContent = '$ 50';
+                                    posAnuallyBtn.disabled = false;
+                                    posMonthlyBtn.disabled = false;
+                                    inCart.textContent -= 1 ;
                                     quantityElement.textContent = currentQuantity - 1;
                                   }
                                   else if(productId === '6') {
                                     productElement.remove();
-                                    posAnually.textContent = '$ 150'
-                                    posMonthly.textContent = '$ 50'
-                                    posAnuallyBtn.disabled = false
-                                    posMonthlyBtn.disabled = false
-                                    inCart.textContent -= 1 
+                                    posAnually.textContent = '$ 150';
+                                    posMonthly.textContent = '$ 50';
+                                    posAnuallyBtn.disabled = false;
+                                    posMonthlyBtn.disabled = false;
+                                    inCart.textContent -= 1 ;
                                     quantityElement.textContent = currentQuantity - 1;
                                   }
       
                                   else if(productId === '3') {
                                     productElement.remove();
-                                    imAnually.textContent = '$ 150'
-                                    imMonthly.textContent = '$ 50'
-                                    imAnuallyBtn.disabled = false
-                                    imMonthlyBtn.disabled = false
-                                    inCart.textContent -= 1 
+                                    imAnually.textContent = '$ 150';
+                                    imMonthly.textContent = '$ 50';
+                                    imAnuallyBtn.disabled = false;
+                                    imMonthlyBtn.disabled = false;
+                                    inCart.textContent -= 1 ;
                                     quantityElement.textContent = currentQuantity - 1;
                                   }
       
                                   else if(productId === '7') {
                                     productElement.remove();
-                                    imAnually.textContent = '$ 150'
-                                    imMonthly.textContent = '$ 50'
-                                    imAnuallyBtn.disabled = false
-                                    imMonthlyBtn.disabled = false
-                                    inCart.textContent -= 1 
+                                    imAnually.textContent = '$ 150';
+                                    imMonthly.textContent = '$ 50';
+                                    imAnuallyBtn.disabled = false;
+                                    imMonthlyBtn.disabled = false;
+                                    inCart.textContent -= 1 ;
                                     quantityElement.textContent = currentQuantity - 1;
                                   }
       
                                   else if(productId === '5') {
                                     productElement.remove();
-                                    aAnually.textContent = '$ 150'
-                                    aMonthly.textContent = '$ 50'
-                                    aAnuallyBtn.disabled = false
-                                    aMonthlyBtn.disabled = false
-                                    inCart.textContent -= 1 
+                                    aAnually.textContent = '$ 150';
+                                    aMonthly.textContent = '$ 50';
+                                    aAnuallyBtn.disabled = false;
+                                    aMonthlyBtn.disabled = false;
+                                    inCart.textContent -= 1 ;
                                     quantityElement.textContent = currentQuantity - 1;
                                   }
       
                                   else if(productId === '9') {
                                     productElement.remove();
-                                    aAnually.textContent = '$ 150'
-                                    aMonthly.textContent = '$ 50'
-                                    aAnuallyBtn.disabled = false
-                                    aMonthlyBtn.disabled = false
-                                    inCart.textContent -= 1 
+                                    aAnually.textContent = '$ 150';
+                                    aMonthly.textContent = '$ 50';
+                                    aAnuallyBtn.disabled = false;
+                                    aMonthlyBtn.disabled = false;
+                                    inCart.textContent -= 1 ;
                                     quantityElement.textContent = currentQuantity - 1;
                                   }
                                   
@@ -758,7 +758,7 @@
                                   else{
                                     console.log('no11')
                                     productElement.remove();
-                                    inCart.textContent -= 1
+                                    inCart.textContent -= 1;
                                     quantityElement.textContent = currentQuantity - 1;
                                   }
                               
@@ -776,7 +776,17 @@
                             const cartInfoElement = document.getElementById('cartinfo');
                             const cartItems = cartInfoElement.getElementsByClassName('items');
                             if (cartItems.length === 0) {
-                              cartInfoElement.innerHTML = '<div id="empty-el" class="orgrow"><center><h1>Empty</h1></center></div>';
+                              cartInfoElement.innerHTML = `<div class="orgrow" style="display:block;font-size:small; color: black;">
+                                <div class="col-24" style="width: 45%;background-color:lightgray">
+                                    <a style="alignment: left; font-size: small;color: black;">Products</a>
+                                </div>
+                                <div class="col-24" style=" width: 10%;background-color:lightgray">
+                                    <a style="font-size: small;color: black;"><center>Qty</center></a>
+                                </div>
+                                <div class="col-24" style=" width: 35%;background-color:lightgray">
+                                    <a style="font-size: small ;color: black;"> <center>Unit Price</center></a>
+                                </div>
+                              </div><div id="empty-el" class="orgrow"><center><h1>Empty</h1></center></div>`;
                             }
               //-----------------------------------------------------------------------------------------------------------------------
                             const storedPromoCode = localStorage.getItem('promoCode');

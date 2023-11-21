@@ -33,9 +33,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         {% block header %}{% endblock header %}
         <style>
             .right-align {
-                float: right;
+                {% comment %} float: right; {% endcomment %}
                 top: 0px;
-                right:  -10px;  
+                right:  -5px;  
             }
             .dropbtn {
                 display: flex;
@@ -90,6 +90,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
               border: none;
               cursor: pointer;
             }
+
             
         </style>
         
@@ -109,103 +110,97 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             </section>
             <div class="topnav" id="myTopnav">
             
-                <a href="{% url 'galaxy:index' %}"  class="active">Home</a>
+                <a href="{% url 'index' %}"  class="active">Home</a>
                 
-                <a href="{% url 'galaxy:pricing' %}" >Pricing</a>
-                <a href="{% url 'galaxy:contact_us' %}" >Contact</a>
-                <a href="{% url 'galaxy:about_us' %}" >About</a>
-                     
-                <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>
+                <a href="{% url 'pricing' %}" >Pricing</a>
+                <a href="{% url 'contact_us' %}" >Contact</a>
+                <a href="{% url 'about_us' %}" >About</a>
+                 
                 {% if request.user.is_authenticated %}
+                
+
                         <div class="cart">
                             {% if request.user.user_Type == s_a %}<button id="cart-btn" onclick="openrightNav('cartNav')" class="cartbtn dropbtn"><span class="price" style="color:black"><img src="{% static 'files_images/cart-orange.png' %}" draggable="false" width="25" height="30"></span><p id="in-cart" style="color:black;">{{in_cart}}</p>
-                              <i style="color:black" class="fa fa-caret-down"></i>
+                              {% comment %} <i style="color:black" class="fa fa-caret-down"></i> {% endcomment %}
                             </button>{% endif %} 
                               
                         </div>
-                        <div class="dropdown">
+                        <div class="dropdown" >
                             <button class="dropbtn">
-                                <span class="button-text">{{ request.user.username|capfirst }}</span>
+                                
                                 <div class="avatar avatar--medium active right-align">
                                   <img {% if request.user.avatar %}src="{{ request.user.avatar.url }}" {% else %} src="{% static 'files_images/avatar.svg' %}" {% endif %} draggable="false" />
                                 </div>
                                 <i class="fa fa-caret-down"></i>
                             </button>
-                            <div class="dropdown-content">
-                                
-                                <a style = "cursor: pointer" onclick="openprofileNav()" >Profile</a>
-                                <a id = 'pass-btn' style = "cursor: pointer" onclick="openpasswordNav()" >Password</a>
-
-                                {% if request.user.user_Type == s_a %}<a href="{% url 'galaxy:my_products' %}">My Products</a>{% endif %}
-                                
-                                <a style = "color: red;" href="{% url 'galaxy:logout' %}"><strong>Logout</strong></a>
+                            <div class="dropdown-content" style="position: fixed;z-index: 2;">
+                              <div class="pagetitle" style="padding-top:20px;padding-left:20px;text-align: left;">
+                                <div>{{ request.user.username|capfirst }}</div>
+                              </div>
+                              <div class="container" >
+                                  <div class="smallcontainer" style="display:block;">
+                                    <a style = "cursor: pointer" onclick="openprofileNav()" >Profile</a>
+                                    <a id = 'pass-btn' style = "cursor: pointer" onclick="openpasswordNav()" >Password</a>
+                                    {% if request.user.user_Type == s_a %}<a href="{% url 'my_products' %}">My Products</a>{% endif %}
+                                    {% if request.user.user_Type == s_u %}{% if su_basic_sub and su_user_sub and su_org_sub and su_store_sub %}<a style = "cursor: pointer" onclick="window.location.href='http://192.168.1.11:9000/'" >App</a>{% endif %}{% endif %}
+                                    <a style = "color: red;" href="{% url 'logout' %}"><strong>Logout</strong></a>
+                                </div>
+                              </div> 
                             </div>
                         </div>
-                        
-                {% else %}
-                    <a style="float: right" class="active" href = "{% url 'galaxy:login' %}">Login</a>
+                 {% else  %}    
+                 <a id="loginkey" style = "float : right;color: white;" href="{% url 'login' %}"><strong>Login</strong></a>
                 {% endif %}
-                  
-            </div>
-            {% if not request.user.is_authenticated %}
+                {% comment %} <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="myFunction()">&#9776;</a>                   {% endcomment %}
+                <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+                  <i class="fa fa-bars"></i>
+                </a>
+              </div>
+              
+            {% comment %} {% if not request.user.is_authenticated %}
               <div>
                 <marquee style="color:white;font-stretch:condensed;font-size:x-large; transition: 0.2s;"> Start Now - It's Free </marquee>
               </div>
-            {% endif %}  
+            {% endif %}   {% endcomment %}
+            {% block startnow %}{% endblock startnow %}
             <div  id="cartNav" class="cart1" style="width: 0%">
             
-              <a href="javascript:void(0)" class="closebtn" onclick="closerightNav('cartNav')" style="font-size: 40px;right: 15px;">&times;</a>
+              <a href="javascript:void(0)" class="closebtn" onclick="closerightNav('cartNav')" style="font-size: x-large;right: 15px;">&times;</a>
               <div class="pagetitle" style="padding-top:20px;padding-left:20px;text-align: left;">
                     <div>Cart</div>
-
-
+                          
                     <p></p>
               </div>
-                <div >
+                <div>
                     <div class="container">
+                      <div id="cartinfo" class="smallcontainer" style="display:block;">
                         <div class="orgrow" style="display:block;font-size:small; color: black;">
-                            <div class="col-24" style="padding-left:15px">
-                                <h3>Products</h3>
-                            </div>
-                            <div class="col-24">
-                                <h3><center>Qty</center></h3>
-                            </div>
-                            <div class="col-24">
-                                <h3><center>Unit Price</center></h3>
-                            </div>
-                            <div class="col-24">
-                                <h3><center>Delete</center></h3>
-                            </div>
-
+                          <div class="col-24" style="width: 45%;background-color:lightgray">
+                              <a style="alignment: left; font-size: small;color: black;">Products</a>
+                          </div>
+                          <div class="col-24" style=" width: 10%;background-color:lightgray">
+                              <a style="font-size: small;color: black;"><center>Qty</center></a>
+                          </div>
+                          <div class="col-24" style=" width: 35%;background-color:lightgray">
+                              <a style="font-size: small ;color: black;"> <center>Unit Price</center></a>
+                          </div>
                         </div>
-
-                        <div id="cartinfo" class="smallcontainer" style="display:block;">
                         <div id="cart-cont" class="orgrow">  
                           {% if cart %}
                            {% for p in cart %}
                             <div class="orgrow del items id{{p.ProductID.id}}">
-                              
-                              <div class="col-24">
-                                 
-                                    <a style="alignment: left; font-size: small;color: black;" href="url">{{p.ProductID.Name}}</a>
-                                  
+                              <div class="col-24" style="width: 45%;">
+                                    <a style="alignment: left; font-size: small;color: black;" >{{p.ProductID.Name}}</a>
                               </div>
-                              <div class="col-24 a">
-                                 
-                                    <a class="qty" style="font-size: small;color: black;padding-left: 15px;"><center>{{p.Qty}}</center></a>
-                                 
+                              <div class="col-24 a" style=" width: 10%;">
+                                    <a class="qty" style="font-size: small;color: black;"><center>{{p.Qty}}</center></a>
                               </div>
-                              <div class="col-24" style="font-size: small ;">
-                                  
-                                    <a style="font-size: small ;padding-left: 55px;color: black;"><center>${{p.ProductID.Price}}/{{p.ProductID.Type}}</center></a>
-                                  
+                              <div class="col-24" style=" width: 35%;">
+                                    <a style="font-size: small ;color: black;"><center>${{p.ProductID.Price}}/{{p.ProductID.Type}}</center></a>
                               </div>
-                              <div class="col-24" style="font-size: small ;">
-                                  
-                                    <center><a class="fa fa-remove delete-btn" style="font-size: large; padding-top: 10px; padding-left: 60px;color: black;" data-product-id="{{ p.ProductID.id }}"></a></center>
-                                  
+                              <div class="col-24" style=" width: 5%;">
+                                    <center><a class="fa fa-remove delete-btn" style="font-size: large; padding-top: 10px; color: red;" data-product-id="{{ p.ProductID.id }}"></a></center>
                               </div>
-                              
                             </div>
                            {% endfor %}
                           {% else %}
@@ -216,11 +211,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 </div>
               </div>
               <div class="title" style="font-size:large;padding-top:20px;padding-left:20px;text-align: left;" >
-                    <div style="display: flex; align-items: center;"><span style="margin-right: 5px;">Sub Total : $</span><div id="subtotal">{{total|floatformat:2}}</div></div>
-                    <div style="display: flex; align-items: center;">Promo Code : <input class="input-wrapper" name="promo-code" id="promo-code" type="text" style="width:80px;height:1.5px; margin-left: 5px;"><button style="height:26px" class = "add-promo promoBtn">Apply</button><button style="height:26px" class = "remove-promo promoBtn" onclick="removePromo()">Remove</button><span id="promo-error" style="color: red; padding-left: 5px; font-size: small;"></span><span id="promo-success" style="color: green; padding-left: 5px; font-size: large;"></span></div>
-                    <div style="display: flex; align-items: center; margin-bottom: 15px;"><span style="margin-right: 5px;">Grand Total : $</span><div id="grandtotal">{{total|floatformat:2}}</div></div>
-                    <div style="align-content: center;font-size:large;padding-right: 10%"><input id="checkout" onclick="location.href='{% url 'galaxy:payment' %}'" type="submit" value="Continue to checkout" class="btn" style="width:90%;" ></div>
-                </div>
+                <div style="display: flex; align-items: center;"><span style="margin-right: 5px;">Sub Total : $</span><div id="subtotal">{{total|floatformat:2}}</div></div>
+                <div style="display: flex; align-items: center;">Promo Code : <input class="input-wrapper" name="promo-code" id="promo-code" type="text" style="width:25%;height:1.5px; margin-left: 5px;"><button style="height:26px" class = "add-promo btn1">Apply</button><button style="height:26px" class = "remove-promo promoBtn btn1" onclick="removePromo()">Remove</button><span id="promo-error" style="color: red; padding-left: 5px; font-size: small;"></span><span id="promo-success" style="color: green; padding-left: 5px; font-size: large;"></span></div>
+                <div style="display: flex; align-items: center; margin-bottom: 15px;"><span style="margin-right: 5px;">Grand Total : $</span><div id="grandtotal">{{total|floatformat:2}}</div></div>
+                <div style="align-content: center;font-size:large;padding-right: 10%"><input id="checkout" onclick="location.href='{% url 'payment' %}'" type="submit" value="Continue to checkout" class="btn" style="width:90%;" ></div>
+              </div>
             </div>
             
               
@@ -296,7 +291,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
               var x = document.getElementById("myTopnav");
               if (x.className === "topnav") {
                 x.className += " responsive";
-              } else {
+              } 
+              else if (x.className != " responsive") {
                 x.className = "topnav";
               }
             }
@@ -307,11 +303,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             var w = window.innerWidth;
             if (document.getElementById("cartNav").style.width != "0%")
               {if( w >= 1025 )
-                {document.getElementById("cartNav").style.width = "50%";}
+                {document.getElementById("cartNav").style.width = "35%";}
                 else 
                 {
-                    if(w > 800 && w < 1025)
-                      {document.getElementById("cartNav").style.width = "70%";}
+                    if(w > 700 && w < 1025)
+                      {document.getElementById("cartNav").style.width = "60%";}
                       else
                       {document.getElementById("cartNav").style.width = "90%";}
               }
@@ -319,39 +315,64 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             }
           </script>
           <script>
+
             window.addEventListener("resize", resizeCurtainMenu);
+           
             function resizeCurtainMenu() {
+              
             var w = window.innerWidth;
-            if (document.getElementById("orgNav").style.width != "0%")
-              {if( w >= 1025 )
-                {document.getElementById("orgNav").style.width = "20%";}
+            if (document.getElementById("userNav").style.width > "0%")
+          
+              if( w >= 1025 )
+                {document.getElementById("userNav").style.width = "30%";}
                 else 
                 {
                     if(w > 800 && w < 1025)
-                      {document.getElementById("orgNav").style.width = "30%";}
+                      {document.getElementById("userNav").style.width = "40%";}
                       else
-                      {document.getElementById("orgNav").style.width = "50%";}
+                      {document.getElementById("userNav").style.width = "60%";}
+              }
+            }
+          </script>
+          <script>
+            window.addEventListener("resize", resizeCurtainMenu);
+            function resizeCurtainMenu() {
+            var w = window.innerWidth;
+            if (document.getElementById("orgNav").style.width > "0%")
+              {if( w >= 1025 )
+                {document.getElementById("orgNav").style.width = "30%";}
+                else 
+                {
+                    if(w > 800 && w < 1025)
+                      {document.getElementById("orgNav").style.width = "40%";}
+                      else
+                      {document.getElementById("orgNav").style.width = "60%";}
               }
             }
             }
           </script>
-           {% comment %} ---------------------------------------page title------------------------------------------------------------ {% endcomment %}
-          <script>
+
+         {% comment %} ---------------------------------------page title------------------------------------------------------------ {% endcomment %}
+         
+         <script>
                       
             // When the user scrolls down 50px from the top of the document, resize the header's font size
             window.onscroll = function() {
               topnavdisappear();
               scrollFunction();
-              
-            };
+              };
+             
+            
+             
+
             function scrollFunction() {
-              if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+              if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 5) {
+                
+                document.getElementById("header").style.top = "0px";
                 document.getElementById("header").style.fontSize = "15px";
                 document.getElementById("title").style.fontSize = "20px";
-                document.getElementById("header").style.width = "30%";
+                document.getElementById("header").style.width = "100%";
                 document.getElementById("header").style.color = "green";
-                document.getElementById("title").style.color = "blue";
-                document.getElementById("header").style.right = "0.8%";
                 document.getElementById("header").style.padding = "10px";
                 document.getElementById("header").style.cursor = "pointer";
                 var Div1top = document.getElementById('Div1').getBoundingClientRect().top;
@@ -361,6 +382,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 if (document.getElementById('Div5'))  {
                   var Div5top = document.getElementById('Div5').getBoundingClientRect().top;
                 }
+                if (document.getElementById('Div6'))  {
+                  var Div5top = document.getElementById('Div6').getBoundingClientRect().top;
+                }
                 var mypos = window.pageXOffset;
                 if (Div1top < mypos) {document.getElementById('titleDiv1').style.display = "block"; } else {document.getElementById('titleDiv1').style.display = "none";};
                 if (Div2top < mypos) {document.getElementById('titleDiv2').style.display = "block"; } else {document.getElementById('titleDiv2').style.display = "none";};
@@ -369,39 +393,66 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 if (Div5top)  {
                   if (Div5top < mypos) {document.getElementById('titleDiv5').style.display = "block"; } else {document.getElementById('titleDiv5').style.display = "none";};
                 }   
+                if (Div6top)  {
+                  if (Div6top < mypos) {document.getElementById('titleDiv6').style.display = "block"; } else {document.getElementById('titleDiv6').style.display = "none";};
+                }
+                
               } else {
+                document.getElementById("header").style.top = "51px";
                 document.getElementById("header").style.fontSize = "25px";
-                document.getElementById("header").style.width = "50%";
-                document.getElementById("header").style.color = "blue";
-                document.getElementById("header").style.right = "25%";
+                document.getElementById("header").style.width = "100%";
+                document.getElementById("header").style.color = "black";
+               
                 document.getElementById('titleDiv1').style.display = "none";
                 document.getElementById('titleDiv2').style.display = "none";
                 document.getElementById('titleDiv3').style.display = "none";
                 document.getElementById('titleDiv4').style.display = "none";
                 document.getElementById('titleDiv5').style.display = "none";
+                document.getElementById('titleDiv6').style.display = "none";
             
+
+                
                 
                 
               }
             }
             {% comment %} ---------------------------------------------------topnave onscroll function------------------------------------------------------- {% endcomment %}
             var prevScrollpos = window.pageYOffset;
-            function topnavdisappear() {
+             function topnavdisappear() {
             var currentScrollPos = window.pageYOffset;
               if (prevScrollpos > currentScrollPos) {
                 document.getElementById("myTopnav").style.top = "0";
               } else {
-                document.getElementById("myTopnav").style.top = "-50px";
+                document.getElementById("myTopnav").style.top = "-60px";
               }
               prevScrollpos = currentScrollPos;
-            }
+            } 
           </script>
-          <script>
+         <script>
+            function gotodiv(e) {
+              var myElement = document.getElementById(e);
+              var stiky = document.getElementById('header');
+              var stikyBottom = stiky.offsetTop + stiky.offsetHeight;
+              var TopPos = myElement.offsetTop - stikyBottom;
+              window.scrollTo(0, TopPos); 
+              
+            } 
+          </script>
+          
+          
+
+           {% comment %} <script>
                 function gotodiv(e) {
                     var element = document.getElementById(e);
                     element.scrollIntoView ({behavior: "smooth"});
               }
-          </script>
+          </script>  {% endcomment %}
+
+          {% comment %} <script>
+            function  gotodiv(e) {
+              document.getElementById(e).scrollTop += 10;
+            }
+          </script> {% endcomment %}
           
           <script>
             // Get a reference to the delete buttons
@@ -434,18 +485,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                       const inCart =  document.getElementById('in-cart')
                       const productIdNum = parseInt(productId)
                       const productElement = button.closest(`.id${productIdNum}`);
-                      const quantityElement = productElement.querySelector('.a');
-                      const currentQuantity = parseInt(quantityElement.textContent);
+                      const quantityElement = productElement.querySelector('.qty');
+                      const currentQuantity = quantityElement.textContent;
 
                       if (currentQuantity > 1) {
                         // Decrease the quantity by one
-                        quantityElement.textContent = currentQuantity - 1;
+                        quantityElement.textContent -= 1;
                         inCart.textContent -= 1
                         quantityElement.style.fontSize = 'small';
                         quantityElement.style.textAlign = 'center';
-                        quantityElement.style.marginTop = '15px';
-                        quantityElement.style.marginLeft = '3.5px';
-                        quantityElement.style.marginRight = '-3.59px';
+                        quantityElement.style.marginLeft = '0.1px';
+                        quantityElement.style.marginRight = '-0.2px';
                       } else {
                         // Remove the product element from the cart UI
                         
@@ -578,7 +628,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                       const cartInfoElement = document.getElementById('cartinfo');
                       const cartItems = cartInfoElement.getElementsByClassName('items');
                       if (cartItems.length === 0) {
-                        cartInfoElement.innerHTML = '<div id="empty-el" class="orgrow"><center><h1>Empty</h1></center></div>';
+                        cartInfoElement.innerHTML = `<div class="orgrow" style="display:block;font-size:small; color: black;">
+                          <div class="col-24" style="width: 45%;background-color:lightgray">
+                              <a style="alignment: left; font-size: small;color: black;">Products</a>
+                          </div>
+                          <div class="col-24" style=" width: 10%;background-color:lightgray">
+                              <a style="font-size: small;color: black;"><center>Qty</center></a>
+                          </div>
+                          <div class="col-24" style=" width: 35%;background-color:lightgray">
+                              <a style="font-size: small ;color: black;"> <center>Unit Price</center></a>
+                          </div>
+                        </div><div id="empty-el" class="orgrow"><center><h1>Empty</h1></center></div>`;
                       }
     //----------------------------------------------------------------------------------------------------------------------------
                       const storedPromoCode = localStorage.getItem('promoCode');
@@ -641,8 +701,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     removePromoButton.style.display = 'block';
                     document.getElementById('promo-success').textContent = '✔'
                     document.getElementById('promo-error').textContent = ''
-                    alertify.set('notifier', 'position', 'top-center');
-                    alertify.success("promocode applied");
+                    
                   } else if (data.error) {
                     const errorEl = document.getElementById('promo-error')
                     
@@ -731,8 +790,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
               inCartElement.addEventListener('DOMSubtreeModified', updateCheckoutVisibility);
             });
           </script>
-         
-          
+               
           
           
           

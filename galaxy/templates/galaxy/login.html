@@ -9,7 +9,7 @@
     <div onload="" id="id01" class="modal">
         <div class="modal-content animate-zoom" style="max-width:600px">
             <div style="text-align:center!important"><br>
-                <span onclick="location.href='{% url 'galaxy:logout' %}'" class="close" title="Close Modal">×</span>
+                <span onclick="location.href='{% url 'logout' %}'" class="close" title="Close Modal">×</span>
                 <img src="{% static 'files_images/avatar.png' %}" alt="Avatar" style="width:20%;border-radius:50%;">
             </div>
 
@@ -34,7 +34,7 @@
                     <br>
                     <input id="loginRemember" style="margin-top:16px!important" type="checkbox" checked > Remember me for next 5 days
                     <p></p>
-                    <span style="color:black;font-size:15px;float: right"> <a href="{% url 'galaxy:reset_password' %}">Forgot Password?</a></span>
+                    <span style="color:black;font-size:15px;float: right"> <a href="{% url 'password_reset' %}">Forgot Password?</a></span>
                     <p></p>
                     <p></p>
                     <button style="width: 100%" class="button loginbtn" name="login-btn">Login</button>
@@ -43,8 +43,8 @@
 
                     <br> 
                     <div class="clearfix">
-                        <button onclick="location.href='{% url 'galaxy:signup' %}'" type="button" class="button signupbtn">Sign Up</button>
-                        <button onclick="location.href='{% url 'galaxy:logout' %}'" type="button" class="button cancelbtn" name="cancel-btn">Cancel</button>
+                        <button onclick="location.href='{% url 'signup' %}'" type="button" class="button signupbtn">Sign Up</button>
+                        <button onclick="location.href='{% url 'logout' %}'" type="button" class="button cancelbtn" name="cancel-btn">Cancel</button>
                     </div>
                 </div>
             </form>

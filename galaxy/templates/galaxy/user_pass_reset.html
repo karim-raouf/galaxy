@@ -2,112 +2,126 @@
 <header>
     <link type="text/css" rel="stylesheet" href="{% static 'css/products_managment.css' %}"/>
     <script src="{% static 'js/products_managment.js' %}"></script>
-   
+    {% comment %} -----------------for stars background------------------------------------------------------ {% endcomment %}
+    <link type="text/css" rel="stylesheet" href="{% static 'css/background_stars.css' %}"/>
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
 </header>
-<body style="background-image: url('{% static 'files_images/background_image.jpg' %}');" >
-      <div class="title" style="padding-left:10px;padding-top: 10px">
-          <div class="pagetitle">Change Password</div>
-          <p></p>
-          <label>You are logged in by temporary password created by your admin, Accordingly you have to change password before you can continue.</label>
-      </div>
-      <div >
-          <div class="container">
-              <div id="passwordinfo" class="smallcontainer" style="display:block;">
-                <div>
-                    {% if messages %}
-                      <div class="messages" id="message">
-                            {% for message in messages %}
-                              <a id="fade-msg" {% if message.tags %} class="messages {{ message.tags }} alert {% if message.level_tag == 'error' %} error{% endif %}"{% endif %}>{{ message }}</a><br>
-                            {% endfor %}
-                      </div>
-                    {% endif %}
+{% comment %}style="background-image: url('{% static 'files_images/background_image.jpg' %}');" {% endcomment %}
+<body style="font-family: 'Lato': sans-serif; padding-top: 65px; background : radial-gradient(ellipse at bottom, #1b2735 0%,#090a0f 100%);" >{% comment %}   background-image: url('{% static 'files_images/background_image.jpg' %}');" {% endcomment %}
+  <section class="wrapper">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>
+    {% comment %} <div id="title">
+        <span>PURE CSS</span>
+        <br>
+        <span>PARALLAX PIXEL BACKGROUND</span>
+    </div> {% endcomment %}
+    <div class="title" style="padding-left:10px;padding-top: 10px">
+      <div class="pagetitle">Change Password</div>
+      <p></p>
+      <label>You are logged in by temporary password created by your admin, Accordingly you have to change password before you can continue.</label>
+    </div>
+  </section>
+  
+  <div >
+      <div class="container">
+          <div id="passwordinfo" class="smallcontainer" style="display:block;">
+            <div>
+                {% if messages %}
+                  <div class="messages" id="message">
+                        {% for message in messages %}
+                          <a id="fade-msg" {% if message.tags %} class="messages {{ message.tags }} alert {% if message.level_tag == 'error' %} error{% endif %}"{% endif %}>{{ message }}</a><br>
+                        {% endfor %}
                   </div>
-                <div class="orgrow">  
-                  <div class="orgrow">
-                      
-                      <form method = 'POST' id="password-form">    
-                        {% csrf_token %}
-                      <div id="password" class="subcontainer" style = "display: block" >
-                              <div class="orgrow">
-                                  <div class="col-15">
-                                      <label for="currentpsw" >Current Password :</label>
-                                  </div>
-                                  <div class="col-60">
-                                      <input type="password" placeholder="Current Password..." name="currentpsw" id="currentpsw" required>
-                                  </div>
-                              </div>
-                          <div class="orgrow">
-                                  <div class="col-15">
-                                      <label for="newpassword" >New Password :</label>
-                                  </div>
-                                  <div class="col-60">
-                                      <input type="password" placeholder="New Password..." name="psw" onfocus="showPswMsg()" onblur="hidePswMsg()" onkeyup="ChangePswMsgStatus(psw.value)" id="psw" required>
-                                          
-                                           <div id="pswMessage">
-                                               <h3 style="font-size:10px">Password must contain the following: </h3>
-                                               <p id="lab1" style="background-color:inherit">✖ capital letters,</p> 
-                                               <p id="lab2" >✖ small letters,</p> 
-                                               <p id="lab3" >✖ special character,</p>
-                                               <p id="lab4" >✖ number,</p>
-                                               <p id="lab5" >✖ not less than 8 character.</p>
-                                           </div>
-                                  </div>
-                              </div>
-                          <div class="orgrow">
-                                  <div class="col-15">
-                                      <label for="newpassword" >Repeat Password :</label>
-                                  </div>
-                                  <div class="col-60">
-                                      <input type="password" placeholder="Repeat Password..." name="psw-repeat" onfocus="showPswMatchMsg()" onblur="hidePswMatchMsg()" onkeyup="ChangePswMsgStatus(psw.value)" id="psw-repeat" required>
-                                          
-                                           <div id="pswMatchMsg">
-                                               <p id="lab6" >✖ Password Matches</p>
-                                           </div>
-                                  </div>
-                              </div>  
-                              <p></p>
-                            <div class="passerror">
-                                {% if pass_error %}
-                                  {% for error in pass_error %}
-                                    {{error}}<br>
-                                  {% endfor %}
-                                {% endif %}
-                            </div>                                         
-                       </div>
-                       <div class="orgrow">
-                            <button style="float: right" class="btn" id="cancel-btn" type="button" onclick="location.href='{% url 'galaxy:login' %}'">Cancel</button><button style="float: right;margin-right: 10px;" class="btn" name="save-profile" type="submit" value="Save">Save</button>
-                       </div> 
-                      </form>
-                  </div>
+                {% endif %}
               </div>
+            <div class="orgrow">  
+              <div class="orgrow">
+                  
+                  <form method = 'POST' id="password-form">    
+                    {% csrf_token %}
+                  <div id="password" class="subcontainer" style = "display: block" >
+                          <div class="orgrow">
+                              <div class="col-15">
+                                  <label for="currentpsw" >Current Password :</label>
+                              </div>
+                              <div class="col-60">
+                                  <input type="password" placeholder="Current Password..." name="currentpsw" id="currentpsw" required>
+                              </div>
+                          </div>
+                      <div class="orgrow">
+                              <div class="col-15">
+                                  <label for="newpassword" >New Password :</label>
+                              </div>
+                              <div class="col-60">
+                                  <input type="password" placeholder="New Password..." name="psw" onfocus="showPswMsg()" onblur="hidePswMsg()" onkeyup="ChangePswMsgStatus(psw.value)" id="psw" required>
+                                      
+                                        <div id="pswMessage">
+                                            <h3 style="font-size:10px">Password must contain the following: </h3>
+                                            <p id="lab1" style="background-color:inherit">✖ capital letters,</p> 
+                                            <p id="lab2" >✖ small letters,</p> 
+                                            <p id="lab3" >✖ special character,</p>
+                                            <p id="lab4" >✖ number,</p>
+                                            <p id="lab5" >✖ not less than 8 character.</p>
+                                        </div>
+                              </div>
+                          </div>
+                      <div class="orgrow">
+                              <div class="col-15">
+                                  <label for="newpassword" >Repeat Password :</label>
+                              </div>
+                              <div class="col-60">
+                                  <input type="password" placeholder="Repeat Password..." name="psw-repeat" onfocus="showPswMatchMsg()" onblur="hidePswMatchMsg()" onkeyup="ChangePswMsgStatus(psw.value)" id="psw-repeat" required>
+                                      
+                                        <div id="pswMatchMsg">
+                                            <p id="lab6" >✖ Password Matches</p>
+                                        </div>
+                              </div>
+                          </div>  
+                          <p></p>
+                        <div class="passerror">
+                            {% if pass_error %}
+                              {% for error in pass_error %}
+                                {{error}}<br>
+                              {% endfor %}
+                            {% endif %}
+                        </div>                                         
+                    </div>
+                    <div class="orgrow">
+                        <button style="float: right" class="btn" id="cancel-btn" type="button" onclick="location.href='{% url 'login' %}'">Cancel</button><button style="float: right;margin-right: 10px;" class="btn" name="save-profile" type="submit" value="Save">Save</button>
+                    </div> 
+                  </form>
               </div>
           </div>
-  </div>
+          </div>
+      </div>
+</div>
 
 
-  <script>
-    // Wait for the DOM to load
-    document.addEventListener('DOMContentLoaded', function() {
-        // Select all the messages with the 'alert' class
-        var messages = document.querySelectorAll('.alert');
-  
-        // Loop through each message and set a timeout to remove it after 3 seconds,
-        // except for error messages
-        messages.forEach(function(message) {
-            if (!message.classList.contains('error')) {
-                setTimeout(function() {
-                    message.remove();
-                }, 3000);
-            }
-        });
+<script>
+// Wait for the DOM to load
+document.addEventListener('DOMContentLoaded', function() {
+    // Select all the messages with the 'alert' class
+    var messages = document.querySelectorAll('.alert');
+
+    // Loop through each message and set a timeout to remove it after 3 seconds,
+    // except for error messages
+    messages.forEach(function(message) {
+        if (!message.classList.contains('error')) {
+            setTimeout(function() {
+                message.remove();
+            }, 3000);
+        }
     });
-  </script>
-  <script>
-    var message = document.getElementById('fade-msg');
-    if (!message.classList.contains('error')) {
-        setTimeout(function() {
-          message.style.opacity = '0';
-        }, 1250);
-    }
-  </script>
+});
+</script>
+<script>
+var message = document.getElementById('fade-msg');
+if (!message.classList.contains('error')) {
+    setTimeout(function() {
+      message.style.opacity = '0';
+    }, 1250);
+}
+</script>
 </body>

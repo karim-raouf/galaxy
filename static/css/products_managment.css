@@ -12,9 +12,10 @@ body {
   
 }
 
-#header {
-  background-color: lightgray;
-  border-radius: 20px;
+
+pageheader {
+  /* background-color: lightgray; */
+  /* border-radius: 20px; */
   color: blue;
   font-size: 25px; 
   font-weight: bold;
@@ -32,15 +33,18 @@ body {
 .cart1 {
   height: auto;
   width: 0;
-  position: absolute;
-  z-index: 2;
+  position: fixed;
+  z-index: 5;
   top: 58px;
   right: 0;
   box-shadow: 0px 8px 16px 0px rgba(10, 78, 10, 0.9);
   background-color:  #e9efed;
   overflow-x: hidden;
+  overflow-y:auto;
   transition: 0.5s ;
 }
+
+
 .cart1-content {
   position: relative;
   width: 100%;
@@ -65,21 +69,22 @@ body {
 
 .cart1 .closebtn {
   position: absolute;
-  font-size: 40px;
+  font-size: x-large;
   right: 45px;
   
 }
 .overlay {
   height: 100%;
   width: 0;
-  position: absolute;
-  z-index: 1;
+  position: fixed;
+  z-index: 4;
   top: 58px;
   left: 0;
   box-shadow: 0px 8px 16px 0px rgba(10, 78, 10, 0.9);
   background-color:  #e9ecef;
   overflow-x: hidden;
   transition: 0.5s ;
+  overflow-y:auto;
 }
 
 .overlay-content {
@@ -108,7 +113,7 @@ body {
 
 .overlay .closebtn {
   position: absolute;
-  font-size: 40px;
+  font-size: x-large;
   right: 45px;
   
 }
@@ -127,38 +132,43 @@ body {
 
 input[type=text], select, textarea {
   width: 95%;
-  padding: 12px;
+  padding: 12px 0px 12px 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
   resize: vertical;
+  word-wrap:break-word; 
+  
 }
 
 input[type=date] {
-  width: 50%;
-  padding: 12px;
+  /* width: 50%; */
+  padding: 12px 0px 12px 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
   resize: vertical;
+
 }
 
 input[type=tel] {
-  width: 50%;
-  padding: 12px;
+  /* width: 50%; */
+  padding: 12px 0px 12px 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
   resize: vertical;
+
 }
 
 input[type=email]{
   width: 95%;
-  padding: 12px;
+  padding: 12px 0px 12px 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
   resize: vertical;
+
 }
 
 input[type=password] {
-    width: 50%;
+    /* width: 50%; */
     box-sizing: border-box;
     border: 2px solid #ccc;
     border-radius: 4px;
@@ -168,6 +178,7 @@ input[type=password] {
     background-position: 10px 10px;
     background-repeat: no-repeat;
     padding: 12px 20px 12px 40px;
+
 }
 
 
@@ -269,6 +280,7 @@ input[type=submit]:hover {
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   background-color: lightgray;
   padding: 20px;
+ 
 
 }
 
@@ -280,7 +292,7 @@ background-color: whitesmoke;
 padding: 20px;
 height: auto;
 width: auto;
-
+transition: all 0.8s;
 }
 
 .col-5 {
@@ -292,6 +304,12 @@ width: auto;
 .col-10 {
   float: left;
   width: 10%;
+  margin-top: 6px;
+  color: black;
+}
+.col-12 {
+  float: left;
+  width: 12%;
   margin-top: 6px;
   color: black;
 }
@@ -329,6 +347,12 @@ width: auto;
   color: black;
   font-size: 18px;
 }
+.col-pricing-button {
+  float: left;
+  width: 24%;
+  margin-top: 6px;
+  color: black;
+}
 
 .col-45 {
   float: left;
@@ -337,6 +361,14 @@ width: auto;
   color: black;
   font-size: 15px;
 }
+
+.col-48 {
+  width: 48%;
+  margin-top: 6px;
+  color: black;
+  font-size: 15px;
+}
+
 .col-40 {
   float: left;
   width: 40%;
@@ -354,6 +386,13 @@ width: auto;
 .col-20 {
   float: left;
   width: 20%;
+  margin-top: 6px;
+  color: black;
+}
+
+.col-30 {
+  float: left;
+  width: 30%;
   margin-top: 6px;
   color: black;
 }
@@ -409,7 +448,7 @@ width: auto;
   border-style: solid;
   border-color:  black;
   border-radius: 20%;
-  width: 20%;
+  width: 10%;
   border-radius: 3px;
   cursor: pointer;
   font-size: 17px;
@@ -422,24 +461,47 @@ width: auto;
 }
 
 .btn1 {
-  background-color: green;
-  color: white;
+  background-color: transparent;
+  color: darkgreen;
+  border: solid;
   border-radius: 20%;
   width: 20%;
   border-radius: 3px;
   cursor: pointer;
   font-size: 13px;
   text-align: center;
-  padding : 5px
+  padding : 5px;
+  box-shadow: 0px 8px 16px 0px rgba(10, 78, 10, 0.2);
+
 }
 
 .btn1:hover {
   background-color: white;
   color : green;
 }
+
+.btn2 {
+  background-color: transparent;
+  color: darkgreen;
+  border: solid;
+  border-radius: 20%;
+  width: 90%;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 13px;
+  text-align: center;
+  padding : 5px;
+  box-shadow: 0px 8px 16px 0px rgba(10, 78, 10, 0.2);
+}
+.btn2:hover {
+  background-color: white;
+  color : green;
+}
 .useravatar {
   vertical-align: middle;
-  border-radius: 10%;
+  border-radius: 50%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .password-container{position: relative;}
@@ -519,7 +581,7 @@ width: auto;
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
   left: 0;
-  top: 0;
+  top: 10%;
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
@@ -534,6 +596,28 @@ width: auto;
   margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
   border: 1px solid #888;
   width: 50%; /* Could be more or less, depending on screen size */
+}
+
+.salestax {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 10%;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(255,255,255,0.9);
+  padding-top: 50px;
+
+}
+
+/* Modal Content/Box */
+.salestax-content {
+  background-color: #fefefe;
+  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
 }
 
 /* Style the horizontal ruler */
@@ -558,6 +642,22 @@ hr {
   cursor: pointer;
 }
 
+/* The salestax Close Button (x) */
+.salestax_close {
+  position: absolute;
+  right: 35px;
+  top: 15px;
+  font-size: 40px;
+  font-weight: bold;
+  color: #f1f1f1;
+}
+
+.salestax_close:hover,
+.salestax_close:focus {
+  color: #f44336;
+  cursor: pointer;
+}
+
 /* Clear floats */
 .clearfix::after {
   content: "";
@@ -568,12 +668,13 @@ hr {
 
 
 /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
-@media screen and (max-width: 1025px) {
-  .col-100,.col-65,.col-20,.col-35,.col-25, .col-75,.col-15,.col-10,.col-5,.col-60,.col-11,.col-45,.col-40 input[type=submit] 
+@media screen and (max-width: 600px) {
+  .col-100,.col-65,.col-20,.col-35,.col-25,.col-30, .col-75,.col-15,.col-10,.col-5,.col-60,.col-11,.col-45,.col-40 input[type=submit] 
   {
     width: 100%;
     margin-top: 0;
   }
+
   .overlay-content a {font-size: medium}
   .orgrow a {font-size: medium}
   .overlay 
@@ -590,9 +691,12 @@ hr {
  
 }
 .title {
-    font-size:small;
+    font-size:Larg;
     font-weight:bolder;
-   
+}
+.closebtn {
+    font-size:x-small;
+    font-weight:bolder;
 }
 label {
   color :green;
@@ -618,7 +722,7 @@ input[type=password]{
   font-size: small;
   width: 100%;
 }
-.orgrow a {font-size:small}
+.orgrow a {font-size:medium}
 .passerror{        
   font-size:small;
   padding-left:0px;
@@ -631,5 +735,37 @@ input[type=password]{
 .deletemodal-content {
 width: 90%; /* Could be more or less, depending on screen size */
 }
+.btn {width: 35%;font-size: small;}
+.btn1 {width: 35%;font-size: small;}
+.btn2 {width: 30%;font-size: small;}
+label {
+  color :green;
+  font-size: small;
+ 
+  }
+}
 
+@media screen and (min-width: 601px) and (max-width: 1025px){
+
+  .btn {width: 20%;font-size: small;}
+  .btn1 {width: 20%;font-size: small;}
+  ul li {font-size: small;padding: 12px  8px 12px 0px;  }
+  label {
+    color :green;
+    font-size: small;
+  
+    }
+}
+
+@media screen and (min-width: 1026px){
+
+  .btn {width: 15%;font-size: medium;}
+  .btn1 {width: 15%;font-size: medium;}
+  .btn2 {width: 90%;font-size: medium;}
+  ul li {font-size: medium;padding: 12px  8px 12px 40px;  }
+label {
+  color :green;
+  font-size: medium;
+  
+  }
 }

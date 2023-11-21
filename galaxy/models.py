@@ -51,7 +51,7 @@ class User(AbstractUser):
 
 class Organization(models.Model):
     UserID = models.ForeignKey(User , on_delete=models.SET_NULL , null=True)
-    SubscriptionID = models.ForeignKey('Subscription' , on_delete=models.SET_NULL , null=True)#, limit_choices_to={'ProductID': 17}
+    SubscriptionID = models.ForeignKey('Subscription' , on_delete=models.CASCADE , null=True)#, limit_choices_to={'ProductID': 17}
     Com_Regm = models.FileField("Upload Commercial registration :",upload_to='file_uploads/' , null=True , blank=True)
     Tax_Reg = models.FileField("Upload the Tax registration :",upload_to='file_uploads/' , null=True, blank=True)
     Logo = models.ImageField("Upload the Logo :",upload_to='org_logos/', null = True, blank=True)
@@ -141,7 +141,12 @@ class Currency(models.Model):
     
     
 class Tax(models.Model):  
-    pass
+    tax_name = models.CharField(max_length=50 , null=True , blank=True)
+    
+    def __str__(self):
+        return str(self.tax_name)
+    
+
 
 class UsersType(models.Model):
     UserTypeCode = models.IntegerField(null = True)

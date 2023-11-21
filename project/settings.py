@@ -26,7 +26,7 @@ SECRET_KEY = 'm0f_ld%t!u&@$h&@_jn%qpcr7qtmb+0t__393(9#4dp3(f!!-f'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'galaxy.apps.GalaxyConfig',
-    'App.apps.AppConfig',
     'mssql',
 
 ]
@@ -184,5 +183,7 @@ EMAIL_HOST_PASSWORD = 'arcbastlomavsahf'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField' 
-
+SESSION_COOKIE_AGE = 86400
 # TIME_ZONE = 'Africa/Cairo'
+
+LOGIN_URL = '/login/'

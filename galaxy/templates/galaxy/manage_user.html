@@ -20,42 +20,65 @@
       button:hover {
         opacity:1;
       }
+      .sticky {
+        font-size: 25px; 
+        font-weight: bold;
+        position: fixed;
+        top: 51px;
+        padding: 10px;
+        width: 100%;
+        text-align:center;
+        background-color : lightgray;
+        color: black;
+        transition: all 0.8s;
+        z-index:3 ;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      }
+
+      
     </style> 
     
     {% endblock header %}
 
 {% block body %}
 
-<div style="padding:25px">
-  <div id ="header">
-      <p id="title" style="text-align: center;"> User Management </P>
-      <p id="titleDiv1" onclick="gotodiv('Div1')" style="display:none;text-align: left;cursor:pointer;">•  Basic Info </P>
-      <p id="titleDiv2" onclick="gotodiv('Div2')" style="display:none;text-align: left;cursor:pointer;">•  Rules </P>
-      <p id="titleDiv3" onclick="gotodiv('Div3')" style="display:none;text-align: left;cursor:pointer;">•  Modules Access </P>
-      <p id="titleDiv4" onclick="gotodiv('Div4')" style="display:none;text-align: left;cursor:pointer;">•  Access Times </P>
-      <p id="titleDiv5" onclick="gotodiv('Div5')" style="display:none;text-align: left;cursor:pointer;">•  Restrict IP </P>
-  </div>
+<div id ="header" class="sticky">
+    <div class="orgrow">
+      <strong><span class="title" style="float:left;color:green;cursor:pointer" onclick="openleftNav('userNav')">&#9776; <Strong>Select User</strong></span></strong>
+      </div>
+      <div class="orgrow">
+      <div class="col-30"><a id="title" name="username" style=" color:darkgreen;font-size: large;font-weight: bold;text-align: left ">{% if the_user.username %}│{{the_user.email}}│{% endif %}{% if the_user and not the_user.email %}New User {% endif %}{% if not the_user %} {% endif %}</a></div>
+      </div>
+      <div class="orgrow">
+      <div class="col-15"><a id="titleDiv1" onclick="gotodiv('Div1')" style="color:darkgreen;display:none;text-align: center;cursor:pointer;">•  Basic Info </a></div>
+      <div class="col-15"><a id="titleDiv2" onclick="gotodiv('Div2')" style="color:darkgreen;display:none;text-align: center;cursor:pointer;">•  Rules </a></div>
+      <div class="col-15"><a id="titleDiv3" onclick="gotodiv('Div3')" style="color:darkgreen;display:none;text-align: center;cursor:pointer;">•  Modules Access </a></div>
+      <div class="col-15"><a id="titleDiv4" onclick="gotodiv('Div4')" style="color:darkgreen;display:none;text-align: center;cursor:pointer;">•  Access Times </a></div>
+      <div class="col-15"><a id="titleDiv5" onclick="gotodiv('Div5')" style="color:darkgreen;display:none;text-align: center;cursor:pointer;">•  Restrict IP </a></div>
+      <div class="col-15"><a id="titleDiv6" onclick="gotodiv('Div6')" style="color:darkgreen;display:none;text-align: center;cursor:pointer;">•  Opened Sessions </a></div>
+      
+    </div>
+    
 </div>
-    <p></p>
-    <strong><span class="title" style="color:green;cursor:pointer" onclick="openleftNav('userNav')">&#9776; <Strong>Select User</strong></span></strong>
-    <p></p>
+
+    
       
 <div  id="userNav" class="overlay">
   <a href="javascript:void(0)" class="closebtn" onclick="closeleftNav('userNav')">&times;</a>
 
   <div class="overlay-content">
     {% for user in users %}
-        <a href="{% url 'galaxy:manage_user' %}?id={{user.id}}"> {% if user.email %}{{user.email}}{% else %}Undefined User{% endif %}</a>
+        <a href="{% url 'manage_user' %}?id={{user.id}}"> {% if user.email %}{{user.email}}{% else %}Undefined User{% endif %}</a>
     {% endfor %}
-    <a href="{% url 'galaxy:pricing' %}" style="font-size:xx-large;color:blue;" class="fa fa-cart-plus" ></a>  
+    <a href="{% url 'pricing' %}" style="font-size:xx-large;color:blue;" class="fa fa-cart-plus" ></a>  
   </div>
 </div>
 
-<div id="orgSubscription" class="container">
+<div id="orgSubscription" class="container" style="padding-top:100px;position:relative; z-index: 2;">
   
-  <div class="orgrow" style="text-align: left;font-size:medium;font-weight:bold;">
+  {% comment %} <div class="orgrow" style="text-align: left;font-size:medium;font-weight:bold;">
     <a id="username" name="username" style=" color:blue;font-size: large;font-weight: bold; ">{% if the_user.username %}│{{the_user.email}}│{% endif %}{% if the_user and not the_user.email %}Undefined User {% endif %}{% if not the_user %}Choose User{% endif %}</a>
-  </div>
+  </div> {% endcomment %}
               <div id="manage" class="orgrow" style="text-align: center;font-size:medium;font-weight:bold;">
                 <div class="col-25" style="border-bottom: solid;border-color: blue">
                   <label for="Status">Subscription Status</label>
@@ -83,11 +106,11 @@
               </div>
               <div id="manage1" class="orgrow" style="text-align: center;font-size:medium;font-weight:bold;">
                 <div class="col-45" style="text-align: center;">
-                  {% if the_user %}<button id="userinfo" style="width: 60%; float: right;" class="fa fa-arrow-circle-o-down btn" onclick="info()"> User Info</button>{% endif %}
+                  {% if the_user %}<button id="userinfobtn" type="button" style="width: 50%; float: right;" class="fa fa-arrow-circle-o-down btn" onclick="info()"> User Info</button>{% endif %}
                 </div>
                 <div class="col-45" style="text-align: center;">
       
-                      {% if the_user.email %}<button type="button" style="width: 60%; float: right;" onclick="document.getElementById('userdeleteconfirm').style.display='block'" class="fa fa-remove btn"> Delete User</button>{% endif %}
+                 {% if the_user.email %}<button type="button" style="width: 50%; float: right;" onclick="document.getElementById('userdeleteconfirm').style.display='block'" class="fa fa-remove btn"> Delete User</button>{% endif %}
                     
                 </div>
               </div>
@@ -103,9 +126,10 @@
         <Label style="color: black;"> User data will be permanently erased and you will not be able to access it again</label>
         <br>
         <div class="clearfix">
-          <button id="remove-button" type="button" onclick="document.getElementById('userdeleteconfirm').style.display='none';document.getElementById('deleteconfirmation').style.display='none'" class="modeldelete_cancelbtn">Cancel</button>
           
-          <button id="user-delete-btn" name="user-delete-btn" type="button" onclick="document.getElementById('deleteconfirmation').style.display='block';document.getElementById('user-delete-btn').style.display='none'" class="modeldelete_deletebtn">Delete</button>
+          <button id="user-delete-btn" name="user-delete-btn" type="button" onclick="document.getElementById('deleteconfirmation').style.display='block';document.getElementById('user-delete-btn').style.display='none'" class="modeldelete_deletebtn" style="margin : 0 auto">Delete</button>
+          <br>
+          <button id="remove-button" type="button" onclick="document.getElementById('userdeleteconfirm').style.display='none';document.getElementById('deleteconfirmation').style.display='none'" class="modeldelete_cancelbtn" style = "margin-top : 15px">Cancel</button>
           
           <div id="deleteconfirmation" style="display:none">
               <h4 style="color: black;">a confirmation code has been sent to your email</h4>
@@ -127,175 +151,169 @@
   </div>
   <form method = 'POST' id="system-user-form" enctype="multipart/form-data">
   {% csrf_token %}
-   
+  
   <div id="info" class="subcontainer" >
-      <a id="Div1" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('basicinfo'),showdiv('subbasicinfo') ,arrowdirection(id) , showdiv('password-basic')"> Basic Info </a>
-    <div id="basicinfo" class="smallcontainer">
-      <div id="subbasicinfo" class="smallcontainer">
+    <a id="Div1" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('basicinfo'),showdiv('subbasicinfo') ,arrowdirection(id) , showdiv('password-basic')"> Basic Info </a>
+  <div id="basicinfo" class="smallcontainer">
+    <div id="subbasicinfo" style="display:none;padding-left:5%">
       <div class="orgrow">  
-            <div class="orgrow">
-              <div class="col-10">
-                <label for="activeuser" >Active :</label>
-                {{form.is_active}}
-                {% if form.is_active.errors %}
-                  <ul class="errorlist" style="color: red">
-                    {% for error in form.is_active.errors %}
-                      <span style="color: red; padding-left: 60px;">• {{ error }}</span>
-                    {% endfor %}
-                  </ul>
-                {% endif %}
-              </div>
-            </div>
-            <div class="orgrow">
-              <div class="col-10">
-                <label for="Usertype">User Type :</label>
-              </div>
-              <div class="col-15">
-                {{form.user_Type}}
-                {% if form.user_Type.errors %}
-                  <ul class="errorlist" style="color: red">
-                    {% for error in form.user_Type.errors %}
-                      <span style="color: red; padding-left: 60px;">• {{ error }}</span>
-                    {% endfor %}
-                  </ul>
-                {% endif %}
-              </div>
-            </div>
-          <p> </p>
-           
-          <div class="col-40" style="">
-
-            <div class="orgrow">
-              <div class="col-25">
-                <label for="username" >User Name :</label>
-              </div>
-              <div class="col-75">
-                {{form.username}}
-                {% if form.username.errors %}
-                  <ul class="errorlist" style="color: red">
-                    {% for error in form.username.errors %}
-                      <span style="color: red; padding-left: 60px;">• {{ error }}</span>
-                    {% endfor %}
-                  </ul>
-                {% endif %}
-              </div>
-            </div>
-            <div class="orgrow">
-              <div class="col-25">
-                <label for="AddressFiled">First Name :</label>
-              </div>
-              <div class="col-75">
-                {{form.first_name}}
-                {% if form.first_name.errors %}
-                  <ul class="errorlist" style="color: red">
-                    {% for error in form.first_name.errors %}
-                      <span style="color: red; padding-left: 60px;">• {{ error }}</span><li>{{ error }}</li>
-                    {% endfor %}
-                  </ul>
-                {% endif %}
-              </div>
-            </div>
-            <div class="orgrow">
-              <div class="col-25">
-                <label for="country">Last Name :</label>
-              </div>
-              <div class="col-75">
-                  {{form.last_name}}
-                  {% if form.last_name.errors %}
-                  <ul class="errorlist" style="color: red">
-                    {% for error in form.last_name.errors %}
-                      <span style="color: red; padding-left: 60px;">• {{ error }}</span>
-                    {% endfor %}
-                  </ul>
-                {% endif %}
-              </div>
-            </div>
-            <div class="orgrow">
-              <div class="col-25">
-                <label for="userEmail">User E-mail :</label>
-              </div>
-              <div class="col-75">
-                {{form.email}}
-                {% if form.email.errors %}
-                  <ul class="errorlist" style="color: red">
-                    {% for error in form.email.errors %}
-                      <span style="color: red; padding-left: 60px;">• {{ error }}</span>
-                    {% endfor %}
-                  </ul>
-                {% endif %}
-              </div>
-            </div>
-          </div>
-          <div class="col-40" style="padding-left:25px;">
-              
-            <div class="orgrow">
-              <div class="col-25">
-                <label for="language">Language :</label>
-              </div>
-              <div class="col-75">
-                {{form.Language}}
-                {% if form.Language.errors %}
-                  <ul class="errorlist" style="color: red">
-                    {% for error in form.Language.errors %}
-                      <span style="color: red; padding-left: 60px;">• {{ error }}</span>
-                    {% endfor %}
-                  </ul>
-                {% endif %}
-              </div>
-            </div>
-            <div class="orgrow">
-              <div class="col-25">
-                <label for="gender">Gender :</label>
-              </div>
-              <div class="col-75">
-                {{form.Gender}}
-                {% if form.Gender.errors %}
-                  <ul class="errorlist" style="color: red">
-                    {% for error in form.Gender.errors %}
-                      <span style="color: red; padding-left: 60px;">• {{ error }}</span>
-                    {% endfor %}
-                  </ul>
-                {% endif %}
-              </div>
-            </div>
-            <div class="orgrow">
-              <div class="col-25">
-                <label for="birthdate">Birth Date :</label>
-              </div>
-              <div class="col-75">
-                {{form.Birth_Date}}
-                {% if form.Birth_Date.errors %}
-                  <ul class="errorlist" style="color: red">
-                    {% for error in form.Birth_Date.errors %}
-                      <span style="color: red; padding-left: 60px;">• {{ error }}</span>
-                    {% endfor %}
-                  </ul>
-                {% endif %}
-              </div>
-            </div>
-            <div class="orgrow">
-              <div class="col-25">
-                <label for="telephone">Telephone :</label>
-              </div>
-              <div class="col-75">
-                {{form.Telephone}}
-                {% if form.Telephone.errors %}
-                  <ul class="errorlist" style="color: red">
-                    {% for error in form.Telephone.errors %}
-                      <span style="color: red; padding-left: 60px;">• {{ error }}</span>
-                    {% endfor %}
-                  </ul>
-                {% endif %}
-              </div>
-            </div>
-          </div>
-      </div>
-    </div>
-      <p></p>
-      <div id="password-basic" class="smallcontainer">
-        <div class="password-container">
           <div class="orgrow">
+            <div class="col-25">
+              <label for="activeuser" >Active :</label>
+              {{form.is_active}}
+              {% if form.is_active.errors %}
+                <ul class="errorlist" style="color: red">
+                  {% for error in form.is_active.errors %}
+                    <span style="color: red; padding-left: 60px;">• {{ error }}</span>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </div>
+          </div>
+          <div class="orgrow">
+            <div class="col-25">
+              <label for="Usertype">User Type :</label>
+            </div>
             <div class="col-15">
+              {{form.user_Type}}
+              {% if form.user_Type.errors %}
+                <ul class="errorlist" style="color: red">
+                  {% for error in form.user_Type.errors %}
+                    <span style="color: red; padding-left: 60px;">• {{ error }}</span>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </div>
+          </div>
+        <p> </p>
+         
+        
+
+          <div class="orgrow">
+            <div class="col-25">
+              <label for="username" >User Name :</label>
+            </div>
+            <div class="col-75">
+              {{form.username}}
+              {% if form.username.errors %}
+                <ul class="errorlist" style="color: red">
+                  {% for error in form.username.errors %}
+                    <span style="color: red; padding-left: 60px;">• {{ error }}</span>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </div>
+          </div>
+          <div class="orgrow">
+            <div class="col-25">
+              <label for="AddressFiled">First Name :</label>
+            </div>
+            <div class="col-75">
+              {{form.first_name}}
+              {% if form.first_name.errors %}
+                <ul class="errorlist" style="color: red">
+                  {% for error in form.first_name.errors %}
+                    <span style="color: red; padding-left: 60px;">• {{ error }}</span><li>{{ error }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </div>
+          </div>
+          <div class="orgrow">
+            <div class="col-25">
+              <label for="country">Last Name :</label>
+            </div>
+            <div class="col-75">
+                {{form.last_name}}
+                {% if form.last_name.errors %}
+                <ul class="errorlist" style="color: red">
+                  {% for error in form.last_name.errors %}
+                    <span style="color: red; padding-left: 60px;">• {{ error }}</span>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </div>
+          </div>
+          <div class="orgrow">
+            <div class="col-25">
+              <label for="userEmail">User E-mail :</label>
+            </div>
+            <div class="col-75">
+              {{form.email}}
+              {% if form.email.errors %}
+                <ul class="errorlist" style="color: red">
+                  {% for error in form.email.errors %}
+                    <span style="color: red; padding-left: 60px;">• {{ error }}</span>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </div>
+          </div>
+        
+       
+            
+          <div class="orgrow">
+            <div class="col-25">
+              <label for="language">Language :</label>
+            </div>
+            <div class="col-75">
+              {{form.Language}}
+              {% if form.Language.errors %}
+                <ul class="errorlist" style="color: red">
+                  {% for error in form.Language.errors %}
+                    <span style="color: red; padding-left: 60px;">• {{ error }}</span>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </div>
+          </div>
+          <div class="orgrow">
+            <div class="col-25">
+              <label for="gender">Gender :</label>
+            </div>
+            <div class="col-75">
+              {{form.Gender}}
+              {% if form.Gender.errors %}
+                <ul class="errorlist" style="color: red">
+                  {% for error in form.Gender.errors %}
+                    <span style="color: red; padding-left: 60px;">• {{ error }}</span>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </div>
+          </div>
+          <div class="orgrow">
+            <div class="col-25">
+              <label for="birthdate">Birth Date :</label>
+            </div>
+            <div class="col-75">
+              {{form.Birth_Date}}
+              {% if form.Birth_Date.errors %}
+                <ul class="errorlist" style="color: red">
+                  {% for error in form.Birth_Date.errors %}
+                    <span style="color: red; padding-left: 60px;">• {{ error }}</span>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </div>
+          </div>
+          <div class="orgrow">
+            <div class="col-25">
+              <label for="telephone">Telephone :</label>
+            </div>
+            <div class="col-75">
+              {{form.Telephone}}
+              {% if form.Telephone.errors %}
+                <ul class="errorlist" style="color: red">
+                  {% for error in form.Telephone.errors %}
+                    <span style="color: red; padding-left: 60px;">• {{ error }}</span>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </div>
+          </div>
+          <div class="orgrow">
+            <div class="col-25">
               <label for="psw">Password :</label>
             </div>
             <div class="col-75">
@@ -318,11 +336,11 @@
                   </div>
             </div>
           </div>
-
-          </div>
-          <div class="password-container">
+  
+        
+        
           <div class="orgrow">
-            <div class="col-15">
+            <div class="col-25">
               <label for="psw-repeat-user">Repeat Password :</label>
             </div>
             <div class="col-75">
@@ -334,53 +352,65 @@
             </div>
             
           </div>
-
-          </div>
+  
+        </div>
           <p></p>
                  
           <div class="passerror">
-          {% if pass_error_user %}
-            {% for error in pass_error_user %}
-              {{error}}<br>
-            {% endfor %}
-          {% endif %}
+            {% if pass_error_user %}
+              {% for error in pass_error_user %}
+                {{error}}<br>
+              {% endfor %}
+            {% endif %}
           </div>
-      </div>
+        
+      
       <p></p>
       <div class="orgrow">
-        <button style="float: right" class="btn" id="cancel-btn" type="button">Cancel</button><a>&nbsp;</a><button style="float: right;margin-right: 10px;" class="btn" name="user-save-btn" type="submit" value="Save" >{% if the_user.username %}Update {% else %}Save{% endif %}</button>
+        <button style="float: right" class="btn1" id="cancel-btn" type="button">Cancel</button><a>&nbsp;</a><button style="float: right;margin-right: 10px;" class="btn1" name="user-save-btn" type="submit" value="Save" >{% if the_user.username %}Update {% else %}Save{% endif %}</button>
       </div>
+ 
+    <p></p>      
+    </div>
   </div>
     <p></p>
-      
-      <a id="Div2" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('rules') ,arrowdirection(id)"> Rules </a>
-      <div id="rules" class="smallcontainer">
-      </div>
-      <p></p>
-      
     
-
       
-      <a id="Div3" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('modulesaccess') ,arrowdirection(id)"> Modules Access </a>
+
+    
+    <a id="Div2" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('rules') ,arrowdirection(id)"> Rules </a>
+    <div id="rules" class="smallcontainer">
+    </div>
+    <p></p>
+    
+  
+
+    
+    <a id="Div3" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('modulesaccess') ,arrowdirection(id)"> Modules Access </a>
       <div id="modulesaccess" class="smallcontainer">
             <div class="orgrow">
-              <div class="col-10">
-                <label for="gender">Modules :</label>
+              <div class="col-15" >
+                <label for="module">Modules :</label>
               </div>
-              <div class="col-25">
+              <div class="col-25" >
                 <select id="module" name="module">
                   {% for sub in user_subs_basic %}
                     <option id="{{sub.ProductID.Name}}" value="{{sub.ProductID.Name}}">{{sub.ProductID.Name}}</option>
                   {% endfor %}
-                </select>
-              </div>
-              <div class="col-15" style="display: inline-block;color :green;padding-left: 20px">
+                  </select>
+                </div>
+              
+                <div class="col-10">
+                  <button onclick="addnewmodule()" class="btn2" type="button">Add</button>
+                </div>
+              
+              {% comment %} <div class="col-15" style="display: inline-block;color :green;padding-left: 20px">
                   <span onclick="addnewmodule()" class="btn1" style="padding: 12px 12px 12px 0;display: inline-block;text-align: center;">Add</span>
-              </div>
-             <div class="col-20">
+              </div> {% endcomment %}
+              <div class="col-20">
                 <label >Allowed Modules :</label> 
              </div>
-             <div class="col-25">
+             <div class="col-30">
                     <ul id="mymoduleUL">
                       {% if user_module %}
                         {% for module in user_module %}
@@ -396,18 +426,83 @@
 
       </div>
       <p></p>
+
       
       <a id="Div4" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('security') ,arrowdirection(id)"> Access Time </a>
-      <div id="security" class="smallcontainer">
-          <div class="orgrow">
+          <div id="security" class="smallcontainer">
+            <div class="orgrow">
               <div class="col-25">
                   <label for="weekdays"><b>User Access Time :</b></label>
               </div>
-              <div id="weekdays" class="col-60">
+            </div>
+            <div class="orgrow">
+              <div id="weekdays" class="col-90" style="padding-left:10%">
                 <dl>
                     <dt>Saturday</dt>
-                    <dd><a> From :</a> <input type="time" name="aftertime" value="{{ time_restrictions.Saturday.0 }}"> <a> To :</a> <input type="time" name="befortime" value="{{ time_restrictions.Saturday.1 }}"></dd>
+                      <div class="orgrow">
+                        <div class="col-25" >
+                          <dd><a> From :</a> <input type="time" name="aftertime" value="{{ time_restrictions.Saturday.0 }}"></dd>
+                        </div>
+                        <div class="col-25" >
+                          <dd><a> To :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> <input type="time" name="befortime" value="{{ time_restrictions.Saturday.1 }}"></dd>
+                        </div>
+                      </div>
                     <dt>Sunday</dt>
+                    <div class="orgrow">
+                        <div class="col-25" >
+                          <dd><a> From :</a> <input type="time" name="aftertime" value="{{ time_restrictions.Sunday.0 }}"></dd>
+                        </div>
+                        <div class="col-25" >
+                          <dd><a> To :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> <input type="time" name="befortime" value="{{ time_restrictions.Sunday.1 }}"></dd>
+                        </div>
+                    </div>
+                    <dt>Monday</dt>
+                    <div class="orgrow">
+                      <div class="col-25" >
+                        <dd><a> From :</a> <input type="time" name="aftertime" value="{{ time_restrictions.Monday.0 }}"></dd>
+                      </div>
+                      <div class="col-25" >
+                        <dd><a> To :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> <input type="time" name="befortime" value="{{ time_restrictions.Monday.1 }}"></dd>
+                      </div>
+                    </div>
+                    <dt>Tuesday</dt>
+                    <div class="orgrow">
+                      <div class="col-25" >
+                        <dd><a> From :</a> <input type="time" name="aftertime" value="{{ time_restrictions.Tuesday.0 }}"></dd>
+                      </div>
+                      <div class="col-25" >
+                        <dd><a> To :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> <input type="time" name="befortime" value="{{ time_restrictions.Tuesday.1 }}"></dd>
+                      </div>
+                    </div>
+                    <dt>Wednesday</dt>
+                    <div class="orgrow">
+                      <div class="col-25" >
+                        <dd><a> From :</a> <input type="time" name="aftertime" value="{{ time_restrictions.Wednesday.0 }}"></dd>
+                      </div>
+                      <div class="col-25" >
+                        <dd><a> To :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> <input type="time" name="befortime" value="{{ time_restrictions.Wednesday.1 }}"></dd>
+                      </div>
+                    </div>
+                    <dt>Thursday</dt>
+                    <div class="orgrow">
+                      <div class="col-25" >
+                        <dd><a> From :</a> <input type="time" name="aftertime" value="{{ time_restrictions.Thursday.0 }}"></dd>
+                      </div>
+                      <div class="col-25" >
+                        <dd><a> To :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> <input type="time" name="befortime" value="{{ time_restrictions.Thursday.1 }}"></dd>
+                      </div>
+                    </div>
+                    <dt>Friday</dt>
+                    <div class="orgrow">
+                      <div class="col-25" >
+                        <dd><a> From :</a> <input type="time" name="aftertime" value="{{ time_restrictions.Friday.0 }}"></dd>
+                      </div>
+                      <div class="col-25" >
+                        <dd><a> To :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> <input type="time" name="befortime" value="{{ time_restrictions.Friday.1 }}"></dd>
+                      </div>
+                    </div>
+                  </div>
+                    {% comment %} <dt>Sunday</dt>
                     <dd><a> From :</a> <input type="time" name="aftertime" value="{{ time_restrictions.Sunday.0 }}"> <a> To :</a> <input type="time" name="befortime" value="{{ time_restrictions.Sunday.1 }}"></dd>
                     <dt>Monday</dt>
                     <dd><a> From :</a> <input type="time" name="aftertime" value="{{ time_restrictions.Monday.0 }}"> <a> To :</a> <input type="time" name="befortime" value="{{ time_restrictions.Monday.1 }}"></dd>
@@ -418,16 +513,18 @@
                     <dt>Thursday</dt>
                     <dd><a> From :</a> <input type="time" name="aftertime" value="{{ time_restrictions.Thursday.0 }}"> <a> To :</a> <input type="time" name="befortime" value="{{ time_restrictions.Thursday.1 }}"></dd>
                     <dt>Friday</dt>
-                    <dd><a> From :</a> <input type="time" name="aftertime" value="{{ time_restrictions.Friday.0 }}"> <a> To :</a> <input type="time" name="befortime" value="{{ time_restrictions.Friday.1 }}"></dd>
+                    <dd><a> From :</a> <input type="time" name="aftertime" value="{{ time_restrictions.Friday.0 }}"> <a> To :</a> <input type="time" name="befortime" value="{{ time_restrictions.Friday.1 }}"></dd> {% endcomment %}
                 </dl>  
-
               </div>
-               <div class="col-45"> 
-                <button style="float: left" class="btn" id="time-restrict-btn" type="button">Save</button><button style="float: left; margin-left: 17px;" class="btn" id="remove-restrict-btn" type="button">Remove all</button>
-               </div>
-
+              <div class="orgrow">
+                <div class="col-90"> 
+                 <button style="float: right; margin-left: 17px;" class="btn1" id="time-restrict-btn" type="button">Save</button><button style="float: right;" class="btn1" id="remove-restrict-btn" type="button">Remove all</button>
+                </div>
+ 
+           </div>
           </div>
-      </div>
+
+      
       <p></p>
       <a id="Div5" class="fa fa-arrow-circle-down"  style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('restrictip') ,arrowdirection(id)"> Restrict IP </a>
 
@@ -447,20 +544,23 @@
 
 
             <div class="orgrow" id="restrictipssection" style="display:none">
-            {% comment %} <label >Multiple IPs can be added separated by commas.</label><br> {% endcomment %}
-              <div class="col-5">
+              {% comment %} <label >Multiple IPs can be added separated by commas.</label><br> {% endcomment %}
+              <div class="col-10">
                 <label for="ips">IPs :</label>
               </div>
-              <div class="col-25">
+              <div class="col-25" >
                   <input type="text" id="ips" name="ips" placeholder="IP Address...">
               </div>
-              <div class="col-20" style="display: inline-block;color :green;padding-left: 20px">
-                  <span onclick="ValidateIPaddress(ips)" class="btn1" style="text-align: center;padding: 12px 12px 12px 0;display: inline-block;text-align: center;">Add</span>
+              <div class="col-10" >
+                <button style="margin-left:12px" onclick="ValidateIPaddress(ips)" class="btn2" type="button">Add</button>
               </div>
-             <div class="col-10">
-                <label >Allowed IPs :</label> 
+              {% comment %} <div class="col-20" style="display: inline-block;color :green;padding-left: 20px">
+                  <span onclick="ValidateIPaddress(ips)" class="btn1" style="text-align: center;padding: 12px 12px 12px 0;display: inline-block;text-align: center;">Add</span>
+              </div> {% endcomment %}
+             <div class="col-20">
+                <label style="margin-left:12px">Allowed IPs :</label> 
              </div>
-                <div class="col-25">
+                <div class="col-30">
                     <ul id="myipUL">
                       {% if ip_addresses %}
                         {% for address in ip_addresses %}
@@ -474,10 +574,32 @@
             </div>
         
       </div>
-      
-      
+       
      
 
+      <p></p>
+
+      
+      <a id="Div6" class="fa fa-arrow-circle-down" style="font-weight: bold; padding-left:10px;font-size: large; cursor: pointer; color: green;" onclick="showdiv('OpendSessions') ,arrowdirection(id)"> Opend Sessions </a>
+      <div id="OpendSessions" class="smallcontainer">
+        <div class="orgrow" id="restrictipssection" style="display:none">
+          {% comment %} <label >Multiple IPs can be added separated by commas.</label><br> {% endcomment %}
+           <div class="col-10">
+              <label >Opened Sessions :</label> 
+           </div>
+              <div class="col-25">
+                  <ul id="UserOpenedSessions">
+                    {% if ip_addresses %}
+                      {% for address in ip_addresses %}
+                      <li class="ip-address" data-ip-address="{{address.ip_address}}" id="{{address.ip_address}}">{{address.ip_address}}<span id = "{{address.ip_address}}" class="closeLI ip-del">×</span></li>
+                      {% endfor %}
+                    {% endif %}
+
+                  </ul>
+                      
+           </div>
+          </div>
+      </div>
       <p></p>
       
         
@@ -502,23 +624,7 @@
   });
 </script>
 
-<script>
-  window.addEventListener("resize", resizeCurtainMenu);
-  function resizeCurtainMenu() {
-  var w = window.innerWidth;
-  if (document.getElementById("userNav").style.width != "0%")
-    {if( w >= 1025 )
-      {document.getElementById("userNav").style.width = "30%";}
-      else 
-      {
-          if(w > 800 && w < 1025)
-            {document.getElementById("userNav").style.width = "40%";}
-            else
-            {document.getElementById("userNav").style.width = "60%";}
-    }
-  p}
-  }
-</script>
+
 
 <script>
   document.getElementById('autoRenewField').addEventListener('change', function() {
@@ -1025,8 +1131,8 @@ window.onclick = function(event) {
     // Show the delEl element by modifying its style
     delEl.style.display = 'block';
     delEl2.style.display = 'block';
-    document.getElementById('user-delete-btn').style.display='none'
-  }
+    document.getElementById('user-delete-btn').style.display='none';
+  } 
 
   // Attach an event listener to the remove button
   removeButton.addEventListener('click', () => {
@@ -1038,6 +1144,10 @@ window.onclick = function(event) {
 
     // Modify the browser history without triggering a page reload
     window.history.pushState({}, '', url.href);
+    document.getElementById('user-delete-btn').style.display='block';
+    document.getElementById('user-delete-btn').style.margin = '0 auto';
+    document.getElementById('remove-button').style.marginTop = '-10px';
+ 
   });
 </script>
 
@@ -1281,5 +1391,21 @@ document.getElementById('remove-restrict-btn').addEventListener('click', functio
 
 });
 </script>
+
+<script>
+  window.onscroll = function() {pagemapFunction()};
+  
+  var header = document.getElementById("myHeader");
+  var sticky = header.offsetTop;
+  
+  function pagemapFunction() {
+    if (window.pageYOffset > sticky) {
+      header.classList.add("sticky");
+    } else {
+      header.classList.remove("sticky");
+    }
+  }
+  </script> 
+
 
 {% endblock additional %}

@@ -15,12 +15,12 @@ document.getElementById('info').style.display = 'block';
 }
 function openleftNav(y) {
   var w = window.innerWidth;
-  
+
   if( w >= 1025 ){ 
       document.getElementById(y).style.width = "30%";
       }
       else {
-          if(w > 800 && w < 1025)
+          if(w > 700 && w < 1025)
             {document.getElementById(y).style.width = "40%";}
             else
             {document.getElementById(y).style.width = "60%";}
@@ -35,11 +35,11 @@ function openleftNav(y) {
     var w = window.innerWidth;
     
     if( w >= 1025 ){ 
-        document.getElementById(z).style.width = "50%";
+        document.getElementById(z).style.width = "35%";
         }
         else {
-            if(w > 800 && w < 1025)
-              {document.getElementById(z).style.width = "70%";}
+            if(w > 700 && w < 1025)
+              {document.getElementById(z).style.width = "60%";}
               else
               {document.getElementById(z).style.width = "90%";}
       }

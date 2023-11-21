@@ -1,9 +1,14 @@
 {% extends 'galaxy/base.html' %}
 {% block header %}
         <title>Home</title>
-    {% endblock header %}
-
-
+{% endblock header %}
+{% block startnow %}
+{% if not request.user.is_authenticated %}
+<div>
+  <marquee style="color:white;font-stretch:condensed;font-size:x-large; transition: 0.2s;"> Start Now - It's Free </marquee>
+</div>
+{% endif %}  
+{% endblock startnow %}
 <div>
     {% if messages %}
       <div class="messages" id="message">
