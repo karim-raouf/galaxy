@@ -9,8 +9,9 @@ class TimeFormatField(models.CharField):
 
     def to_python(self, value):
         if value is None or isinstance(value, str):
-            return value
-        return value.strftime('%H:%M:%S.%f')[:-3]
+            # Convert the string to a datetime object
+            return datetime.strptime(value, '%H:%M').time() if value else None
+        return value
 
     def validate(self, value, model_instance):
         super().validate(value, model_instance)

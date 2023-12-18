@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 import os
 import sys
+from django.core.wsgi import get_wsgi_application
+
 
 if __name__ == '__main__':
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
+    application = get_wsgi_application()
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

@@ -1,4 +1,6 @@
 {% load static %}
+{% load custom_filters %}
+
 <!DOCTYPE html>
 <!--
 Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -91,7 +93,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
               cursor: pointer;
             }
 
-            
+            #searchtext {
+              background-position: 10px 12px;
+              background-repeat: no-repeat;
+              font-size: 16px;
+              padding: 7px 5px 7px 12px;
+              border: 1px solid #ddd;
+              margin-bottom: 12px;
+              margin:10px 10px 10px 10px;
+            }
+
         </style>
         
         
@@ -108,14 +119,15 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                   <span>PARALLAX PIXEL BACKGROUND</span>
               </div> {% endcomment %}
             </section>
-            <div class="topnav" id="myTopnav">
+            <div class="topnav" id="myTopnav" style="text-align:center">
             
                 <a href="{% url 'index' %}"  class="active">Home</a>
                 
                 <a href="{% url 'pricing' %}" >Pricing</a>
                 <a href="{% url 'contact_us' %}" >Contact</a>
                 <a href="{% url 'about_us' %}" >About</a>
-                 
+                <input id="searchtext" oninput="viewsearchlist()" onkeyup="searchFunction()" type="text" style="margin:10px 10px 10px 10px;" placeholder="Search.." name="search">
+
                 {% if request.user.is_authenticated %}
                 
 
@@ -216,6 +228,15 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 <div style="display: flex; align-items: center; margin-bottom: 15px;"><span style="margin-right: 5px;">Grand Total : $</span><div id="grandtotal">{{total|floatformat:2}}</div></div>
                 <div style="align-content: center;font-size:large;padding-right: 10%"><input id="checkout" onclick="location.href='{% url 'payment' %}'" type="submit" value="Continue to checkout" class="btn" style="width:90%;" ></div>
               </div>
+            </div>
+
+            <div id="searchlist" style="position:absolute;z-index:5;top:35px;padding:12px;display:none">
+              <ul id="searchUL">
+                <li><a style="padding:5px;color:green" href="/my_products/users" onclick="hidesearchlist()">Manage Users</a></li>
+                <li><a style="padding:5px;color:green" href="/my_products/organizations">Manage organizations</a></li>
+                <li><a style="padding:5px;color:green" href="/my_products">My Products</a></li>
+                <li><a style="padding:5px;color:green" href="/about_us">about_us</a></li>
+              </ul>
             </div>
             
               
@@ -369,8 +390,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
               if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 5) {
                 
                 document.getElementById("header").style.top = "0px";
-                document.getElementById("header").style.fontSize = "15px";
-                document.getElementById("title").style.fontSize = "20px";
+                //document.getElementById("header").style.fontSize = "15px";
+                //document.getElementById("title").style.fontSize = "15px";
                 document.getElementById("header").style.width = "100%";
                 document.getElementById("header").style.color = "green";
                 document.getElementById("header").style.padding = "10px";
@@ -399,7 +420,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 
               } else {
                 document.getElementById("header").style.top = "51px";
-                document.getElementById("header").style.fontSize = "25px";
+                //document.getElementById("header").style.fontSize = "25px";
                 document.getElementById("header").style.width = "100%";
                 document.getElementById("header").style.color = "black";
                
@@ -790,8 +811,65 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
               inCartElement.addEventListener('DOMSubtreeModified', updateCheckoutVisibility);
             });
           </script>
-               
-          
+          <script>
+            function searchFunction() {
+              
+              var input, filter, ul, li, a, i, txtValue;
+                input = document.getElementById("searchtext");
+                filter = input.value.toUpperCase();
+                ul = document.getElementById("searchUL");
+                li = ul.getElementsByTagName("li");
+                for (i = 0; i < li.length; i++) {
+                    a = li[i].getElementsByTagName("a")[0];
+                    txtValue = a.textContent || a.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        li[i].style.display = "";
+                    } else {
+                        li[i].style.display = "none";
+                    }
+                }
+            }
+            </script>   
+            <script>
+              function viewsearchlist(){
+                document.getElementById("searchlist").style.display = 'block';
+                }
+
+                  
+            </script>
+            <Script>
+              window.onload = function(){
+                var divToHide = document.getElementById('searchlist');
+                document.onclick = function(e){
+                  if(e.target.id !== 'divToHide'){
+                    //element clicked wasn't the div; hide the div
+                    divToHide.style.display = 'none';
+                  }
+                };
+              };
+            </script>
+
+
+<script>
+  // Attach event listener to the <a> element
+  document.getElementById('myLink').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent default link behavior
+
+    // Go to a specific page
+    window.location.href = 'https://example.com/page';
+  });
+
+  // Wait for the page to load
+  window.addEventListener('load', function() {
+    // Find the specific element on the page
+    var targetElement = document.getElementById('elementId');
+
+    if (targetElement) {
+      // Change the height of the element
+      targetElement.style.height = '200px';
+    }
+  });
+</script>
           
           
         

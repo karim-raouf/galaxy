@@ -2,6 +2,26 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/javascript.js to edit this template
  */
+function deleteProduct()
+{
+      document.getElementById("statusrow").style.display = 'none';
+      document.getElementById("info").style.display = 'none';
+      document.getElementById('productdeleteconfirm').style.display='block';
+  }
+
+
+function statusshow()
+{
+  if(document.getElementById("statusrow").style.display === 'block')
+  {
+      document.getElementById("statusrow").style.display = 'none';
+  }
+  else
+  {
+      document.getElementById("statusrow").style.display = 'block';
+      document.getElementById("info").style.display = 'none';
+  }
+  }
 
 function info() {
   if(document.getElementById("info").style.display === 'block')
@@ -11,6 +31,7 @@ document.getElementById("info").style.display = 'none';
 else
 {
 document.getElementById('info').style.display = 'block';
+document.getElementById('statusrow').style.display = 'none';
 }
 }
 function openleftNav(y) {
@@ -73,6 +94,60 @@ function openleftNav(y) {
 
 // }
 
+window.addEventListener("resize", resizetoggleMaxHeight);
+
+function resizetoggleMaxHeight() {
+  var w = window.innerWidth;
+  const elements = document.querySelectorAll('.accordion-content');
+  for (let i = 0; i < elements.length; i++) {
+    const element = elements[i];
+    const actualHeight = element.offsetHeight;
+    if (actualHeight !== '0px') {
+      element.style.maxHeight = actualHeight;
+    }
+  }
+}
+// function toggleMaxHeight(){
+
+//   var div = document.getElementById("elementId");
+//   var divHeight = div.scrollHeight + 10; // get the scroll height and add 10
+//   div.style.height = divHeight + "px"; // set the height of the div element
+// }
+
+
+function toggleMaxHeight(elementId, newMaxHeight, newMaxHeight1) {
+  var element = document.getElementById(elementId);
+  var w = window.innerWidth;
+ 
+  if (element) {
+    if (element.style.maxHeight === '0px') {
+      if( w >= 1025 ){ 
+        element.style.maxHeight = newMaxHeight;
+     }
+          else {
+              if(w > 700 && w < 1025)
+                {element.style.maxHeight = newMaxHeight;}
+                else
+                {element.style.maxHeight = newMaxHeight1;} }
+        
+          if(document.getElementById(elementId+"Cancel")){
+          document.getElementById(elementId+"Cancel").style.display = "block";
+          document.getElementById(elementId+"Save").style.display = "block";
+          }
+      } 
+
+    else {
+      element.style.maxHeight = '0';
+      if(document.getElementById(elementId+"Cancel")){
+        document.getElementById(elementId+"Cancel").style.display = "none";
+        document.getElementById(elementId+"Save").style.display = "none";  
+      }
+     }
+  } else {
+    console.log("Element with ID '" + elementId + "' not found.");
+  }
+}
+
 function showdiv(x) {
 
 if(document.getElementById(x).style.display === "block")
@@ -88,11 +163,15 @@ document.getElementById(x).style.display = "block";
 
 }
 }
-function arrowdirection(x) {
-if (document.getElementById(x).className === "fa fa-arrow-circle-down") {
-document.getElementById(x).className = "fa fa-arrow-circle-up";
+
+function arrowdirection(x){
+var element = document.getElementById(x);
+if (element.classList.contains("fa-arrow-circle-down")) {
+  element.classList.remove("fa-arrow-circle-down");
+  element.classList.add("fa-arrow-circle-up");
 } else {
-document.getElementById(x).className = "fa fa-arrow-circle-down";
+  element.classList.remove("fa-arrow-circle-up");
+  element.classList.add("fa-arrow-circle-down");
 }
 }
 
@@ -171,5 +250,9 @@ function showPswMatchMsg() {
 document.getElementById("pswMatchMsg").style.display = "block";
 }
 ;
+
+
 // End show password condition message ---------------------------------------
+
+
 

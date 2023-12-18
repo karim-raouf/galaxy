@@ -53,6 +53,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'galaxy.middleware.TimeRestrictionMiddleware',
+    'galaxy.middleware.IpRestrictionMiddleware',
+    'galaxy.middleware.PswFlagMiddleware',
+    'ipinfo_django.middleware.IPinfoMiddleware',
+
+
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -141,7 +147,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'EET'
 
 USE_I18N = True
 

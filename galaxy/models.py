@@ -21,7 +21,17 @@ GENDER = (
     ( 1 , 'Male'),
     ( 2 , 'Female'),
 )
-
+TAXTYPE=(
+    (1 , 'On the net total of the item'),
+    (2 , 'On Previous Row Amount'),
+    (3 , 'On Previous Row Total'),
+)
+TAXAMOUNT=(
+    (4 , 'Fixed Amount'),
+    (5 , 'Rate'),
+    (6 , 'Fixed Amount + Rate'),
+    (7 , 'Enter the rate manualy'),
+)
 
 
 class User(AbstractUser):
@@ -33,19 +43,20 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=128, null=True, blank=True)
     avatar = models.ImageField(upload_to='user_images/' , null = True , blank = True)
     user_Type = models.ForeignKey('UsersType' , on_delete=models.SET_NULL , null=True)
-    SubscriptionID = models.ForeignKey('Subscription' , on_delete=models.SET_NULL , null=True , blank=True)
+    SubscriptionID = models.ForeignKey('Subscription' , on_delete=models.CASCADE , null=True , blank=True)
     Language = models.ForeignKey('Language' , on_delete=models.SET_NULL , null=True , blank=True)
     Birth_Date = models.DateField(verbose_name="Birth Date" , null=True , blank=True)
     Gender = models.IntegerField(choices=GENDER , null=True, blank=True)
     Telephone = models.CharField(max_length=100 , unique=True , null=True , blank=True)
     ip_restricted = models.BooleanField(default=False)
+    system_user_active = models.BooleanField(default=True)
 
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     
     def __str__(self):
-        return str(self.email)+'-'+str(self.id)
+        return '(' + str(self.email)+'-'+str(self.id)+')'
     
     
 
@@ -62,7 +73,7 @@ class Organization(models.Model):
     Address = models.CharField("Address :",max_length=100 , null=True, blank=True)
     Country = models.ForeignKey('Country',verbose_name="Country :" , on_delete=models.SET_NULL , null=True, blank=True)
     Currency = models.ForeignKey('Currency' ,verbose_name="Currency :" ,on_delete=models.SET_NULL , null=True, blank=True)
-    Tax = models.ForeignKey('Tax' ,verbose_name="Tax :" ,on_delete=models.SET_NULL , null=True, blank=True)
+    # Tax = models.ForeignKey('Tax' ,verbose_name="Tax :" ,on_delete=models.SET_NULL , null=True, blank=True)
     Cost_Method = models.IntegerField("Calculate item cost as :" ,choices=COSTMETH , null=True, blank=True)
     Create_Receive = models.BooleanField("Automaticlly create inter-store receive inventory orders :" , default=False)
     Create_Issue = models.BooleanField("Automaticlly create inter-store issue inventory orders :", default=False)
@@ -75,7 +86,7 @@ class Organization(models.Model):
     
     
     def __str__(self):
-        return str(self.UserID)+'-'+str(self.OrganizationName)
+        return str(self.UserID)+' ('+str(self.OrganizationName) + ')'
     
 
 class Subscription(models.Model):
@@ -140,13 +151,42 @@ class Currency(models.Model):
         return self.name
     
     
-class Tax(models.Model):  
-    tax_name = models.CharField(max_length=50 , null=True , blank=True)
+class Taxes_Charges(models.Model):  
+    org_id = models.ForeignKey('Organization' , on_delete=models.CASCADE , null=True , blank=True)
+    tax_title = models.CharField(max_length=50 , null=True , blank=True)
+    tax_include = models.BooleanField()
+    default = models.BooleanField()
+    disable = models.BooleanField()
+    min_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    max_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    tax_type = models.IntegerField(choices=TAXTYPE, null=True)
+    tax_amount  = models.IntegerField(choices=TAXAMOUNT, null=True)
+    rate =  models.DecimalField(max_digits=5, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    
+    
     
     def __str__(self):
-        return str(self.tax_name)
+        return str(self.org_id) + ' (' + self.tax_title + ')'
+        
+    
+class Store_Tax(models.Model):
+    org_id = models.ForeignKey('Organization' , on_delete=models.CASCADE , null=True , blank=True)
+    tax_id = models.ForeignKey('Taxes_Charges' , on_delete=models.CASCADE , null=True , blank=True)
+    store_id = models.ForeignKey('Store' , on_delete=models.CASCADE , null=True , blank=True)
+    
+    def __str__(self):
+        return str(str(self.org_id.UserID) + ' (' +self.store_id.name + ' (' + self.tax_id.tax_title + '))')
     
 
+    
+    
+class Store(models.Model):
+    org_id = models.ForeignKey('Organization' , on_delete=models.CASCADE , null=True , blank=True)
+    name = models.CharField(max_length=50 , null=True )
+    
+    def __str__(self):
+        return str(self.name)   
 
 class UsersType(models.Model):
     UserTypeCode = models.IntegerField(null = True)
@@ -198,3 +238,10 @@ class TimeRestriction(models.Model):
     def __str__(self):
         return str(self.UserID)+'('+str(self.day_of_week)+')'
     
+class Department(models.Model):
+    name =  models.CharField(max_length=25 , null=True)
+    org_id = models.ForeignKey('Organization' , on_delete=models.CASCADE , null=True , blank=True)
+    
+class Category(models.Model):
+    name =  models.CharField(max_length=25 , null=True)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)

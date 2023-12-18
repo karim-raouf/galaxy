@@ -92,7 +92,6 @@ pageheader {
   width: 100%;
   text-align: center;
   margin-top: 30px;
-  top: 10%;
   color:black
   
 }
@@ -114,9 +113,52 @@ pageheader {
 .overlay .closebtn {
   position: absolute;
   font-size: x-large;
-  right: 45px;
+  right: 20px;
   
 }
+
+.overlay2 {
+  width: 0;
+  position:absolute;
+  z-index: 4;
+  box-shadow: 0px 8px 16px 0px rgba(10, 78, 10, 0.9);
+  background-color:  #e9ecef;
+  overflow-x: hidden;
+  transition: 0.5s ;
+  overflow-y:auto;
+}
+
+.overlay2-content {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  margin-top: 40px;
+  top: 10%;
+  color:black
+  
+}
+
+.overlay2 a {
+  padding: 8px;
+  text-decoration: none;
+  font-size: medium;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.overlay2 a:hover, .overlay2 a:focus {
+  color: darkgreen;
+  font-weight: bold;
+}
+
+.overlay2 .closebtn {
+  position: absolute;
+  font-size: x-large;
+  right: 10px;
+  
+}
+
 /*
 @media screen and (max-height: 450px) {
   .overlay a {font-size: xx-small}
@@ -130,8 +172,8 @@ pageheader {
 */
 
 
-input[type=text], select, textarea {
-  width: 95%;
+input[type=text], select, textarea, url {
+  /* width: 95%; */
   padding: 12px 0px 12px 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -141,7 +183,15 @@ input[type=text], select, textarea {
 }
 
 input[type=date] {
-  /* width: 50%; */
+  /* width: 95%; */
+  padding: 12px 0px 12px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+
+}
+input[type=number] {
+  /* width: 95%; */
   padding: 12px 0px 12px 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -150,7 +200,7 @@ input[type=date] {
 }
 
 input[type=tel] {
-  /* width: 50%; */
+  /* width: 95%; */
   padding: 12px 0px 12px 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -159,7 +209,7 @@ input[type=tel] {
 }
 
 input[type=email]{
-  width: 95%;
+  /* width: 95%; */
   padding: 12px 0px 12px 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -177,7 +227,7 @@ input[type=password] {
     background-image: url('imgs/password.png');
     background-position: 10px 10px;
     background-repeat: no-repeat;
-    padding: 12px 20px 12px 40px;
+    padding: 12px 20px 12px 12px;
 
 }
 
@@ -376,7 +426,11 @@ transition: all 0.8s;
   color: black;
   font-size: 15px;
 }
-
+.col-50 {
+  float: left;
+  width: 50%;
+  margin-top: 6px;
+}
 .col-75 {
   float: left;
   width: 75%;
@@ -435,7 +489,7 @@ transition: all 0.8s;
     color:darkgreen;
 }
 .title {
-    font-size:x-large;
+    font-size:large;
     font-weight:bolder;
     color:green
 }
@@ -478,6 +532,23 @@ transition: all 0.8s;
 .btn1:hover {
   background-color: white;
   color : green;
+}
+
+.btn3 {
+  float: right;
+  background-color: transparent;
+  margin:0;
+  color: black;
+  width: 10%;
+  cursor: pointer;
+  font-size: small;
+  text-align: center;
+  padding : 15px 0px 0px 0px;
+}
+
+.btn3:hover {
+  /* background-color: white; */
+  color : white;
 }
 
 .btn2 {
@@ -618,6 +689,7 @@ transition: all 0.8s;
   margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
   border: 1px solid #888;
   width: 80%; /* Could be more or less, depending on screen size */
+  cursor: pointer;
 }
 
 /* Style the horizontal ruler */
@@ -662,26 +734,109 @@ hr {
 .clearfix::after {
   content: "";
   clear: both;
-  display: table;
-}  
+  display: table;
+} 
+
+.sticky {
+  font-size: small; 
+  font-weight: bold;
+  position: fixed;
+  top: 51px;
+  padding: 10px;
+  width: 100%;
+  background-color : lightgray;
+  color: black;
+  transition: all 0.8s;
+  z-index:3 ;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.accordion{ 
+
+  text-align: left;
+  margin: 5px;
+  border-radius:10px;
+  border:solid;
+}
+
+.accordion-content{
+  -webkit-transition: max-height 0.3s; 
+  -moz-transition: max-height 0.3s; 
+  -ms-transition: max-height 0.3s; 
+  -o-transition: max-height 0.3s; 
+  transition: max-height 0.3s;  
+  background: #f1f1f1;
+  overflow: hidden;
+  width: 100%;
+  border-radius:10px;
+  border:none;
 
 
+
+  
+}
+
+.accordion-inner{
+  padding: 0 15px;
+
+}
+
+.accordion-toggle{
+  -webkit-transition: background 0.3s linear;
+  -moz-transition: background 0.3s linear;   
+  -ms-transition: background 0.3s linear;   
+  -o-transition: background 0.3s linear;   
+  transition: background 0.3s linear;   
+  background-color: #c8c389;
+  border-radius: 3px;
+  color: black;
+  display: block;
+  margin: 0 0 0px;
+  padding: 10px;
+  text-decoration: none;
+  text-align: left;
+  outline: none;
+  font-size: large;
+  
+  &:hover{
+    background-color: rgba(246, 210, 5, 0.558); 
+    color:white;
+    /* background: darken(rgb(79, 70, 21), 50%); */
+  }
+ 
+}
+
+.online {border-color:darkgreen;border-radius:10px;color:white;background-color:yellowgreen;box-shadow: 0px 8px 16px 0px rgba(10, 78, 10, 0.3);margin-left:10px;font-size:x-small;} 
+.offline {border-color:rgb(100, 0, 0);border-radius:10px;color:white;background-color:rgb(229, 94, 94);box-shadow: 0px 8px 16px 0px rgba(10, 78, 10, 0.3);margin-left:10px;font-size:x-small;} 
+.divTools {border-color:darkgreen;border-radius:10px;color:white;background-color:yellowgreen;box-shadow: 0px 8px 16px 0px rgba(10, 78, 10, 0.3);margin-left:10px;font-size:medium;float:right;cursor: pointer;
+  &:hover{
+    background-color: rgba(246, 210, 5, 0.558); 
+    color:green;} }
+
+.tableHeader{font-size:small;color:black;}
+.tableRow{font-size:x-small;color:darkgreen;}
 
 /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
 @media screen and (max-width: 600px) {
-  .col-100,.col-65,.col-20,.col-35,.col-25,.col-30, .col-75,.col-15,.col-10,.col-5,.col-60,.col-11,.col-45,.col-40 input[type=submit] 
+  .col-100,.col-65,.col-20,.col-35,.col-25,.col-30,.col-50, .col-75,.col-15,.col-10,.col-5,.col-60,.col-11,.col-45,.col-40 input[type=submit] 
   {
     width: 100%;
     margin-top: 0;
   }
-
+  .overlay a {font-size: small}
   .overlay-content a {font-size: medium}
-  .orgrow a {font-size: medium}
+  
   .overlay 
   {
   font-size: small;
   top: 55px;
   right: 35px;
+  }
+  .overlay2 a {font-size: small}
+  .overlay2-content a {font-size: small}
+  .overlay2 
+  {
+  font-size: small;
   }
 .pagetitle {
     text-align: center;  
@@ -691,7 +846,7 @@ hr {
  
 }
 .title {
-    font-size:Larg;
+    font-size:medium;
     font-weight:bolder;
 }
 .closebtn {
@@ -714,7 +869,7 @@ ul li {
   font-size: small;
 }
 
-input[type=text], select, textarea {
+input[type=text],input[type=number], select, textarea {
   font-size: small;
 }
 
@@ -722,39 +877,49 @@ input[type=password]{
   font-size: small;
   width: 100%;
 }
-.orgrow a {font-size:medium}
+
 .passerror{        
   font-size:small;
   padding-left:0px;
 }
 
-.modeldelete_cancelbtn, .modeldelete_deletebtn {
-  width: 100%;
-}
-/* Modal Content/Box */
-.deletemodal-content {
-width: 90%; /* Could be more or less, depending on screen size */
-}
+.modeldelete_cancelbtn, .modeldelete_deletebtn {width: 100%;}
+.deletemodal-content {width: 90%;}
 .btn {width: 35%;font-size: small;}
 .btn1 {width: 35%;font-size: small;}
 .btn2 {width: 30%;font-size: small;}
-label {
-  color :green;
-  font-size: small;
- 
-  }
+.btn3 {width: 10%;font-size: small;}
+label {color :green;font-size: small;}
+input[type=text],input[type=email],select, textarea, url {width: 95%;}
+input[type=password] {width: 90%;}
+#searchtext {width:50%}
+#searchlist {width:60%;left:20%;}
+.divTools {font-size: small;}
+.overlay a {font-size: small}
+.orgrow a {font-size:small}
+.tableHeader{font-size:small;color:black;}
+.tableRow{font-size:x-small;color:darkgreen;}
 }
 
 @media screen and (min-width: 601px) and (max-width: 1025px){
 
   .btn {width: 20%;font-size: small;}
   .btn1 {width: 20%;font-size: small;}
-  ul li {font-size: small;padding: 12px  8px 12px 0px;  }
-  label {
-    color :green;
-    font-size: small;
+  .btn3 {width: 5%;font-size: small;}
+  ul li {font-size: small;padding: 12px  8px 12px 40px;}
+  label {color :green;font-size: small; }
+  input[type=text],input[type=email], select, textarea,url {width: 90%;}
+  input[type=password] {width: 75%;}
+  .title {font-size: medium}
+  .overlay2 a {font-size: small}
+  .divTools {font-size: medium;}
+  #searchtext {width:25%}
+  #searchlist {width:45%;left:42%;}
+  .orgrow a {font-size:medium}
+  .overlay a {font-size: medium}
+  .tableHeader{font-size:medium;color:black;}
+.tableRow{font-size:small;color:darkgreen;}
   
-    }
 }
 
 @media screen and (min-width: 1026px){
@@ -762,10 +927,18 @@ label {
   .btn {width: 15%;font-size: medium;}
   .btn1 {width: 15%;font-size: medium;}
   .btn2 {width: 90%;font-size: medium;}
+  .btn3 {width: 5%;font-size: medium;}
   ul li {font-size: medium;padding: 12px  8px 12px 40px;  }
-label {
-  color :green;
-  font-size: medium;
-  
-  }
+  label {color :green;font-size: medium;}
+  .overlay2 a {font-size: medium}
+  .title {font-size: large}
+  .divTools {font-size: large;}
+  input[type=text],input[type=email], select, textarea, url {width: 50%;}
+  input[type=password] {width: 50%;}
+  #searchtext {width:25%}
+  #searchlist {width:35%;left:42%;}
+  .orgrow a {font-size:large}
+  .overlay a {font-size: large}
+  .tableHeader{font-size:large;color:black;}
+.tableRow{font-size:medium;color:darkgreen;}
 }
