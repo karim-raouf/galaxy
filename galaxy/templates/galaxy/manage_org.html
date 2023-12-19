@@ -352,7 +352,7 @@
                 <div id="taxTemp" class="overlay2-content">
                   
                   {% for temp in tax_temps %} 
-                    <a style="font-size:20px;padding-bottom:8px;padding-top:8px;" id="tax{{temp.id}}" onclick="addQueryParam('{{ temp.id }}')">{{temp.tax_title}}</a> 
+                    <a style="font-size:20px;padding-bottom:8px;padding-top:8px;" id="tax{{temp.id}}" onclick="addTaxParam('{{ temp.id }}')">{{temp.tax_title}}</a> 
                   {% endfor %}
                   
                   <h3 id="noTax" style="color:grey;padding-top:23px;padding-bottom:23px;display:none">No templates available</h3>
@@ -493,14 +493,13 @@
           <div id="DepCatInfo" class="accordion-content" style="max-height: 0px;">
             <div class="accordion-inner">
               <br>
-              <div class="col-45" style="border-radius:10px;box-shadow: 0px 2px 8px 8px rgba(0,0,0,0.2);margin-bottom:25px;" >
+              <div class="col-45" style="border-radius:10px;box-shadow: 0px 2px 8px 8px rgba(0,0,0,0.2);margin-bottom:25px;min-height: 230px;" >
                 <p></p>
-                <div class="orgrow" style="">
-
+                <div class="orgrow">
                   <strong><label style="padding: 0px 20px 0px 20px;">Departments : <span id="DepAdd" style="cursor:pointer;font-size:medium;margin-top:20px;" class="online">&nbsp;&nbsp; create &nbsp;&nbsp;</span></label></strong>
                 </div>   
                   <br>               
-                <div id="addDepEl" style="display:none;background-color:#a9a9a9;margin-left: 15px;margin-right: 15px;border-radius:10px;">
+                <div id="addDepEl" style="display:none;background-color:#a9a9a9;margin-left: 15px;margin-right: 15px;border-radius:10px;margin-bottom:15px;">
                   <div class="orgrow" >
                     <table id = "AddDep-table" style="width:90%;text-align:center">
                       <tr class="tableHeader">
@@ -509,20 +508,20 @@
                         <th > </th>
                       </tr>
                       <tr class="tableRow">
-                          <td style="width:25%"><input required="false" style="padding:12px 3px 12px 3px;width:80%" type="text" id="DepCode" name="DepCode" placeholder="" > </td>
-                          <td style="width:50%"><input required="false" style="padding:12px 3px 12px 3px;width:80%" type="text" id="DepName" name="DepCode" placeholder="" > </td>
-                          <td style="width:20%"><span id="DepAddBtn" style="margin:13px 0px 13px 0px" class="divTools">&nbsp;&nbsp; + add &nbsp;&nbsp;</span></td>
-                        </tr>
+                        <td style="width:25%"><input required="false" style="padding:12px 3px 12px 3px;width:80%" type="text" id="DepCode" name="DepCode" placeholder="" > </td>
+                        <td style="width:50%"><input required="false" style="padding:12px 3px 12px 3px;width:80%" type="text" id="DepName" name="DepCode" placeholder="" > </td>
+                        <td style="width:20%"><span id="DepAddBtn" style="margin:13px 0px 13px 0px" class="divTools">&nbsp;&nbsp; + add &nbsp;&nbsp;</span></td>
+                      </tr>
                     </table>
                   </div>
                   <br>
                 </div>
-                <br>
+                
                 <div class="orgrow" style="max-height: 200px; overflow-y: scroll;">
                   <div class="col-90" style="padding-left:15px; padding-bottom:20px;">
                         <ul id="DepUL" >
                           {% for department in departments %}
-                            <li class="orgDepartment" id = "{{department.name}}" data-department-name = "{{department.name}}" data-department-id = "{{department.id}}" > {{department.name}} <span class="closeLI department-del">×</span></li>
+                            <li class="orgDepartment" id = "{{department.name}}" data-department-name = "{{department.name}}" data-department-id = "{{department.id}}" onclick="addDepParam('{{department.id}}')" > {{department.name}} <span class="closeLI department-del">×</span></li>
                           {% endfor %}
                           <center id="depEmptyTag" style="display:none;color:grey;padding-top:20px;"><h3>No departments available</h3><center>
                         </ul>
@@ -536,14 +535,14 @@
                 <p></p>
                 <p></p>
               </div>
-              <div class="col-45"  style="border-radius:10px;box-shadow: 0px 2px 8px 8px rgba(0,0,0,0.2);margin-bottom:25px;">
+              <div class="col-45"  style="border-radius:10px;box-shadow: 0px 2px 8px 8px rgba(0,0,0,0.2);margin-bottom:25px;min-height: 230px;">
                 <p></p>
               <div class="orgrow" style="">
 
-                <strong><label style="padding: 0px 20px 0px 20px;">Categories : <span id="CatAdd" onclick="showdiv('addCat')" style="cursor:pointer;font-size:medium;" class="online">&nbsp;&nbsp; create &nbsp;&nbsp;</span></label></strong>
+                <strong><label style="padding: 0px 20px 0px 20px;">Categories : <span id="CatAdd" style="cursor:pointer;font-size:medium;margin-top:20px;visibility:hidden;" class="online">&nbsp;&nbsp; create &nbsp;&nbsp;</span></label></strong>
               </div>   
                 <br>               
-              <div id="addCat" style="display:none">
+              <div id="addCatEl" style="display:none;background-color:#a9a9a9;margin-left: 15px;margin-right: 15px;border-radius:10px;margin-bottom:15px;">
                 <div class="orgrow">
                   <table id = "AddCat-table" style="width:90%;text-align:center">
                     <tr class="tableHeader">
@@ -552,9 +551,9 @@
                       <th > </th>
                     </tr>
                     <tr class="tableRow">
-                        <td style="width:25%"><input required="false" style="padding:12px 3px 12px 3px;width:80%" type="text" id="DepCode" name="DepCode" placeholder="" > </td>
-                        <td style="width:50%"><input required="false" style="padding:12px 3px 12px 3px;width:80%" type="text" id="DepCode" name="DepCode" placeholder="" > </td>
-                        <td style="width:20%"><span id="CarAddBtn" style="margin:13px 0px 13px 0px" class="divTools">&nbsp;&nbsp; + add &nbsp;&nbsp;</span></td>
+                        <td style="width:25%"><input required="false" style="padding:12px 3px 12px 3px;width:80%" type="text" id="CatCode" name="CatCode" placeholder="" > </td>
+                        <td style="width:50%"><input required="false" style="padding:12px 3px 12px 3px;width:80%" type="text" id="CatName" name="CatName" placeholder="" > </td>
+                        <td style="width:20%"><span id="CatAddBtn" style="margin:13px 0px 13px 0px" class="divTools">&nbsp;&nbsp; + add &nbsp;&nbsp;</span></td>
                       </tr>
                   </table>
                 </div>
@@ -565,10 +564,12 @@
                 <div class="col-90" style="padding-left:15px; padding-bottom:20px;">
                       <ul id="CatUL" >
 
-                          <li> Sitting Groups <span class="closeLI storeTax-del">×</span></li>
-
+                          {% comment %} <li> Sitting Groups <span class="closeLI storeTax-del">×</span></li> {% endcomment %}
+                        <center><h3 id="noDepSelected" style = "color:grey;padding-top:20px;">No department selected</h3></center>
                       </ul>
+                      
                 </div>
+                <br>
             </div>
             <br>
 
@@ -1021,7 +1022,7 @@ function addappliedstore() {
                   element.style.marginTop = '-21.5px';
 
                   element.onclick = function() {
-                    addQueryParam(data.tempid);
+                    addTaxParam(data.tempid);
                   };
                   taxEl.appendChild(element);
                   document.getElementById('noTax').style.display = 'none'
@@ -1185,7 +1186,7 @@ const orgCancelButton = document.querySelector('.orgcancelbtn');
   }); 
 </script>
 <script>
-  function addQueryParam(taxTitle) {
+  function addTaxParam(taxTitle) {
       // Get the current URL
       document.getElementById("stores").value = "";
       var currentUrl = new URL(window.location.href);
@@ -1448,6 +1449,7 @@ const orgCancelButton = document.querySelector('.orgcancelbtn');
     } else{
       alertify.set('notifier', 'position', 'top-center');
       alertify.error('• Save the template first');
+      document.getElementById("stores").value = "";
     }
   });
 
@@ -1731,7 +1733,7 @@ const taxDelButton = document.getElementById('taxDel');
     var span = document.createElement("span");
     var txt = document.createTextNode("\u00D7");
     //span.setAttribute("data-day-name", `${day}`);
-    span.className = "closeLI department-del";
+    span.className = "closeLI department-del-js";
     span.appendChild(txt);
     li.appendChild(span);
 
@@ -1748,13 +1750,13 @@ const taxDelButton = document.getElementById('taxDel');
     }
     if (/[a-zA-Z]/.test(code)) {
       alertify.set('notifier', 'position', 'top-center');
-      alertify.error("Code should not contain letters!");
+      alertify.error("Code should only contain numbers!");
       return;
     }
     // Check if name contains any numbers
     if (/\d/.test(name)) {
         alertify.set('notifier', 'position', 'top-center');
-        alertify.error("Name should not contain numbers!");
+        alertify.error("Name should only contain letters!");
         return;
     }
 
@@ -1798,6 +1800,9 @@ const taxDelButton = document.getElementById('taxDel');
           alertify.set('notifier', 'position', 'top-center');
           alertify.success(data.message);
           li.setAttribute("data-department-id", data.dep_id);
+          li.onclick = function() {
+            addDepParam(data.dep_id);
+          };
           
         } else if (data.error) {
           alertify.set('notifier', 'position', 'top-center');
@@ -1810,7 +1815,7 @@ const taxDelButton = document.getElementById('taxDel');
       });
 
 
-    var newDelButtons = document.querySelectorAll('.department-del');
+    var newDelButtons = document.querySelectorAll('.department-del-js');
     for (var i = 0; i < newDelButtons.length; i++) {
       newDelButtons[i].onclick = function(event) {
         var span = event.target;
@@ -1935,6 +1940,286 @@ const taxDelButton = document.getElementById('taxDel');
   if (numberOfElements === 0){
     document.getElementById('depEmptyTag').style.display = 'block'
   }
+  removeQueryParam('dep-id');
+
+</script>
+{% comment %} -------------------------------------------------------------------------------------------------------- {% endcomment %}
+<script>
+  function addDepParam(depId) {
+    // Get the current URL
+    var currentUrl = new URL(window.location.href);
+    
+    if (currentUrl.searchParams.has('dep-id')) {
+      // Remove the existing 'tempid' query parameter
+      currentUrl.searchParams.delete('dep-id');
+    }
+
+    // Append the new query parameter
+    currentUrl.searchParams.set('dep-id', encodeURIComponent(depId));
+
+    // Update the URL
+    window.history.replaceState({}, document.title, currentUrl.href);
+
+    // Fetch and update the form dynamically
+    document.getElementById('addCatEl').style.display = 'none'
+    document.getElementById('CatAdd').innerHTML = '&nbsp;&nbsp; create &nbsp;&nbsp;'
+    showDepCategories();
+  }
+
+  function showDepCategories() {
+    var depId = new URLSearchParams(window.location.search).get('dep-id');
+
+    if (depId) {
+      
+      document.getElementById('CatAdd').style.visibility = 'visible';
+      document.getElementById('noDepSelected').style.display = 'none'
+      // Make an AJAX request to get the form data
+      $.ajax({
+        url: `/org_dep_categories/${depId}`,  // Replace with your actual backend endpoint
+        method: 'GET',
+        success: function (data) {
+          
+          // Update other fields accordingly
+          depCategories = document.getElementById('CatUL');
+          var liElements = depCategories.querySelectorAll('li');
+          liElements.forEach(function(li) {
+              depCategories.removeChild(li);
+          });
+          var noCatAvailable = true;
+          //linkedStoresEl.innerHTML = '';
+          for (var category of data.dep_categories) {
+         
+            var li = document.createElement("li");
+            li.id = category.id;
+            var t = document.createTextNode(category.name);
+            li.appendChild(t);
+
+            var span = document.createElement("span");
+            var txt = document.createTextNode("\u00D7");
+            span.className = "closeLI catDel-Btn";
+            span.appendChild(txt);
+            span.setAttribute("data-cat-id", `${category.id}`);
+            li.appendChild(span);
+            //li.setAttribute("data-store-id", `${store.id}`);
+            //li.setAttribute("data-store-name", `${store.name}`);
+            depCategories.appendChild(li)
+            var noCatAvailable = false;
+          }
+          if(noCatAvailable){
+            
+            document.getElementById('noDepSelected').style.display = 'block'
+            document.getElementById('noDepSelected').textContent = "No categories available"
+          }
+
+          const catSpans = document.querySelectorAll('.catDel-Btn');
+          // Iterate over each element and set the display property to 'block'
+          console.log('333')
+          catSpans.forEach(element => {
+            console.log(element)
+            console.log('222')
+            var elId = element.getAttribute('data-cat-id');
+            element.onclick = function() {
+              delCat(elId);
+            };
+          });
+
+          
+          function delCat(depId) {
+            const url = `/my_products/organizations/departments/categories/delete/${depId}`;
+
+            // Make an asynchronous request to delete the product from the server
+            fetch(url, {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+              },
+            })
+              .then(response => response.json())
+              .then(data => {
+                // Handle the response data
+                // For example, display a success message or update the cart UI
+                if (data.success) {
+                  // Handle the success response
+                  document.getElementById(`${depId}`).remove()
+                  var listElements = depCategories.querySelectorAll('li');
+                  var numberOfElements = listElements.length;
+                  if (numberOfElements === 0){
+                    document.getElementById('noDepSelected').style.display = 'block'
+                  }
+                  alertify.set('notifier', 'position', 'top-center');
+                  alertify.error(data.message);
+                }
+                })
+            
+              .catch(error => {
+                // Handle any errors that occurred during the request
+                console.error(error);
+              });
+
+          }
+          
+        },
+        error: function () {
+          console.error('Failed to fetch form data.');
+        },
+      });
+    }
+  }
+  
+  const catAddButton = document.getElementById('CatAddBtn');
+  // Attach an event listener to the delete button
+  catAddButton.addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent the default behavior of the button click
+    //var depname = addButton.dataset.departmentName;
+    var li = document.createElement("li");
+    var catCode = document.getElementById("CatCode").value;
+    var catName = document.getElementById("CatName").value;
+    li.id = `${catCode}-${catName}`;
+    li.setAttribute("data-category-name", `${catCode}-${catName}`);
+    var t = document.createTextNode(catCode +"-"+catName);
+    li.appendChild(t);
+  
+    var categoriesEl = document.getElementById("CatUL");
+    var lis = categoriesEl.getElementsByTagName("li");
+    var specifiedName = `${CatCode}-${catName}`;
+    
+    var span = document.createElement("span");
+    var txt = document.createTextNode("\u00D7");
+    //span.setAttribute("data-day-name", `${day}`);
+    span.className = "closeLI";
+    span.appendChild(txt);
+    li.appendChild(span);
+
+    console.log(li)
+    if (catCode === ""){
+      alertify.set('notifier', 'position', 'top-center');
+      alertify.error("Please add a code!");
+      return;
+    }
+    if(catName === ""){
+      alertify.set('notifier', 'position', 'top-center');
+      alertify.error("Please add a name!");
+      return;
+    }
+    if (/[a-zA-Z]/.test(catCode)) {
+      alertify.set('notifier', 'position', 'top-center');
+      alertify.error("Code should only contain numbers!");
+      return;
+    }
+    // Check if name contains any numbers
+    if (/\d/.test(catName)) {
+        alertify.set('notifier', 'position', 'top-center');
+        alertify.error("Name should only contain letters!");
+        return;
+    }
+
+    for (var i = 0; i < lis.length; i++) {
+      var lii = lis[i];
+      var liId = lii.getAttribute("id");
+      
+      if (liId.toLowerCase() === specifiedName.toLowerCase()) {
+        alertify.set('notifier', 'position', 'top-center');
+        alertify.error("Name already exists!");
+        return;
+      }
+    }
+    document.getElementById('noDepSelected').style.display = 'none'
+    categoriesEl.appendChild(li);
+
+    var queryString = window.location.search;
+    // Create a new instance of URLSearchParams with the query string
+    var searchParams = new URLSearchParams(queryString);
+    // Get the value of the "param" query parameter
+    var depId = searchParams.get('dep-id');
+
+    const url = `/my_products/organizations/departments/categories/add_cat/${depId}/${catCode}/${catName}`;
+
+    // Make an asynchronous request to delete the product from the server
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response data
+        // For example, display a success message or update the cart UI
+        if (data.success) {
+          document.getElementById("CatCode").value = '';
+          document.getElementById("CatName").value = '';
+          //document.getElementById('depEmptyTag').style.display = 'none'
+          alertify.set('notifier', 'position', 'top-center');
+          alertify.success(data.message);
+          //li.setAttribute("data-department-id", data.dep_id);
+          span.onclick = function() {
+            delCat(data.cat_id);
+          };
+          console.log(span)
+          
+        } else if (data.error) {
+          alertify.set('notifier', 'position', 'top-center');
+          alertify.error(data.message);
+        }
+      })
+      .catch(error => {
+        // Handle any errors that occurred during the request
+        console.error(error);
+      });
+      function delCat(depId) {
+        const url = `/my_products/organizations/departments/categories/delete/${depId}`;
+
+        // Make an asynchronous request to delete the product from the server
+        fetch(url, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+          },
+        })
+          .then(response => response.json())
+          .then(data => {
+            // Handle the response data
+            // For example, display a success message or update the cart UI
+            if (data.success) {
+              // Handle the success response
+              li.remove()
+              var listElements = categoriesEl.querySelectorAll('li');
+              var numberOfElements = listElements.length;
+              if (numberOfElements === 0){
+                document.getElementById('noDepSelected').style.display = 'block'
+              }
+              alertify.set('notifier', 'position', 'top-center');
+              alertify.error(data.message);
+            }
+            })
+        
+          .catch(error => {
+            // Handle any errors that occurred during the request
+            console.error(error);
+          });
+
+      }
+    });
+
+</script>
+<script>
+  const catCreateButton = document.getElementById('CatAdd');
+  // Attach an event listener to the delete button
+  catCreateButton.addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent the default behavior of the button click
+    createCatEl = document.getElementById('addCatEl')
+
+    if (catCreateButton.innerHTML === '&nbsp;&nbsp; create &nbsp;&nbsp;' ){
+      createCatEl.style.display = 'block'
+      catCreateButton.innerHTML = '&nbsp;&nbsp; done &nbsp;&nbsp;'
+    }else {
+      createCatEl.style.display = 'none'
+      catCreateButton.innerHTML = '&nbsp;&nbsp; create &nbsp;&nbsp;'
+    }
+  });
 </script>
 {% comment %} ---------------------------------------------------------------------------------------------------------- {% endcomment %}
    {% endblock additional %}

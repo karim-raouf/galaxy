@@ -2552,3 +2552,49 @@ def add_department(request , orgid , code , name):
                     'dep_id' : dep_id 
                     }
     return JsonResponse(response_data)
+
+
+def get_dep_categories(request, dep_id):
+    try:
+        selected_dep = Department.objects.get(id=dep_id)
+        # tax_form = OrgTax(instance=selected_temp)
+        related_categories = Category.objects.filter(department = selected_dep)
+        dep_categories = []
+    
+        for category in related_categories:
+            info = {
+                'name' : category.name,
+                'id' : category.id,
+            }
+            dep_categories.append(info)
+        # linked_stores_info = [{'name': store['name'], 'id': store['id']} for store in linked_stores]
+        print(dep_categories)
+        return JsonResponse({'success': True, 'dep_categories': dep_categories})
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)})
+    
+
+def del_category(request , cat_id):
+
+    category = Category.objects.get(id = cat_id)
+    category.delete()
+    
+    response_data = {
+    'success': True,
+    'message': f'• Category {category.name} deleted',
+    }
+    return JsonResponse(response_data)
+
+def add_category(request , depid , code , name):
+
+    department = Department.objects.get(id = depid)
+    cat_name = f"{code}-{name}"
+    category = Category.objects.create(department = department , name = cat_name)
+    cat_id = category.id
+    
+    response_data = {
+                    'success': True,
+                    'message': f'• category {cat_name} added',
+                    'cat_id' : cat_id 
+                    }
+    return JsonResponse(response_data)

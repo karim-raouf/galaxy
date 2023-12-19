@@ -242,6 +242,14 @@ class Department(models.Model):
     name =  models.CharField(max_length=25 , null=True)
     org_id = models.ForeignKey('Organization' , on_delete=models.CASCADE , null=True , blank=True)
     
+    def __str__(self):
+        return str(self.org_id) + '(' + self.name + ')'
+    
+    
 class Category(models.Model):
     name =  models.CharField(max_length=25 , null=True)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return str(self.department) +'(' + self.name + ')'
+    

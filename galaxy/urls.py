@@ -26,10 +26,10 @@ urlpatterns = [
     path('org_tax_info/<int:temp_id>', views.get_tax_data , name='org_tax_info'),
     path('my_products/organizations/departments/delete_dep/<int:orgid>/<int:depart_id>', views.delete_department , name = 'delete_departement'),
     path('my_products/organizations/departments/add_dep/<int:orgid>/<int:code>/<str:name>', views.add_department , name = 'add_departement'),
+    path('org_dep_categories/<int:dep_id>', views.get_dep_categories , name='org_dep_categories'),
+    path('my_products/organizations/departments/categories/delete/<int:cat_id>', views.del_category , name='delete_category'),
+    path('my_products/organizations/departments/categories/add_cat/<int:depid>/<int:code>/<str:name>', views.add_category , name = 'add_category'),
 
-    
-    
-    
     path('pdf_view/', views.view_pdf, name="pdf_view"),
 
 
