@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'm0f_ld%t!u&@$h&@_jn%qpcr7qtmb+0t__393(9#4dp3(f!!-f'
+SECRET_KEY = 'django-insecure-7_(f&dcu@ci-lz!8uiano9f+9mvtj8q)&uy1kudlk(fulox_qp'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'galaxy.apps.GalaxyConfig',
+    'galaxy',
+    'management',
     'mssql',
 
 ]
@@ -46,17 +47,18 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = 'galaxy.User'
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.middleware.security.SecurityMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'galaxy.middleware.TimeRestrictionMiddleware',
-    'galaxy.middleware.IpRestrictionMiddleware',
-    'galaxy.middleware.PswFlagMiddleware',
     'ipinfo_django.middleware.IPinfoMiddleware',
+    'galaxy.middleware.ChangeDatabaseMiddleware',
+    'galaxy.middleware.UpdateSubStatusMiddleware',
+
+    
 
 
 ]
@@ -75,6 +77,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'galaxy.context_processors.global_variables'
                 
             ],
         },
@@ -102,24 +105,34 @@ DATABASES = {
             },
     },
     
+    'app' : {
+            'ENGINE': 'mssql',
+            'NAME': 'user_133' ,
+            'USER': 'sa',
+            'PASSWORD': 'Ka@12?34#',
+            'HOST': 'DESKTOP-F9VA3BH\SQLEXPRESS',
+            'PORT': '',
+            'OPTIONS': {
+                'driver': 'ODBC Driver 17 for SQL Server',
+            }
+        },
+    
 }
 
-    
+DATABASE_ROUTERS = [
+    'routers.db_routers.GalaxyLandingRouter',
+    'routers.db_routers.GalaxyManageRouter',
+]
+
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
 # from galaxy.models import User
 
-def get_user_database_name(username):
-    # Retrieve the user-specific database name from the User model or any other relevant model
-    # You might need to customize this based on your specific implementation
-    return username
-
-def switch_to_user_database(username):
-    # Retrieve the user-specific database name
-    db_name = get_user_database_name(username)
+def switch_database(username):
 
     # Update the Django default database configuration dynamically
-    DATABASES['default']['NAME'] = db_name
+    DATABASES['app']['NAME'] = username
 
 # DATABASE_CONNECTION_POOLING = False
 #----------------------------------------------------------------------------------------------------------

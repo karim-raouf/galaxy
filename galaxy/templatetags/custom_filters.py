@@ -8,7 +8,7 @@ register = template.Library()
 @register.filter(name='active_sessions')
 def active_sessions(user_id):
 
-    session_model = Session.objects.filter(expire_date__gte=timezone.now())
+    session_model = Session.objects.using('app').filter(expire_date__gte=timezone.now())
     the_user_sessions = []
 
     for session in session_model:

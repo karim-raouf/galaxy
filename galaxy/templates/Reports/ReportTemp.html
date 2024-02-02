@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Report Template</title>
+    <!-- Include any necessary CSS stylesheets or libraries here -->
+    <style>
+        /* Define CSS styles for the report template */
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1, h2, h3 {
+            color: #333;
+        }
+
+        section {
+            margin-bottom: 30px;
+        }
+
+        /* Add more CSS styles as needed */
+    </style>
+</head>
+<body>
+    <header>
+        <img src="logo.png" alt="Company Logo">
+        <h1>Report Title</h1>
+        <h2>Subtitle or additional information</h2>
+    </header>
+           <div id="taxCharges" >
+            
+             
+              <div id ="taxInfo" class="orgrow" >
+                
+                <div class="col-45" style="padding-left:5%;">
+                  <div class="orgrow">
+                    <div class="col-75">
+                      <strong><label style="text-decoration: underline;display:block;"> Title :</label></strong>
+                      {% comment %} <input required="false"  type="text" id="salestaxDesc" name="salestaxDesc" placeholder="Sales tax / Charge Title..." > {% endcomment %}
+                      {{tax_form.tax_title}}
+                    </div>
+                  </div>
+                  <br>
+                  <div class="orgrow">
+                    <div class="col-75">
+                      <strong><label style="text-decoration: underline;padding: 0px 20px 0px 0px;"> Is this Tax included in Basic Rate? :</label></strong>
+                      {% comment %} <input  required="false" type="checkbox" id="Taxincluded" name="Taxincluded" value="1"> {% endcomment %}
+                      {{tax_form.tax_include}}
+                    </div>
+                  </div>
+                  <br>
+                  <div class="orgrow">
+                    <div class="col-75">
+                        <strong><label style="text-decoration: underline;padding: 0px 20px 0px 0px;"> Default :</label></strong>
+                        {% comment %} <input required="false" type="checkbox" id="Default" name="Default" value="1"> {% endcomment %}
+                        {{tax_form.default}}
+                      </div>
+                    </div>
+                    <br>
+                    <div class="orgrow">
+                      <div class="col-75">
+                        <strong><label style="text-decoration: underline;padding: 0px 20px 0px 0px;"> Disable :</label></strong>
+                        {% comment %} <input required="false" type="checkbox" id="Disable" name="Disable" value="1"> {% endcomment %}
+                        {{tax_form.disable}}
+                      </div>
+                    </div>
+                    <br>
+                    <div class="orgrow">
+                      <div  class="col-75"  style="margin-right:20px;align-content: center;">
+                        <strong><label style="text-decoration: underline;padding: 0px 0px 0px 0px;"> Minimum taxable amount :</label></strong>
+                        {% comment %} <input  required="false" type="number" min="0" id="mintaxAmount" name="mintaxAmount" value="0.00"><br> {% endcomment %}
+                        {{tax_form.min_amount}}
+                      </div>
+                    </div>
+                    <br>
+                    <div class="orgrow">
+                      <div  class="col-75"  style="margin-right:20px;align-content: center;">
+                        <strong><label style="text-decoration: underline;padding: 0px 0px 0px 0px;"> Maximum taxable amount :</label></strong>
+                        {% comment %} <input required="false" type="number" min="0" id="mintaxAmount" name="mintaxAmount" value="0.00"><br> {% endcomment %}
+                        {{tax_form.max_amount}}
+                      </div> 
+                    </div>
+                </div>
+
+                <div class="col-50">
+                  <div class="orgrow">
+                      <strong><label style="text-decoration: underline;display:block;"> Tax Type :</label></strong>
+                          {% comment %} <input required="false" type="radio" name="taxType" value="1"id="taxType1" required="true"><label for="taxType1" style="padding: 0px 0px 0px 0px;">On the net total of the item</label><br>
+                          <input required="false" type="radio" name="taxType" value="2"id="taxType2" required="true"><label for="taxType2" style="padding: 0px 0px 0px 0px;">On Previous Row Amount</label><br>
+                          <input required="false" type="radio" name="taxType" value="3"id="taxType3" required="true"><label for="taxType3" style="padding: 0px 0px 0px 0px;">On Previous Row Total</label><br> {% endcomment %}
+                          {{tax_form.tax_type}}
+                  </div>
+                  <b></b>
+                  <div class="orgrow">
+                    <div class="col-50">
+                      <strong><label style="text-decoration: underline;display:block;"> Tax Amount :</label></strong>
+                          {% comment %} <input required="false" type="radio" name="taxAmount" value="1"id="taxAmount1" required="true"><label for="taxAmount1" style="padding: 0px 0px 0px 0px;">Fixed Amount</label><br>
+                          <input required="false" type="radio" name="taxAmount" value="2"id="taxAmount2" required="true"><label for="taxAmount2" style="padding: 0px 0px 0px 0px;">Rate</label><br>
+                          <input required="false" type="radio" name="taxAmount" value="3"id="taxAmount3" required="true"><label for="taxAmount3" style="padding: 0px 0px 0px 0px;">Fixed Amount + Rate</label><br>
+                          <input required="false" type="radio" name="taxAmount" value="4"id="taxAmount4" required="true"><label for="taxAmount4" style="padding: 0px 0px 0px 0px;">Enter the rate manualy</label><br> {% endcomment %}
+                          {{tax_form.tax_amount}}
+                    </div>
+                  </div>
+                          <b></b>
+                  <div class="orgrow">
+                    <div class="col-50">
+                      <strong><label style="text-decoration: underline;display:block;"> Rate/Amount :</label></strong>
+                      <div class="orgrow">
+                        <div  class="col-90">
+                          <label  style="padding: 0px 0px 0px 12px;" for ="taxRate"> Rate (%) :</label>{{tax_form.rate}}{% comment %}<input required="false" style="padding: 5px 5px 5px 5px;" type="number" min="1" max="100" id="taxRate" name="taxRate" value="0.00">{% endcomment %}<br>
+                        </div>
+                      </div>
+                      <div class="orgrow">
+                        <div  class="col-90">
+                          <label  style="padding: 0px 0px 0px 12px;" for ="fixedAmount"> Amount :</label>{{tax_form.amount}}{% comment %}<input required="false" style="padding: 5px 5px 5px 5px;" type="number" min="1" max="10000000" id="fixedAmount" name="fixedAmount" value="0.00">{% endcomment %}<br>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <br>
+                <div class="orgrow" style="padding-left:5%;">
+                      <div class="col-45">
+                        <strong><label style="text-decoration: underline;display:block;"> Applied Stores :</label></strong>
+                        <select id="stores" name="stores">
+                          {% for store in stores %}
+                            <option data-store-id = "{{store.id}}" value="{{store.name}}">{{store.name}}</option>
+                          {% endfor %}  
+                        </select>
+                        <button style="margin-right: 10px;" class="btn1 addStoreTaxBtn" type="button">Add</button>
+                      </div>
+                </div>
+                <div class="orgrow" style="padding-left:5%;">
+                    <div class="col-25" style="padding-left:15px; padding-bottom:20px;">
+                          <ul id="mystoresUL" >
+                            {% for store in applied_stores %}
+                              <li  data-store-id="{{store.store_id.id}}" data-store-name="{{store.store_id.name}}" id="{{store.store_id.name}}">{{store.store_id.name}}<span class="closeLI storeTax-del">×</span></li>
+                            {% endfor %}
+                          </ul>
+                    </div>
+                </div>
+      
+              </div>
+          </div>
+</body>
+</html>

@@ -1,30 +1,6 @@
 
-class GalaxyRouter:
-    route_app_labels = {'galaxy' , 'auth' , 'contenttypes' , 'admin' , 'sessions'}
-    
-    # def datab_name(request):
-    #     user = request.user
-    #     if user.is_authenticated:
-    #         username = str(request.user.username)
-
-    #         return username
-    #     else:
-    #         return "no username"
-    
-    # @staticmethod
-    # def connected_db(request):
-    #     db_name = datab_name(request)
-    #     return db_name
-    
-    # @classmethod
-    # def get_target_database(cls, request):
-    #     return cls.connected_db(request)
-    
-    # target_database = None
-    
-    # def __init__(self, request=None):
-    #     if request is not None:
-    #         self.target_database = self.get_target_database(request)
+class GalaxyLandingRouter:
+    route_app_labels = {'galaxy', 'auth' , 'contenttypes' , 'admin' , 'sessions'}
     
     target_database = 'default'
     
@@ -48,7 +24,7 @@ class GalaxyRouter:
     def allow_relation(self, obj1, obj2, **hints):
         """ Allow relations if a model in the auth or contenttypes or admin or sessions or galaxy apps is involved. """
         
-        if (
+        if (    
             obj1._meta.app_label in self.route_app_labels
             or obj2._meta.app_label in self.route_app_labels
         ):
@@ -64,36 +40,12 @@ class GalaxyRouter:
         
         return None
     
-    
-    
-class AppRouter:
-    route_app_labels = {'App'}
-    
-    def datab_name(request):
-        user = request.user
-        if user.is_authenticated:
-            username = str(request.user.username)
 
-            return username
-        else:
-            return "no username"
+
+class GalaxyManageRouter:
+    route_app_labels = {'management'}
     
-    @staticmethod
-    def connected_db(request):
-        db_name = datab_name(request)
-        return db_name
-    
-    @classmethod
-    def get_target_database(cls, request):
-        return cls.connected_db(request)
-    
-    target_database = None
-    
-    def __init__(self, request=None):
-        if request is not None:
-            self.target_database = self.get_target_database(request)
-    
-    
+    target_database = 'app'
     
     def db_for_read(self, model, **hints):
         """ Attempts to read auth and contenttypes models go to galaxy_db. """

@@ -45,7 +45,7 @@
                                   <a style="color:black;font-weight:bold;padding-top:10px">Point of Sales</a>
                               </div>
                               <div style="float: left; width: 35%; margin-top: 6px; color: black;">
-                                  <button id="posMonth-btn" style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if POS_M.id in p_ids or POS_A.id in p_ids %} disabled {% endif %}{% if m_pos or a_pos %}disabled{% endif %} data-product-id="6" data-sub-type="Monthly" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="posMonth" class="add-to-cart">{% if POS_M.id in p_ids or POS_A.id in p_ids %}Added {% elif m_pos or a_pos %}Subscribed{% else %}$ {{POS_M.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                                  <button id="posMonth-btn" style="float:right" {% if request.user.is_authenticated %}{% if POS_M.id in p_ids or POS_A.id in p_ids %} disabled {% endif %}{% if m_pos or a_pos %}disabled{% endif %} data-product-id="6" data-sub-type="Monthly" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="posMonth" class="add-to-cart">{% if POS_M.id in p_ids or POS_A.id in p_ids %}Added {% elif m_pos or a_pos %}Subscribed{% else %}$ {{POS_M.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
                               </div>
                           </div>
   
@@ -54,7 +54,7 @@
                                   <a style="color:black;font-weight:bold;padding-top:10px">Inventory Management</a>
                               </div>
                               <div style="float: left; width: 35%; margin-top: 6px; color: black;">
-                                  <button id="imMonth-btn" style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if IM_M.id in p_ids or IM_A.id in p_ids %} disabled {% endif %}{% if m_im or a_im %}disabled{% endif %} data-product-id="7" data-sub-type="Monthly" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="imMonth" class="add-to-cart">{% if IM_M.id in p_ids or IM_A.id in p_ids %}Added {% elif m_im or a_im %}Subscribed{% else %}$ {{IM_M.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                                  <button id="imMonth-btn" style="float:right" {% if request.user.is_authenticated %}{% if IM_M.id in p_ids or IM_A.id in p_ids %} disabled {% endif %}{% if m_im or a_im %}disabled{% endif %} data-product-id="7" data-sub-type="Monthly" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="imMonth" class="add-to-cart">{% if IM_M.id in p_ids or IM_A.id in p_ids %}Added {% elif m_im or a_im %}Subscribed{% else %}$ {{IM_M.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
                               </div>
                           </div>
                           <div class="orgrow crmM" style="height:50px">
@@ -62,7 +62,7 @@
                                   <a style="color:black;font-weight:bold;padding-top:10px">CRM</a>
                               </div>
                               <div style="float: left; width: 35%; margin-top: 6px; color: black;">
-                                  <button id="crmMonth-btn" style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if CRM_M.id in p_ids or CRM_A.id in p_ids %} disabled {% endif %}{% if m_crm or a_crm %}disabled{% endif %} data-product-id="8" data-sub-type="Monthly" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="crmMonth" class="add-to-cart">{% if CRM_M.id in p_ids or CRM_A.id in p_ids %}Added {% elif m_crm or a_crm %}Subscribed{% else %}$ {{CRM_M.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                                  <button id="crmMonth-btn" style="float:right" {% if request.user.is_authenticated %}{% if CRM_M.id in p_ids or CRM_A.id in p_ids %} disabled {% endif %}{% if m_crm or a_crm %}disabled{% endif %} data-product-id="8" data-sub-type="Monthly" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="crmMonth" class="add-to-cart">{% if CRM_M.id in p_ids or CRM_A.id in p_ids %}Added {% elif m_crm or a_crm %}Subscribed{% else %}$ {{CRM_M.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
                               </div>
                           </div>
                           <div class="orgrow aM" style="height:50px">
@@ -70,7 +70,7 @@
                                   <a style="color:black;font-weight:bold;padding-top:10px">Accounting</a>
                               </div>
                               <div style="float: left; width: 35%; margin-top: 6px; color: black;">
-                                  <button id="aMonth-btn" style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if A_M.id in p_ids or A_A.id in p_ids %} disabled {% endif %}{% if m_a or a_a %}disabled{% endif %} data-product-id="9" data-sub-type="Monthly" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="aMonth" class="add-to-cart">{% if A_M.id in p_ids or A_A.id in p_ids %}Added {% elif m_a or a_a %}Subscribed{% else %}$ {{A_M.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                                  <button id="aMonth-btn" style="float:right" {% if request.user.is_authenticated %}{% if A_M.id in p_ids or A_A.id in p_ids %} disabled {% endif %}{% if m_a or a_a %}disabled{% endif %} data-product-id="9" data-sub-type="Monthly" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="aMonth" class="add-to-cart">{% if A_M.id in p_ids or A_A.id in p_ids %}Added {% elif m_a or a_a %}Subscribed{% else %}$ {{A_M.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
                               </div>
                           </div>
                           {% comment %} ----Anually bundles---- {% endcomment %}
@@ -79,7 +79,7 @@
                                   <a style="color:black;font-weight:bold;padding-top:10px"> Point of Sales</a>
                               </div>
                               <div style="float: left; width: 35%; margin-top: 6px; color: black;">
-                                  <button id="posAnnual-btn" style="float:right;" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if POS_A.id in p_ids or POS_M.id in p_ids %} disabled {% endif %}{% if m_pos or a_pos %}disabled{% endif %} data-product-id="2" data-sub-type="Annually" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="posAnnual" class="add-to-cart">{% if POS_A.id in p_ids or POS_M.id in p_ids %}Added {% elif m_pos or a_pos %}Subscribed{% else %}$ {{POS_A.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                                  <button id="posAnnual-btn" style="float:right;" {% if request.user.is_authenticated %}{% if POS_A.id in p_ids or POS_M.id in p_ids %} disabled {% endif %}{% if m_pos or a_pos %}disabled{% endif %} data-product-id="2" data-sub-type="Annually" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="posAnnual" class="add-to-cart">{% if POS_A.id in p_ids or POS_M.id in p_ids %}Added {% elif m_pos or a_pos %}Subscribed{% else %}$ {{POS_A.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
                               </div>
                           </div>
                           <div class="orgrow imA" style="height:50px">
@@ -87,7 +87,7 @@
                                   <a style="color:black;font-weight:bold;padding-top:10px">Inventory Management</a>
                               </div>
                               <div style="float: left; width: 35%; margin-top: 6px; color: black;">
-                                  <button id="imAnnual-btn" style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if IM_A.id in p_ids or IM_M.id in p_ids %} disabled {% endif %}{% if m_im or a_im %}disabled{% endif %} data-product-id="3" data-sub-type="Annually" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="imAnnual" class="add-to-cart">{% if IM_A.id in p_ids or IM_M.id in p_ids %}Added {% elif m_im or a_im %}Subscribed{% else %}$ {{IM_A.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                                  <button id="imAnnual-btn" style="float:right" {% if request.user.is_authenticated %}{% if IM_A.id in p_ids or IM_M.id in p_ids %} disabled {% endif %}{% if m_im or a_im %}disabled{% endif %} data-product-id="3" data-sub-type="Annually" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="imAnnual" class="add-to-cart">{% if IM_A.id in p_ids or IM_M.id in p_ids %}Added {% elif m_im or a_im %}Subscribed{% else %}$ {{IM_A.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
                               </div>
                           </div>
                           <div class="orgrow crmA" style="height:50px">
@@ -95,7 +95,7 @@
                                   <a style="color:black;font-weight:bold;padding-top:10px">CRM</a>
                               </div>
                               <div style="float: left; width: 35%; margin-top: 6px; color: black;">
-                                  <button id="crmAnnual-btn" style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if CRM_A.id in p_ids or CRM_M.id in p_ids %} disabled {% endif %}{% if m_crm or a_crm %}disabled{% endif %} data-product-id="4" data-sub-type="Annually" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="crmAnnual" class="add-to-cart">{% if CRM_A.id in p_ids or CRM_M.id in p_ids %}Added {% elif m_crm or a_crm %}Subscribed{% else %}$ {{CRM_A.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                                  <button id="crmAnnual-btn" style="float:right" {% if request.user.is_authenticated %}{% if CRM_A.id in p_ids or CRM_M.id in p_ids %} disabled {% endif %}{% if m_crm or a_crm %}disabled{% endif %} data-product-id="4" data-sub-type="Annually" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="crmAnnual" class="add-to-cart">{% if CRM_A.id in p_ids or CRM_M.id in p_ids %}Added {% elif m_crm or a_crm %}Subscribed{% else %}$ {{CRM_A.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
                               </div>
                           </div>
                           <div class="orgrow aA" style="height:50px">
@@ -103,7 +103,7 @@
                                   <a  style="color:black;font-weight:bold;padding-top:10px">Accounting</a>
                               </div>
                               <div style="float: left; width: 35%; margin-top: 6px; color: black;">
-                                  <button id="aAnnual-btn" style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %}{% if A_A.id in p_ids or A_M.id in p_ids %} disabled {% endif %}{% if m_a or a_a %}disabled{% endif %} data-product-id="5" data-sub-type="Annually" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="aAnnual" class="add-to-cart">{% if A_A.id in p_ids or A_M.id in p_ids  %}Added {% elif m_a or a_a %}Subscribed{% else %}$ {{A_A.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
+                                  <button id="aAnnual-btn" style="float:right" {% if request.user.is_authenticated %}{% if A_A.id in p_ids or A_M.id in p_ids %} disabled {% endif %}{% if m_a or a_a %}disabled{% endif %} data-product-id="5" data-sub-type="Annually" data-bundle-type="Basic" {% endif %} class="cart-button "><span id="aAnnual" class="add-to-cart">{% if A_A.id in p_ids or A_M.id in p_ids  %}Added {% elif m_a or a_a %}Subscribed{% else %}$ {{A_A.Price}}{% endif %}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i></button>
                               </div>
                           </div>
                       </div>
@@ -137,7 +137,7 @@
                                     <a style="color:black;font-weight:bold;padding-top:10px"> 1 Organization </a>
                                 </div>
                                 <div style="float: left; width: 35%; margin-top: 6px; color: black;">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="17" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{O_M.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                    <button style="float:right" {% if request.user.is_authenticated %} data-product-id="17" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{O_M.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             <div class="orgrow storeM" style="height:50px">
@@ -153,7 +153,7 @@
                                     </span>
                                 </div>
                                 <div style="float: left; width: 35%; margin-top: 6px; color: black;">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="18" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORE_M.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                    <button style="float:right" {% if request.user.is_authenticated %} data-product-id="18" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORE_M.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             <div class="orgrow uM" style="height:50px">
@@ -161,7 +161,7 @@
                                     <a style="color:black;font-weight:bold;padding-top:10px"> 1 User </a>
                                 </div>
                                 <div style="float: left; width: 35%; margin-top: 6px; color: black;">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="19" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{U_M.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                    <button style="float:right" {% if request.user.is_authenticated %} data-product-id="19" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{U_M.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             <div class="orgrow rM" style="height:50px">
@@ -169,7 +169,7 @@
                                     <a style="color:black;font-weight:bold;padding-top:10px"> 5 Reports </a>
                                 </div>
                                 <div style="float: left; width: 35%; margin-top: 6px; color: black;">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="20" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{R_M.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                    <button style="float:right" {% if request.user.is_authenticated %} data-product-id="20" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{R_M.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             <div class="orgrow tM " style="height:50px">
@@ -177,7 +177,7 @@
                                     <a style="color:black;font-weight:bold;padding-top:10px"> 10,000 Transactions / Month </a>
                                 </div>
                                 <div style="float: left; width: 35%; margin-top: 6px; color: black;">
-                                    <button style="width:100%;float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="21" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{T_M.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                    <button style="width:100%;float:right" {% if request.user.is_authenticated %} data-product-id="21" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{T_M.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             <div class="orgrow slaM" style="height:50px">
@@ -185,7 +185,7 @@
                                     <a style="color:black;font-weight:bold;padding-top:10px"> SLA </a>
                                 </div>
                                 <div style="float: left; width: 35%; margin-top: 6px; color: black;">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="22" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{SLA_M.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                    <button style="float:right" {% if request.user.is_authenticated %} data-product-id="22" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{SLA_M.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             <div class="orgrow storageM" style="height:50px">
@@ -193,7 +193,7 @@
                                     <a style="color:black;font-weight:bold;padding-top:10px"> 10GB Storage </a>
                                 </div>
                                 <div style="float: left; width: 35%; margin-top: 6px; color: black;">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="23" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORAGE_M.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                    <button style="float:right" {% if request.user.is_authenticated %} data-product-id="23" data-sub-type="Monthly" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORAGE_M.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             {% comment %} Annually bundles {% endcomment %}
@@ -202,7 +202,7 @@
                                     <a style="color:black;font-weight:bold;padding-top:10px"> 1 Organization </a>
                                 </div>
                                 <div style="float: left; width: 35%; margin-top: 6px; color: black;">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="10" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{O_A.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                    <button style="float:right" {% if request.user.is_authenticated %} data-product-id="10" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{O_A.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             <div class="orgrow storeA" style="height:50px">
@@ -214,7 +214,7 @@
                                     </span>
                                 </div>
                                 <div style="float: left; width: 35%; margin-top: 6px; color: black;">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="11" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORE_A.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                    <button style="float:right" {% if request.user.is_authenticated %} data-product-id="11" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORE_A.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             <div class="orgrow uA" style="height:50px">
@@ -222,7 +222,7 @@
                                     <a style="color:black;font-weight:bold;padding-top:10px"> 1 User </a>
                                 </div>
                                 <div style="float: left; width: 35%; margin-top: 6px; color: black;">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="12" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{U_A.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                    <button style="float:right" {% if request.user.is_authenticated %} data-product-id="12" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{U_A.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             <div class="orgrow rA" style="height:50px">
@@ -230,7 +230,7 @@
                                     <a style="color:black;font-weight:bold;padding-top:10px"> 5 Reports </a>
                                 </div>
                                 <div style="float: left; width: 35%; margin-top: 6px; color: black;">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="13" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{R_A.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                    <button style="float:right" {% if request.user.is_authenticated %} data-product-id="13" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{R_A.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             <div class="orgrow tA" style="height:50px">
@@ -238,7 +238,7 @@
                                     <a style="color:black;font-weight:bold;padding-top:10px"> 10,000 Transactions / Month </a>
                                 </div>
                                 <div style="float: left; width: 35%; margin-top: 6px; color: black;">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="14" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{T_A.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                    <button style="float:right" {% if request.user.is_authenticated %} data-product-id="14" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{T_A.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             <div class="orgrow slaA" style="height:50px">
@@ -246,7 +246,7 @@
                                     <a style="color:black;font-weight:bold;padding-top:10px"> SLA </a>
                                 </div>
                                 <div style="float: left; width: 35%; margin-top: 6px; color: black;">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="15" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{SLA_A.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                    <button style="float:right" {% if request.user.is_authenticated %} data-product-id="15" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{SLA_A.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
                             <div class="orgrow storageA" style="height:50px">
@@ -254,7 +254,7 @@
                                     <a style="color:black;font-weight:bold;padding-top:10px"> 10GB Storage </a>
                                 </div>
                                 <div style="float: left; width: 35%; margin-top: 6px; color: black;">
-                                    <button style="float:right" {% if request.user.is_authenticated %}{% if request.user.user_Type != s_a %} disabled {% endif %} data-product-id="16" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORAGE_A.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
+                                    <button style="float:right" {% if request.user.is_authenticated %} data-product-id="16" data-sub-type="Annually" data-bundle-type="Add-Ons" {% endif %} class="cart-button "><span class="add-to-cart">$ {{STORAGE_A.Price}}</span><span class="added">Added</span> <i class="fa fa-shopping-cart"></i> <i class="fa fa-square"></i> </button>
                                 </div>
                             </div>
 

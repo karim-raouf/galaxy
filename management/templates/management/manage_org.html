@@ -1,0 +1,2276 @@
+{% extends 'galaxy/base.html' %}
+    {% load static %}
+    {% block header %}
+    <title>Organization Management</title>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/products_managment.css' %}"/>
+    <script src="{% static 'js/products_managment.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      button {
+        background-color: #04AA6D;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+      }
+      
+      button:hover {
+        opacity:1;
+      }
+
+    </style> 
+    {% endblock header %}
+    
+
+    {% block body %}
+    <div id ="header" class="sticky">
+        <div class="orgrow">
+          <strong><span class="title" style="float:left;color:green;cursor:pointer" onclick="openleftNav('orgNav')">&#9776; <Strong>Select Organization</strong></span></strong>
+        </div>
+        <div class="orgrow">
+          <div class="col-90" style="padding-left:12px;">
+            <a id="title" name="Orgname" style=" color:darkgreen;font-weight: bold;text-align: left ">{% if org.OrganizationName %}│{{org.OrganizationName|capfirst}}│{% endif %}{% if org and not org.OrganizationName %}New organization {% endif %}{% if not org %}{% endif %}</a>
+              {% if org %}<span onclick="statusshow()" style="margin-right:10px;color:blue;font-size:small;text-decoration:underline;cursor:pointer;">Status</span>{% endif %}
+              {% if org %}<span id="orginfo" style="margin-right:10px;color:blue;font-size:small;text-decoration:underline;cursor:pointer;" onclick="info()"> Setup</span>{% endif %}
+              {% if org.OrganizationEmail %}<span style="margin-right:10px;color:blue;font-size:small;text-decoration:underline;cursor:pointer;" onclick="deleteProduct()" > Delete</span>{% endif %}
+          </div>
+        </div>
+        <div id="statusrow" class="orgrow" style="display:none;">
+          <div class="col-25" style="border-bottom: solid;border-color: blue">
+            <label for="Status">Subscription Status</label>
+            <a id="Status" name="Status" style=" color:blue; ">{% if choosed_org %}{% if sub_status %}Active{% else %}Inactive{% endif %}{% else %}{% endif %}</a>
+          </div>
+        
+          <div  class="col-25" style="border-bottom: solid;border-color: blue">
+            <label for="StartD">Start Date</label>
+            <a id="StartD" name="StartD" style=" color:blue;">{% if sub_start %}{{sub_start}}{% endif %}</a>
+          </div>
+        
+          <div class="col-25" style="border-bottom: solid;border-color: blue">
+            <label for="EndD">End Date</label>
+            <a id="EndD" name="EndD" style=" color:blue; ">{% if sub_end %}{{sub_end}}<span style="color: black; padding-left: 10px;"></span>{% endif %}</a>
+          </div>
+        
+          <div  class="col-25" style="border-bottom: solid;border-color: blue">
+            
+                <label for="AutoRenew" >Auto Renew</label>
+                {% if org %}  
+                  <input type="checkbox" id="autoRenewField" name="Auto-Renew" style=" color:blue " {% if form2.AutoRenew.value %} checked {% endif %}>
+                {% endif %}
+            
+          </div>
+        </div>
+
+        <div class="orgrow">
+          <div class="col-15"><a id="titleDiv1" onclick="gotodiv('Div1')" style="color:darkgreen;display:none;text-align: center;cursor:pointer;">•  Name & Address </a></div>
+          <div class="col-15"><a id="titleDiv2" onclick="gotodiv('Div2')" style="color:darkgreen;display:none;text-align: center;cursor:pointer;">•  Uploads </a></div>
+          <div class="col-15"><a id="titleDiv3" onclick="gotodiv('Div3')" style="color:darkgreen;display:none;text-align: center;cursor:pointer;">•  Options </a></div>
+          <div class="col-15"><a id="titleDiv4" onclick="gotodiv('Div4')" style="color:darkgreen;display:none;text-align: center;cursor:pointer;">•  Sales Taxes / Charges </a></div>
+          <div class="col-15"><a id="titleDiv5" onclick="gotodiv('Div5')" style="color:darkgreen;display:none;text-align: center;cursor:pointer;">•  Links </a></div>
+        </div>
+      
+    </div>
+      
+<div  id="orgNav" class="overlay">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeleftNav('orgNav')">&times;</a>
+
+  <div class="overlay-content">
+    {% for organisation in organisations %} 
+      <a href="{% url 'manage_org' %}?id={{organisation.id}}"> {% if organisation.OrganizationName %}{{organisation.OrganizationName}}{% else %}Undefined Org{% endif %}</a>
+    {% endfor %} 
+    <a href="{% url 'pricing' %}" style="font-size:xx-large;color:blue;" class="fa fa-cart-plus" ></a> 
+  </div>
+</div>
+  
+  <div id="productdeleteconfirm" class="deletemodal">
+    <span onclick="document.getElementById('productdeleteconfirm').style.display='none';document.getElementById('deleteconfirmation').style.display='none'" class="deletemodel_close" title="Close Modal">x</span>
+    <form class="deletemodal-content">
+      <div class="container"  style="padding: 5px;text-align: center;">
+        <h1 style="color: black;">Organiation Data Delete Confirmation</h1>
+        <p style="color: black;">Are you sure you want to delete Organization Data?</p>
+        <p></p>
+        <strong><h2 style="color: black;">Warning:</h2></strong>
+        <Label style="color: black;"> Organization data will be permanently erased and you will not be able to access it again</label>
+        <br>
+        <div class="clearfix">
+          <button id="org-delete-btn" name="org-delete-btn" type="button" onclick="document.getElementById('deleteconfirmation').style.display='block';document.getElementById('org-delete-btn').style.display='none'" class="modeldelete_deletebtn" style="margin : 0 auto">Delete</button>
+          <br>
+          <button id="remove-button" type="button" onclick="document.getElementById('productdeleteconfirm').style.display='none';document.getElementById('deleteconfirmation').style.display='none';document.getElementById('org-delete-btn').style.display='block'" class="modeldelete_cancelbtn">Cancel</button>
+          
+          
+          
+          <div id="deleteconfirmation" style="display:none">
+              <h4 style="color: black;">a confirmation code has been sent to your email</h4>
+                  {% if error_message %}
+                  <p style="color: red;">{{ error_message }}</p>
+                  {% endif %}
+  
+                    <label style="color: black;" for="code">Confirmation Code:</label>
+                    <input style="margin-bottom: 10px" type="text" id="code" name="code" required>
+                    <a id="code-error" style="color: red"></a><br>
+                    <button class="modeldelete_deletebtn orgdel" data-org-id = "{{org.id}}" type="submit">Confirm Delete</button>
+                  
+                  
+  
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div id="salestax" class="salestax">
+    <span onclick="document.getElementById('salestax').style.display='none';" class="salestax_close" title="Close salestax">x</span>
+    <form class="salestax-content">
+      <div class="container"  style="padding: 5px;text-align: center;">
+        
+      </div>
+    </form>
+  </div>
+
+   
+
+  <div id="info" style="position:relative;top:65px;display:none;">
+
+            
+    <form method = 'POST' action="" id="org-form" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div  class="accordion">
+          <a id="Div1" class="fa fa-arrow-circle-down accordion-toggle" onclick="toggleMaxHeight('OrgBasicInfo', '1200px', '1200px'), arrowdirection(id)">
+            <span style="display: inline-block; vertical-align: middle;">
+              Basic Information
+            </span>
+            <span style="position: relative;top: -13px;">
+              <button id="OrgBasicInfoCancel" style="margin-right: 10px;display:none;"class="btn3 orgcancelbtn" type="button" >Cancel</button>
+              <button id="OrgBasicInfoSave"style="margin-right: 10px;display:none;" class="btn3 orgsavebtn"  name="save-btn" type="submit" value="Save" data-org-id = "{{org.id}}">
+                {% if org.OrganizationName %}Update {% else %}Save{% endif %}
+              </button>
+            </span>
+          </a>
+
+          <div id="OrgBasicInfo" class="accordion-content" style="max-height: 0px;">
+            <div class="accordion-inner">
+              <div class="col-50" >
+                <div class="orgrow">
+                  <div class="orgrow"> 
+                    <div class="col-30">
+                      <strong><label style="padding: 0px 20px 0px 0px;"><span style="color:red;font-size:medium">*</span> Name :</label></strong>
+                    </div>
+                    <div class="col-65">
+                      {{form.OrganizationName}}
+                    </div>
+                  </div>
+
+                  <div class="orgrow">
+                    <div class="col-30">
+                      <strong><label style="padding: 0px 20px 0px 0px;">Address :</label></strong>
+                    </div>
+                    <div class="col-65">
+                      {{form.Address}}
+                    </div>
+                  </div>
+
+                  <div class="orgrow">
+                    <div class="col-30">
+                      <strong><label style="padding: 0px 20px 0px 0px;">Country :</label></strong>
+                    </div>
+                    <div class="col-65">
+                      {{form.Country}}
+                    </div>
+                  </div>
+
+                  <div class="orgrow">
+                    <div class="col-30">
+                      <strong><label style="padding: 0px 20px 0px 0px;"><span style="color:red;font-size:medium">*</span> E-mail :</label></strong>
+                    </div>
+                    <div class="col-65">
+                      {{form.OrganizationEmail}}
+                    </div>
+                  </div>
+                  <div class="orgrow">
+                    <div class="col-30">
+                      <strong><label style="padding: 0px 20px 0px 0px;"><span style="color:red;font-size:medium">*</span> Currency :</label></strong>
+                    </div>
+                    <div class="col-65">
+                      {{form.Currency}}
+                    </div>
+                  </div>
+                  {% comment %} <div class="orgrow">
+                    <div class="col-30">
+                      <label for="tax"><span style="color:red;font-size:medium">*</span> Tax :</label>
+                    </div>
+                    <div class="col-65">
+                      {{form.Tax}}
+                    </div>
+                  </div>
+                  <div class="col-35">
+                    <button style="margin-right: 10px;" onclick="document.getElementById('salestax').style.display='block';" class="btn1" type="button">New</button><button onclick="" class="btn1" type="button">Edit</button>
+                  </div> {% endcomment %}
+    
+                  <div class="orgrow">
+                    <div class="col-30">
+                      <strong><label style="padding: 0px 20px 0px 0px;"><span style="color:red;font-size:medium">*</span> Calculate item cost as :</label></strong>
+                    </div>
+                    <div class="col-65">
+                      {{form.Cost_Method}}
+                    </div>
+                  </div>
+                  <div class="orgrow">
+                    <div class="col-30">
+                      <strong><label for="autoreceive" style="padding: 0px 0px 0px 0px;">Automaticlly create inter-store receive inventory orders :</label></strong>
+                    </div>
+                    <div class="col-5">
+                      {{form.Create_Receive}}
+                    </div>
+                  </div>
+                  <div class="orgrow">
+                    <div class="col-30">
+                      <strong><label for="autoissue" style="padding: 0px 0px 0px 0px;">Automaticlly create inter-store issue inventory orders :</label></strong>
+                    </div>
+                    <div class="col-5">
+                      {{form.Create_Issue}}
+                    </div>
+                  </div>
+                  <div class="orgrow">
+                    <div class="col-30">
+                      <strong><label for="Terms">Default Terms and Conditions :</label></strong>
+                    </div>
+                    <div class="col-65">
+                      {{form.Terms}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-45" >
+                <div class="orgrow">
+                  <div class="col-45">
+                    <strong><label for="Website" style="padding: 0px 20px 0px 0px;"><i class="fa fa-link"></i> &nbsp; Website :</label></strong>
+                  </div>
+                  <div class="col-45">
+                    {{form.WebsiteLink}}
+                  </div>
+                </div>
+                <div class="orgrow">
+                  <div class="col-45">
+                    <strong><label for="WhatsApp" style="padding: 0px 20px 0px 0px;" ><i class="fa fa-whatsapp"></i> &nbsp;WhatsApp :</label></strong>
+                  </div>
+                  <div class="col-45">
+                    {{form.WhatsappLink}}
+                  </div>
+                </div>
+                <div class="orgrow">
+                  <div class="col-45">
+                    <strong><label for="Facebook" style="padding: 0px 20px 0px 0px;" ><i class="fa fa-facebook-square"></i> &nbsp; Facebook :</label></strong>
+                  </div>
+                  <div class="col-45">
+                    {{form.FacebookLink}}
+                  </div>
+                </div>
+                <div class="orgrow">
+                  <div class="col-45">
+                    <strong><label for="Instagram" style="padding: 0px 20px 0px 0px;"><i class="fa fa-instagram"></i> &nbsp; Instagram :</label></strong>
+                  </div>
+                  <div class="col-45">
+                    {{form.InstagramLink}}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-45">
+                    <strong><label style="padding: 0px 20px 0px 0px;">Upload Commercial registration :</label></strong>
+                  </div>
+                  <div  class="col-45">
+                    {{form.Com_Regm}}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-45">
+                    <strong><label style="padding: 0px 20px 0px 0px;">Upload the Tax registration :</label><strong>
+                  </div>
+                  <div  class="col-45">
+                    {{form.Tax_Reg}}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-45">
+                    <strong><label style="padding: 0px 20px 0px 0px;">Upload the Logo :</label></strong>
+                  </div>
+                  <div  class="col-45">
+                    {{form.Logo}}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-45">
+                    <strong><label style="padding: 0px 20px 0px 0px;">Upload Reports & Letters Header :</label></strong>
+                  </div>
+                  <div  class="col-45">
+                    {{form.Report_H}}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-45">
+                    <strong><label style="padding: 0px 20px 0px 0px;">Upload Reports & Letters Bottom :</label></strong>
+                  </div>
+                  <div  class="col-45">
+                    {{form.Report_B}}
+                  </div>
+                  <div class="row">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </form>
+
+    <form method = 'POST' action="" id="tax-form" enctype="multipart/form-data">
+    
+      {% csrf_token %}
+        <div  class="accordion"> 
+          <a id="Div2" onclick= "toggleMaxHeight('taxCharges', '1200px', '1200px'),arrowdirection(id)" class="fa fa-arrow-circle-down accordion-toggle">
+             <span style="display: inline-block; vertical-align: middle;">
+              Sales Taxes / Charges
+            </span>
+            <span style="position: relative;top: -13px;">
+              <button id="taxChargesCancel" style="margin-right: 10px;display:none;"class="btn3 orgtaxcancelbtn" type="button" >Cancel</button>
+              <button id="taxChargesSave"style="margin-right: 10px;display:none;" class="btn3 orgtaxsavebtn"  name="save-btn" type="submit" value="Save" data-org-id = "{{org.id}}">Save</button>
+            </span>
+          </a>
+          <div id="taxCharges" class="accordion-content" style="max-height: 0px;">
+            <div class="accordion-inner">
+              <div class="orgrow">
+                <strong><span class="title" style="float:left;color:green;cursor:pointer;padding-top:13px;" onclick="openleftNav('taxNav')">&#9776; <Strong>Select Tax/Charge Template</strong></span></strong>
+                <span id="taxCopy" style="display:none;margin-top:13px;" class="divTools commands">&nbsp;&nbsp; copy &nbsp;&nbsp;</span>
+                <span id="taxPrint" style="display:none;margin-top:13px;" class="divTools commands" >&nbsp;&nbsp; print &nbsp;&nbsp;</span>
+                <span id="taxDel" style="display:none;margin-top:13px;" class="divTools commands">&nbsp;&nbsp; delete &nbsp;&nbsp;</span>
+                <span id="taxAdd" style="margin-top:13px" class="divTools">&nbsp;&nbsp; + add &nbsp;&nbsp;</span>
+              </div>
+
+              <div  id="taxNav" class="overlay2">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeleftNav('taxNav')">&times;</a>
+                <div id="taxTemp" class="overlay2-content">
+                  
+                  {% for temp in tax_temps %} 
+                    <a style="font-size:20px;padding-bottom:8px;padding-top:8px;" id="tax{{temp.id}}" onclick="addTaxParam('{{ temp.id }}')">{{temp.tax_title}}</a> 
+                  {% endfor %}
+                  
+                  <h3 id="noTax" style="color:grey;padding-top:23px;padding-bottom:23px;display:none">No templates available</h3>
+                    
+                  <br>
+                  {% comment %} <a id="addNewTax" style="border-color:darkgreen;border-radius:10px;color:white;background-color:yellowgreen;box-shadow: 0px 8px 16px 0px rgba(10, 78, 10, 0.3);margin:10px;font-size:medium;">&nbsp;&nbsp; Add New &nbsp;&nbsp;</a> {% endcomment %}
+                </div>
+              </div>
+              
+              <center><h1 id="emptyTemp" style="margin-top:90px;margin-bottom:90px;">No Tax Template Selected</h1></center>
+              
+              <div id ="taxInfo" class="orgrow" style="display:none" >
+                
+                <div class="col-45" style="padding-left:5%;">
+                  <div class="orgrow">
+                    <div class="col-75">
+                      <strong><label style="text-decoration: underline;display:block;"> Title :</label></strong>
+                      {% comment %} <input required="false" style="" type="text" id="salestaxDesc" name="salestaxDesc" placeholder="Sales tax / Charge Title..." > {% endcomment %}
+                      {{tax_form.tax_title}}
+                    </div>
+                  </div>
+                  <br>
+                  <div class="orgrow">
+                    <div class="col-75">
+                      <strong><label style="text-decoration: underline;padding: 0px 20px 0px 0px;"> Is this Tax included in Basic Rate? :</label></strong>
+                      {% comment %} <input  required="false" type="checkbox" id="Taxincluded" name="Taxincluded" value="1"> {% endcomment %}
+                      {{tax_form.tax_include}}
+                    </div>
+                  </div>
+                  <br>
+                  <div class="orgrow">
+                    <div class="col-75">
+                        <strong><label style="text-decoration: underline;padding: 0px 20px 0px 0px;"> Default :</label></strong>
+                        {% comment %} <input required="false" type="checkbox" id="Default" name="Default" value="1"> {% endcomment %}
+                        {{tax_form.default}}
+                      </div>
+                    </div>
+                    <br>
+                    <div class="orgrow">
+                      <div class="col-75">
+                        <strong><label style="text-decoration: underline;padding: 0px 20px 0px 0px;"> Disable :</label></strong>
+                        {% comment %} <input required="false" type="checkbox" id="Disable" name="Disable" value="1"> {% endcomment %}
+                        {{tax_form.disable}}
+                      </div>
+                    </div>
+                    <br>
+                    <div class="orgrow">
+                      <div  class="col-75"  style="margin-right:20px;align-content: center;">
+                        <strong><label style="text-decoration: underline;padding: 0px 0px 0px 0px;"> Minimum taxable amount :</label></strong>
+                        {% comment %} <input  required="false" type="number" min="0" id="mintaxAmount" name="mintaxAmount" value="0.00"><br> {% endcomment %}
+                        {{tax_form.min_amount}}
+                      </div>
+                    </div>
+                    <br>
+                    <div class="orgrow">
+                      <div  class="col-75"  style="margin-right:20px;align-content: center;">
+                        <strong><label style="text-decoration: underline;padding: 0px 0px 0px 0px;"> Maximum taxable amount :</label></strong>
+                        {% comment %} <input required="false" type="number" min="0" id="mintaxAmount" name="mintaxAmount" value="0.00"><br> {% endcomment %}
+                        {{tax_form.max_amount}}
+                      </div> 
+                    </div>
+                </div>
+
+                <div class="col-50">
+                  <div class="orgrow">
+                      <strong><label style="text-decoration: underline;display:block;"> Tax Type :</label></strong>
+                          {% comment %} <input required="false" type="radio" name="taxType" value="1"id="taxType1" required="true"><label for="taxType1" style="padding: 0px 0px 0px 0px;">On the net total of the item</label><br>
+                          <input required="false" type="radio" name="taxType" value="2"id="taxType2" required="true"><label for="taxType2" style="padding: 0px 0px 0px 0px;">On Previous Row Amount</label><br>
+                          <input required="false" type="radio" name="taxType" value="3"id="taxType3" required="true"><label for="taxType3" style="padding: 0px 0px 0px 0px;">On Previous Row Total</label><br> {% endcomment %}
+                          {{tax_form.tax_type}}
+                  </div>
+                  <b></b>
+                  <div class="orgrow">
+                    <div class="col-50">
+                      <strong><label style="text-decoration: underline;display:block;"> Tax Amount :</label></strong>
+                          {% comment %} <input required="false" type="radio" name="taxAmount" value="1"id="taxAmount1" required="true"><label for="taxAmount1" style="padding: 0px 0px 0px 0px;">Fixed Amount</label><br>
+                          <input required="false" type="radio" name="taxAmount" value="2"id="taxAmount2" required="true"><label for="taxAmount2" style="padding: 0px 0px 0px 0px;">Rate</label><br>
+                          <input required="false" type="radio" name="taxAmount" value="3"id="taxAmount3" required="true"><label for="taxAmount3" style="padding: 0px 0px 0px 0px;">Fixed Amount + Rate</label><br>
+                          <input required="false" type="radio" name="taxAmount" value="4"id="taxAmount4" required="true"><label for="taxAmount4" style="padding: 0px 0px 0px 0px;">Enter the rate manualy</label><br> {% endcomment %}
+                          {{tax_form.tax_amount}}
+                    </div>
+                  </div>
+                          <b></b>
+                  <div class="orgrow">
+                    <div class="col-50">
+                      <strong><label style="text-decoration: underline;display:block;"> Rate/Amount :</label></strong>
+                      <div class="orgrow">
+                        <div  class="col-90">
+                          <label  style="padding: 0px 0px 0px 12px;" for ="taxRate"> Rate (%) :</label>{{tax_form.rate}}{% comment %}<input required="false" style="padding: 5px 5px 5px 5px;" type="number" min="1" max="100" id="taxRate" name="taxRate" value="0.00">{% endcomment %}<br>
+                        </div>
+                      </div>
+                      <div class="orgrow">
+                        <div  class="col-90">
+                          <label  style="padding: 0px 0px 0px 12px;" for ="fixedAmount"> Amount :</label>{{tax_form.amount}}{% comment %}<input required="false" style="padding: 5px 5px 5px 5px;" type="number" min="1" max="10000000" id="fixedAmount" name="fixedAmount" value="0.00">{% endcomment %}<br>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <br>
+                <div class="orgrow" style="padding-left:5%;">
+                      <div class="col-45">
+                        <strong><label style="text-decoration: underline;display:block;"> Applied Stores :</label></strong>
+                        <select id="stores" name="stores">
+                          {% for store in stores %}
+                            <option data-store-id = "{{store.id}}" value="{{store.name}}">{{store.name}}</option>
+                          {% endfor %}  
+                        </select>
+                        <button style="margin-right: 10px;" class="btn1 addStoreTaxBtn" type="button">Add</button>
+                      </div>
+                </div>
+                <div class="orgrow" style="padding-left:5%;">
+                    <div class="col-25" style="padding-left:15px; padding-bottom:20px;">
+                          <ul id="mystoresUL" >
+                            {% for store in applied_stores %}
+                              <li  data-store-id="{{store.store_id.id}}" data-store-name="{{store.store_id.name}}" id="{{store.store_id.name}}">{{store.store_id.name}}<span class="closeLI storeTax-del">×</span></li>
+                            {% endfor %}
+                          </ul>
+                    </div>
+                </div>
+      
+              </div>
+          </div>
+        </div>
+      
+    </form>
+    </div> 
+
+
+        <div  class="accordion">
+          <a id="Div3" class="fa fa-arrow-circle-down accordion-toggle" onclick="toggleMaxHeight('DepCatInfo', '1200px', '1200px'), arrowdirection(id)">
+            <span style="display: inline-block; vertical-align: middle;">
+              Departments / Categories
+            </span>
+          </a>
+          
+          <div id="DepCatInfo" class="accordion-content" style="max-height: 0px;">
+            <div class="accordion-inner">
+              <br>
+              <div class="col-45" style="border-radius:10px;box-shadow: 0px 2px 8px 8px rgba(0,0,0,0.2);margin-bottom:25px;min-height: 230px;" >
+                <p></p>
+                <div class="orgrow">
+                  <strong><label style="padding: 0px 20px 0px 20px;">Departments : <span id="DepAdd" style="cursor:pointer;font-size:medium;margin-top:20px;" class="online">&nbsp;&nbsp; create &nbsp;&nbsp;</span></label></strong>
+                </div>   
+                  <br>               
+                <div id="addDepEl" style="display:none;background-color:#a9a9a9;margin-left: 15px;margin-right: 15px;border-radius:10px;margin-bottom:15px;">
+                  <div class="orgrow" >
+                    <table id = "AddDep-table" style="width:90%;text-align:center">
+                      <tr class="tableHeader">
+                        <th >Code</th>
+                        <th >Name</th> 
+                        <th > </th>
+                      </tr>
+                      <tr class="tableRow">
+                        <td style="width:25%"><input required="false" style="padding:12px 3px 12px 3px;width:80%" type="text" id="DepCode" name="DepCode" placeholder="ex:123..."> </td>
+                        <td style="width:50%"><input required="false" style="padding:12px 3px 12px 3px;width:80%" type="text" id="DepName" name="DepName" placeholder="ex:name..."> </td>
+                        <td style="width:20%"><span id="DepAddBtn" style="margin:13px 0px 13px 0px" class="divTools">&nbsp;&nbsp; + add &nbsp;&nbsp;</span></td>
+                      </tr>
+                    </table>
+                  </div>
+                  <br>
+                </div>
+                
+                <div class="orgrow" style="max-height: 200px; overflow-y: scroll;">
+                  <div class="col-90" style="padding-left:15px; padding-bottom:20px;">
+                        <ul id="DepUL" >
+                          {% for department in departments %}
+                            <li class="orgDepartment" id = "{{department.id}}" data-department-name = "{{department.name}}" data-department-id = "{{department.id}}" onclick="addDepParam('{{department.id}}')" > {{department.code}}-{{department.name}} <span class="closeLI department-del">×</span></li>
+                          {% endfor %}
+                          <center id="depEmptyTag" style="display:none;color:grey;padding-top:20px;"><h3>No departments available</h3><center>
+                        </ul>
+                  </div>
+                  <br>
+              </div>
+              <br>
+              </div>
+              
+              <div class="col-5" >
+                <p></p>
+                <p></p>
+              </div>
+              <div class="col-45"  style="border-radius:10px;box-shadow: 0px 2px 8px 8px rgba(0,0,0,0.2);margin-bottom:25px;min-height: 230px;">
+                <p></p>
+              <div class="orgrow" style="">
+
+                <strong><label style="padding: 0px 20px 0px 20px;">Categories : <span id="CatAdd" style="cursor:pointer;font-size:medium;margin-top:20px;visibility:hidden;" class="online">&nbsp;&nbsp; create &nbsp;&nbsp;</span></label></strong>
+              </div>   
+                <br>               
+              <div id="addCatEl" style="display:none;background-color:#a9a9a9;margin-left: 15px;margin-right: 15px;border-radius:10px;margin-bottom:15px;">
+                <div class="orgrow">
+                  <table id = "AddCat-table" style="width:90%;text-align:center">
+                    <tr class="tableHeader">
+                      <th >Code</th>
+                      <th >Name</th> 
+                      <th > </th>
+                    </tr>
+                    <tr class="tableRow">
+                        <td style="width:25%"><input required="false" style="padding:12px 3px 12px 3px;width:80%" type="text" id="CatCode" name="CatCode" placeholder="ex:123..."> </td>
+                        <td style="width:50%"><input required="false" style="padding:12px 3px 12px 3px;width:80%" type="text" id="CatName" name="CatName" placeholder="ex:name..."> </td>
+                        <td style="width:20%"><span id="CatAddBtn" style="margin:13px 0px 13px 0px" class="divTools">&nbsp;&nbsp; + add &nbsp;&nbsp;</span></td>
+                      </tr>
+                  </table>
+                </div>
+                <br>
+              </div>
+
+              <div class="orgrow" style="max-height: 200px; overflow-y: scroll;">
+                <div class="col-90" style="padding-left:15px; padding-bottom:20px;">
+                      <ul id="CatUL" >
+
+                          {% comment %} <li> Sitting Groups <span class="closeLI storeTax-del">×</span></li> {% endcomment %}
+                        <center><h3 id="noDepSelected" style = "color:grey;padding-top:20px;">No department selected</h3></center>
+                      </ul>
+                      
+                </div>
+                <br>
+            </div>
+            <br>
+
+
+            </div>
+            </div>
+          </div>
+        </div>
+
+
+    <form method = 'POST' action="" id="DepCat-form" enctype="multipart/form-data">
+      {% csrf_token %}
+        <div  class="accordion">
+          <a id="Div4" class="fa fa-arrow-circle-down accordion-toggle" onclick="toggleMaxHeight('SuppliersInfo', '1200px', '1200px'), arrowdirection(id)">
+            <span style="display: inline-block; vertical-align: middle;">
+              Suppliers
+            </span>
+            <span style="position: relative;top: -13px;">
+              <button id="SuppliersCancel" style="margin-right: 10px;display:none;"class="btn3 orgcancelbtn" type="button" >Cancel</button>
+              <button id="SuppliersSave"style="margin-right: 10px;display:none;" class="btn3 "  name="save-btn" type="submit" value="Save" data-org-id = "{{org.id}}">
+                {% if org.OrganizationName %}Update {% else %}Save{% endif %}
+              </button>
+            </span>
+          </a>
+
+          <div id="SuppliersInfo" class="accordion-content" style="max-height: 0px;">
+            <div class="accordion-inner">
+              <div class="col-50" >
+              </div>
+              <div class="col-50" >
+              </div>
+            </div>
+          </div>
+        </div>
+    </form> 
+
+    <form method = 'POST' action="" id="DepCat-form" enctype="multipart/form-data">
+      {% csrf_token %}
+        <div  class="accordion">
+          <a id="Div5" class="fa fa-arrow-circle-down accordion-toggle" onclick="toggleMaxHeight('CustomersInfo', '1200px', '1200px'), arrowdirection(id)">
+            <span style="display: inline-block; vertical-align: middle;">
+              Customers
+            </span>
+            <span style="position: relative;top: -13px;">
+              <button id="CustomersCancel" style="margin-right: 10px;display:none;"class="btn3 orgcancelbtn" type="button" >Cancel</button>
+              <button id="CustomersSave"style="margin-right: 10px;display:none;" class="btn3 "  name="save-btn" type="submit" value="Save" data-org-id = "{{org.id}}">
+                {% if org.OrganizationName %}Update {% else %}Save{% endif %}
+              </button>
+            </span>
+          </a>
+
+          <div id="CustomersInfo" class="accordion-content" style="max-height: 0px;">
+            <div class="accordion-inner">
+              <div class="col-50" >
+              </div>
+              <div class="col-50" >
+              </div>
+            </div>
+          </div>
+        </div>
+    </form> 
+
+    <form method = 'POST' action="" id="DepCat-form" enctype="multipart/form-data">
+      {% csrf_token %}
+        <div  class="accordion">
+          <a id="Div6" class="fa fa-arrow-circle-down accordion-toggle" onclick="toggleMaxHeight('CashiersInfo', '1200px', '1200px'), arrowdirection(id)">
+            <span style="display: inline-block; vertical-align: middle;">
+              Cashiers
+            </span>
+            <span style="position: relative;top: -13px;">
+              <button id="CashiersCancel" style="margin-right: 10px;display:none;"class="btn3 orgcancelbtn" type="button" >Cancel</button>
+              <button id="CashiersSave"style="margin-right: 10px;display:none;" class="btn3 "  name="save-btn" type="submit" value="Save" data-org-id = "{{org.id}}">
+                {% if org.OrganizationName %}Update {% else %}Save{% endif %}
+              </button>
+            </span>
+          </a>
+
+          <div id="CashiersInfo" class="accordion-content" style="max-height: 0px;">
+            <div class="accordion-inner">
+              <div class="col-50" >
+              </div>
+              <div class="col-50" >
+              </div>
+            </div>
+          </div>
+        </div>
+    </form> 
+
+    <form method = 'POST' action="" id="DepCat-form" enctype="multipart/form-data">
+      {% csrf_token %}
+        <div  class="accordion">
+          <a id="Div7" class="fa fa-arrow-circle-down accordion-toggle" onclick="toggleMaxHeight('SalesRepsInfo', '1200px', '1200px'), arrowdirection(id)">
+            <span style="display: inline-block; vertical-align: middle;">
+              Sales Reps
+            </span>
+            <span style="position: relative;top: -13px;">
+              <button id="SalesRepsCancel" style="margin-right: 10px;display:none;"class="btn3 orgcancelbtn" type="button" >Cancel</button>
+              <button id="SalesRepsSave"style="margin-right: 10px;display:none;" class="btn3 "  name="save-btn" type="submit" value="Save" data-org-id = "{{org.id}}">
+                {% if org.OrganizationName %}Update {% else %}Save{% endif %}
+              </button>
+            </span>
+          </a>
+
+          <div id="SalesRepsInfo" class="accordion-content" style="max-height: 0px;">
+            <div class="accordion-inner">
+              <div class="col-50" >
+              </div>
+              <div class="col-50" >
+              </div>
+            </div>
+          </div>
+        </div>
+    </form> 
+
+    <form method = 'POST' action="" id="DepCat-form" enctype="multipart/form-data">
+      {% csrf_token %}
+        <div  class="accordion">
+          <a id="Div8" class="fa fa-arrow-circle-down accordion-toggle" onclick="toggleMaxHeight('ItemsInfo', '1200px', '1200px'), arrowdirection(id)">
+            <span style="display: inline-block; vertical-align: middle;">
+              Items
+            </span>
+            <span style="position: relative;top: -13px;">
+              <button id="ItemsCancel" style="margin-right: 10px;display:none;"class="btn3 orgcancelbtn" type="button" >Cancel</button>
+              <button id="ItemsSave"style="margin-right: 10px;display:none;" class="btn3 "  name="save-btn" type="submit" value="Save" data-org-id = "{{org.id}}">
+                {% if org.OrganizationName %}Update {% else %}Save{% endif %}
+              </button>
+            </span>
+          </a>
+
+          <div id="ItemsInfo" class="accordion-content" style="max-height: 0px;">
+            <div class="accordion-inner">
+              <div class="col-50" >
+              </div>
+              <div class="col-50" >
+              </div>
+            </div>
+          </div>
+        </div>
+    </form> 
+
+    <form method = 'POST' action="" id="DepCat-form" enctype="multipart/form-data">
+      {% csrf_token %}
+        <div  class="accordion">
+          <a id="Div9" class="fa fa-arrow-circle-down accordion-toggle" onclick="toggleMaxHeight('ItemsMsgInfo', '1200px', '1200px'), arrowdirection(id)">
+            <span style="display: inline-block; vertical-align: middle;">
+              Items Messages
+            </span>
+            <span style="position: relative;top: -13px;">
+              <button id="ItemsMsgCancel" style="margin-right: 10px;display:none;"class="btn3 orgcancelbtn" type="button" >Cancel</button>
+              <button id="ItemsMsgSave"style="margin-right: 10px;display:none;" class="btn3 "  name="save-btn" type="submit" value="Save" data-org-id = "{{org.id}}">
+                {% if org.OrganizationName %}Update {% else %}Save{% endif %}
+              </button>
+            </span>
+          </a>
+
+          <div id="ItemsMsgInfo" class="accordion-content" style="max-height: 0px;">
+            <div class="accordion-inner">
+              <div class="col-50" >
+              </div>
+              <div class="col-50" >
+              </div>
+            </div>
+          </div>
+        </div>
+    </form>  
+   
+   {% endblock body %}
+   {% block additional %}
+
+
+<script>
+  const orgForm = document.getElementById('org-form');
+  const orgSaveButton = document.querySelector('.orgsavebtn');
+
+  orgForm.addEventListener('submit', function (event) {
+      event.preventDefault(); // Prevent the default form submission
+
+      const formData = new FormData(this);
+      const orgId = orgSaveButton.dataset.orgId;
+
+      $.ajax({
+          type: 'POST',
+          url: `/manage/my_products/organizations/${orgId}`,
+          data: formData,
+          processData: false,
+          contentType: false,
+          headers: {
+              'X-CSRFToken': getCookie('csrftoken'), // Include the CSRF token
+          },
+          success: function (data) {
+              if (data.success) {
+                  // Handle the success response
+                  alertify.set('notifier', 'position', 'top-center');
+                  alertify.success(data.message);
+                  
+              } else if (data.error) {
+                  alertify.set('notifier', 'position', 'top-center');
+                  alertify.error(data.message);
+                  
+
+              }
+          },
+          error: function (error) {
+              // Handle any errors that occurred during the request
+              console.error('Error:', error);
+          }
+      });
+  });
+
+  function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+{% comment %} ------------the cancel part--------------- {% endcomment %}
+const orgCancelButton = document.querySelector('.orgcancelbtn');
+  // Attach an event listener to the delete button
+  orgCancelButton.addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent the default behavior of the button click
+    
+    setTimeout(() => {
+      orgForm.reset();
+    }, 500);
+  }); 
+</script>
+
+<script>
+  function navigateToReport() {
+      window.location.href = "/Reports/ReportTemp";
+  }
+</script>
+
+<script>
+    document.getElementById('autoRenewField').addEventListener('change', function() {
+      // Check if the checkbox is checked
+      var autoRenewCheckbox = document.getElementById('autoRenewField');
+      var isAutoRenewChecked = autoRenewCheckbox.checked;
+      console.log('hello')
+      // Construct the URL with the confirmation code as a query parameter
+      var queryString = window.location.search;
+      // Create a new instance of URLSearchParams with the query string
+      var searchParams = new URLSearchParams(queryString);
+      // Get the value of the "param" query parameter
+      var paramValue = searchParams.get('id');
+      
+      // Do something based on the checkbox state
+      if (isAutoRenewChecked) {
+        console.log('hello2')
+        
+        const url = `/manage/org_autorenow_on?id=${encodeURIComponent(paramValue)}`;
+        // Make an asynchronous request to delete the product from the server
+        fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+          },
+        })
+          .then(response => response.json())
+          .then(data => {
+            // Handle the response data
+            // For example, display a success message or update the cart UI
+            if (data.success) {
+              // Handle the success response
+              alertify.set('notifier', 'position', 'top-center');
+              alertify.success(data.message);
+            }
+          })
+          .catch(error => {
+            // Handle any errors that occurred during the request
+            console.error(error);
+          });
+        
+      } else {
+        console.log('hello3')
+        
+        const url = `/manage/org_autorenow_off?id=${encodeURIComponent(paramValue)}`;
+        // Make an asynchronous request to delete the product from the server
+        fetch(url, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+          },
+        })
+          .then(response => response.json())
+          .then(data => {
+            // Handle the response data
+            // For example, display a success message or update the cart UI
+            if (data.success) {
+              // Handle the success response
+              alertify.set('notifier', 'position', 'top-center');
+              alertify.error(data.message);
+            }
+          })
+          .catch(error => {
+            // Handle any errors that occurred during the request
+            console.error(error);
+          });
+       
+      }
+    });
+</script>
+
+<script>
+  document. addEventListener('mouseup', function(e) {
+    var container = document. getElementById('orgNav');
+    if (! container. contains(e. target)) {
+    container. style.width = "0%";
+    
+    }
+    });
+</script>
+
+<script>
+  // Wait for the DOM to load
+  document.addEventListener('DOMContentLoaded', function() {
+      // Select all the messages with the 'alert' class
+      var messages = document.querySelectorAll('.alert');
+
+      // Loop through each message and set a timeout to remove it after 3 seconds,
+      // except for error messages
+      messages.forEach(function(message) {
+          if (!message.classList.contains('error')) {
+              setTimeout(function() {
+                  message.remove();
+              }, 3000);
+          }
+      });
+  });
+</script>
+<script>
+  var message = document.getElementById('fade-msg');
+  if (!message.classList.contains('error')) {
+      setTimeout(function() {
+        message.style.opacity = '0';
+      }, 1250);
+  }
+</script>
+<script>
+  // Get the user delete modal
+var modal = document.getElementById('productdeleteconfirm');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target === modal) {
+    modal.style.display = "none";
+    document.getElementById('deleteconfirmation').style.display='none';
+  };
+};
+</script>
+
+<script>
+  // Get references to the buttons
+  const specificButton = document.getElementById('org-delete-btn');
+  const removeButton = document.getElementById('remove-button');
+
+  // Attach an event listener to the add button
+  specificButton.addEventListener('click', () => {
+    // Get the current URL
+    const url = new URL(window.location.href);
+
+    // Add the query parameter to the URL
+    url.searchParams.append('del', 'true');
+
+    // Modify the browser history with triggering a page reload
+    window.location.href = url.href;
+  });
+
+  // Check if the 'del' query parameter exists in the URL
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('del')) {
+    const delEl = document.getElementById('productdeleteconfirm');
+    const delEl2 = document.getElementById('deleteconfirmation');
+
+    // Show the delEl element by modifying its style
+    delEl.style.display = 'block';
+    delEl2.style.display = 'block';
+    document.getElementById('org-delete-btn').style.display='none'
+  }
+
+  // Attach an event listener to the remove button
+  removeButton.addEventListener('click', () => {
+    // Get the current URL
+    const url = new URL(window.location.href);
+
+    // Remove the query parameter from the URL
+    url.searchParams.delete('del');
+
+    // Modify the browser history without triggering a page reload
+    window.history.pushState({}, '', url.href);
+  });
+</script>
+
+<script>
+  // Get a reference to the delete button
+  const deleteButton = document.querySelector('.orgdel');
+  console.log(deleteButton);
+
+  // Attach an event listener to the delete button
+  deleteButton.addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent the default behavior of the button click
+
+    // Get the product ID associated with the delete button
+    const orgId = deleteButton.dataset.orgId;
+    console.log(orgId);
+
+    // Get the confirmation code from the input field
+    const confirmationCode = document.getElementById('code').value;
+
+    // Construct the URL with the confirmation code as a query parameter
+    const url = `/manage/my_products/organizations/delete_org/${orgId}?code=${encodeURIComponent(confirmationCode)}`;
+
+    // Make an asynchronous request to delete the product from the server
+    fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response data
+        // For example, display a success message or update the cart UI
+        if (data.success) {
+          // Handle the success response
+          console.log('success');
+          const url = new URL(window.location.href);
+
+          // Remove the query parameter from the URL
+          url.searchParams.delete('del');
+
+          // Modify the browser history without triggering a page reload
+          window.location.href = url.href;
+          alertify.set('notifier', 'position', 'top-center');
+          alertify.success(data.message);
+        } else if (data.error) {
+          console.log('error');
+          const errorEl = document.getElementById('code-error')
+          errorEl.textContent = '• Invalid Code!'
+        }
+      })
+      .catch(error => {
+        // Handle any errors that occurred during the request
+        console.error(error);
+      });
+  });
+</script>
+{% comment %} <script>
+function addappliedstore() {
+  var li = document.createElement("li");
+  var inputValue = document.getElementById("stores").value;
+  var t = document.createTextNode(inputValue);
+  li.appendChild(t);
+  if (inputValue === '') {
+    alert("You must select something!");
+  } else {
+    document.getElementById("mystoresUL").appendChild(li);
+  }
+  document.getElementById("stores").value = "";
+
+  var span = document.createElement("SPAN");
+  var txt = document.createTextNode("\u00D7");
+  span.className = "closeLI";
+  span.appendChild(txt);
+  li.appendChild(span);
+
+  for (i = 0; i < close.length; i++) {
+    close[i].onclick = function() {
+      var div = this.parentElement;
+      div.style.display = "none";
+    };
+  }
+}
+</script> {% endcomment %}
+<script>
+  const taxForm = document.getElementById('tax-form');
+  const taxSaveButton = document.getElementById('taxChargesSave');
+ 
+  taxForm.addEventListener('submit', function (event) {
+      event.preventDefault(); // Prevent the default form submission
+
+      const formData = new FormData(this);
+      const orgId = taxSaveButton.dataset.orgId;
+      var queryString = window.location.search;
+      // Create a new instance of URLSearchParams with the query string
+      var searchParams = new URLSearchParams(queryString);
+      // Get the value of the "param" query parameter
+      var tempId = searchParams.get('tempid');
+
+      var url = `/manage/my_products/organizations/tax_info/${orgId}`;
+      if (tempId !== null) {
+          url += `?tempid=${tempId}`;
+      }
+      setTimeout(() => {
+      $.ajax({
+          type: 'POST',
+          url: url,
+          data: formData,
+          processData: false,
+          contentType: false,
+          headers: {
+              'X-CSRFToken': getCookie('csrftoken'), // Include the CSRF token
+          },
+          success: function (data) {
+              if (data.success) {
+                if (data.status == 'new') {
+                  var taxEl = document.getElementById('taxTemp')
+                  var element = document.createElement("a");
+                  element.textContent = data.name;
+                  element.id = `tax${data.tempid}`;
+                  element.style.cssText = 'font-size:20px;padding-bottom:30px;padding-top:8px;';
+                  element.style.marginTop = '-21.5px';
+
+                  element.onclick = function() {
+                    addTaxParam(data.tempid);
+                  };
+                  taxEl.appendChild(element);
+                  document.getElementById('noTax').style.display = 'none'
+                  alertify.set('notifier', 'position', 'top-center');
+                  alertify.success(data.message);
+
+                  document.getElementById('taxInfo').style.display = 'none'
+                  document.getElementById('emptyTemp').style.display = 'block'
+                  document.getElementById('taxAdd').style.display = 'block'
+                  const divToolsElements = document.querySelectorAll('.commands');
+                  // Iterate over each element and set the display property to 'block'
+                  divToolsElements.forEach(element => {
+                      element.style.display = 'none';
+                  });
+
+                  var currentUrl = new URL(window.location.href);
+                  // Check if the query parameter exists
+                  if (currentUrl.searchParams.has('tempid')) {
+                      // Remove the query parameter
+                      currentUrl.searchParams.delete('tempid');
+                      // Update the URL without reloading the page
+                      window.history.replaceState({}, document.title, currentUrl.href);
+                  }
+                  var myForm = document.getElementById('tax-form');
+                  myForm.reset();
+                  document.getElementById("stores").value = "";
+                }
+                else {
+                  var taxTemplate = document.getElementById(`tax${data.tempid}`);
+                  taxTemplate.textContent = data.name;
+                  alertify.set('notifier', 'position', 'top-center');
+                  alertify.success(data.message);
+                  //setTimeout(() => {
+                  document.getElementById('taxInfo').style.display = 'none'
+                  document.getElementById('emptyTemp').style.display = 'block'
+
+                  const divToolsElements = document.querySelectorAll('.commands');
+                  // Iterate over each element and set the display property to 'block'
+                  divToolsElements.forEach(element => {
+                      element.style.display = 'none';
+                  });
+                //}, 500);
+                  var currentUrl = new URL(window.location.href);
+                  // Check if the query parameter exists
+                  if (currentUrl.searchParams.has('tempid')) {
+                      // Remove the query parameter
+                      currentUrl.searchParams.delete('tempid');
+
+                      // Update the URL without reloading the page
+                      window.history.replaceState({}, document.title, currentUrl.href);
+                  }
+                  var myForm = document.getElementById('tax-form');
+                  myForm.reset();
+                  document.getElementById("stores").value = "";
+                }
+                  
+                 
+              } else if (data.error) {
+                  alertify.set('notifier', 'position', 'top-center');
+                  alertify.error(data.message);
+                  
+
+              }
+          },
+          error: function (error) {
+              // Handle any errors that occurred during the request
+              console.error('Error:', error);
+          }
+      });
+    }, 300);
+  });
+ 
+  function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+{% comment %} ------------the cancel part--------------- {% endcomment %}
+const taxCancelButton = document.getElementById('taxChargesCancel');
+  // Attach an event listener to the delete button
+  taxCancelButton.addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent the default behavior of the button click
+    var currentUrl = new URL(window.location.href);
+    // Check if the query parameter exists
+    if (currentUrl.searchParams.has('tempid')) {
+        // Remove the query parameter
+        currentUrl.searchParams.delete('tempid');
+        // Update the URL without reloading the page
+        window.history.replaceState({}, document.title, currentUrl.href);
+    }
+    setTimeout(() => {
+      taxForm.reset();
+      document.getElementById("stores").value = "";
+      document.getElementById('taxInfo').style.display = 'none'
+      document.getElementById('emptyTemp').style.display = 'block'
+      document.getElementById('taxAdd').style.display = 'block'
+      const divToolsElements = document.querySelectorAll('.commands');
+      // Iterate over each element and set the display property to 'block'
+      divToolsElements.forEach(element => {
+          element.style.display = 'none';
+      });
+    }, 500);
+  });
+
+  
+</script>
+{% comment %} --------------------- save and cancel organization with js------------------------- {% endcomment %}
+<script>
+  function addTaxParam(taxTitle) {
+      // Get the current URL
+      document.getElementById("stores").value = "";
+      var currentUrl = new URL(window.location.href);
+      
+      if (currentUrl.searchParams.has('tempid')) {
+        // Remove the existing 'tempid' query parameter
+        currentUrl.searchParams.delete('tempid');
+      }
+
+      // Append the new query parameter
+      currentUrl.searchParams.set('tempid', encodeURIComponent(taxTitle));
+
+      // Update the URL
+      window.history.replaceState({}, document.title, currentUrl.href);
+
+      // Fetch and update the form dynamically
+      updateFormInstance();
+      document.getElementById('taxAdd').style.display = 'block'
+      closeleftNav('taxNav');
+  }
+
+  function updateFormInstance() {
+    var tempId = new URLSearchParams(window.location.search).get('tempid');
+
+    if (tempId) {
+      
+      document.getElementById('taxInfo').style.display = 'block'
+      document.getElementById('emptyTemp').style.display = 'none'
+      const divToolsElements = document.querySelectorAll('.commands');
+      // Iterate over each element and set the display property to 'block'
+      divToolsElements.forEach(element => {
+          element.style.display = 'block';
+      });
+      
+      // Make an AJAX request to get the form data
+      $.ajax({
+        url: `/manage/org_tax_info/${tempId}`,  // Replace with your actual backend endpoint
+        method: 'GET',
+        success: function (data) {
+          // Assuming the server returns JSON data
+          // Update form fields with the received data
+          $('#salestaxDesc').val(data.form_data.tax_title);
+          $('#Taxincluded').prop('checked', data.form_data.tax_include);
+          $('#Default').prop('checked', data.form_data.default);
+          $('#Disable').prop('checked', data.form_data.disable);
+          $('#mintaxAmount').val(data.form_data.min_amount);
+          $('#maxtaxAmount').val(data.form_data.max_amount);
+          // Add similar lines for other fields
+          $('input[value="' + data.form_data.tax_type + '"]').prop('checked', true);
+          $('input[value="' + data.form_data.tax_amount + '"]').prop('checked', true);
+          $('#taxRate').val(data.form_data.rate);
+          $('#fixedAmount').val(data.form_data.amount);
+          // Update other fields accordingly
+          linkedStoresEl = document.getElementById('mystoresUL');
+          linkedStoresEl.innerHTML = '';
+          for (var store of data.linked_stores) {
+            var li = document.createElement("li");
+            li.id = store.name;
+            var t = document.createTextNode(store.name);
+            li.appendChild(t);
+
+            var span = document.createElement("span");
+            var txt = document.createTextNode("\u00D7");
+            span.className = "closeLI storeTax-del";
+            span.appendChild(txt);
+            li.appendChild(span);
+            li.setAttribute("data-store-id", `${store.id}`);
+            li.setAttribute("data-store-name", `${store.name}`);
+            linkedStoresEl.appendChild(li)
+          }
+          const storeTaxDelBtnsJs = document.querySelectorAll('.storeTax-del');
+
+          storeTaxDelBtnsJs.forEach(span => {
+            span.addEventListener('click', (event) => {
+              event.preventDefault(); // Prevent the default behavior of the button click
+            // Construct the URL with the confirmation code as a query parameter
+            var queryString = window.location.search;
+            // Create a new instance of URLSearchParams with the query string
+            var searchParams = new URLSearchParams(queryString);
+            // Get the value of the "param" query parameter
+            var orgId = searchParams.get('id');
+            var taxId = searchParams.get('tempid');
+            
+            li = span.parentElement
+            var storeId = li.dataset.storeId;
+            
+
+            const url = `/manage/my_products/organizations/tax_info/delete_store_tax/${encodeURIComponent(orgId)}/${encodeURIComponent(taxId)}/${storeId}`;
+
+            // Make an asynchronous request to delete the product from the server
+            fetch(url, {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+              },
+            })
+              .then(response => response.json())
+              .then(data => {
+                // Handle the response data
+                // For example, display a success message or update the cart UI
+                if (data.success) {
+                  // Handle the success response
+                  li.remove()
+                  alertify.set('notifier', 'position', 'top-center');
+                  alertify.error(data.message);
+                }
+                })
+            
+              .catch(error => {
+                // Handle any errors that occurred during the request
+                console.error(error);
+              });
+          });
+          });
+          
+        },
+        error: function () {
+          console.error('Failed to fetch form data.');
+        },
+      });
+    }
+  }
+</script>
+<script>
+  document.getElementById("stores").value = "";
+
+  let storeId;  // Declare storeId outside the event listener
+  document.getElementById('stores').addEventListener('change', function () {
+      var selectedOption = this.options[this.selectedIndex];
+      storeId = selectedOption.getAttribute('data-store-id');
+  });
+
+  const addStoreTaxBtn = document.querySelector('.addStoreTaxBtn');
+  // Attach an event listener to the delete button
+  addStoreTaxBtn.addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent the default behavior of the button click
+
+    var queryString = window.location.search;
+    // Create a new instance of URLSearchParams with the query string
+    var searchParams = new URLSearchParams(queryString);
+    // Get the value of the "param" query parameter
+    var orgId = searchParams.get('id');
+    var taxId = searchParams.get('tempid');
+
+    if(taxId){
+    var li = document.createElement("li");
+    var inputValue = document.getElementById("stores").value;
+    li.id = inputValue;
+    var t = document.createTextNode(inputValue);
+    li.appendChild(t);
+
+    var span = document.createElement("span");
+    var txt = document.createTextNode("\u00D7");
+    span.className = "closeLI storeTax-del";
+    span.appendChild(txt);
+    li.appendChild(span);
+    li.setAttribute("data-store-id", `${storeId}`);
+    li.setAttribute("data-store-name", `${inputValue}`);
+
+    if (inputValue === '') {
+      alertify.set('notifier', 'position', 'top-center');
+      alertify.error('You must select a store!');
+      return;
+    }
+  
+    var ul = document.getElementById("mystoresUL");
+    var lis = ul.getElementsByTagName("li");
+    var specificId = inputValue;
+  
+    for (var i = 0; i < lis.length; i++) {
+      var lii = lis[i];
+      var liId = lii.getAttribute("id");
+  
+      if (liId === specificId) {
+        alertify.set('notifier', 'position', 'top-center');
+        alertify.error('Tax already applied to this store!');
+        return;
+      }
+    }
+  
+    ul.appendChild(li);
+
+    var close = document.getElementsByClassName("storeTax-del");
+    for (var i = 0; i < close.length; i++) {
+      close[i].onclick = function(event) {
+        var span = event.target;
+        var li = span.closest('li'); // Find the closest ancestor li element
+        var storeId = li.dataset.storeId; // Retrieve the store id from the parent li element
+
+      li.remove(); // Remove the li element
+        var queryString = window.location.search;
+        // Create a new instance of URLSearchParams with the query string
+        var searchParams = new URLSearchParams(queryString);
+        // Get the value of the "param" query parameter
+        var orgId = searchParams.get('id');
+        var taxId = searchParams.get('tempid');
+
+        const url = `/manage/my_products/organizations/tax_info/delete_store_tax/${encodeURIComponent(orgId)}/${encodeURIComponent(taxId)}/${storeId}`;
+
+        // Make an asynchronous request to delete the product from the server
+        fetch(url, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+          },
+        })
+          .then(response => response.json())
+          .then(data => {
+            // Handle the response data
+            // For example, display a success message or update the cart UI
+            if (data.success) {
+              // Handle the success response
+              li.remove()
+              alertify.set('notifier', 'position', 'top-center');
+              alertify.error(data.message);
+            }
+            })
+        
+          .catch(error => {
+            // Handle any errors that occurred during the request
+            console.error(error);
+          });
+
+
+        };
+      }
+
+    const url = `/manage/my_products/organizations/tax_info/add_store_tax/${encodeURIComponent(orgId)}/${encodeURIComponent(taxId)}/${storeId}`;
+
+    // Make an asynchronous request to delete the product from the server
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response data
+        // For example, display a success message or update the cart UI
+        if (data.success) {
+          // Handle the success response
+
+
+
+          alertify.set('notifier', 'position', 'top-center');
+          alertify.success(data.message);
+        }
+      })
+      .catch(error => {
+        // Handle any errors that occurred during the request
+        console.error(error);
+      });
+
+      document.getElementById("stores").value = "";
+
+    } else{
+      alertify.set('notifier', 'position', 'top-center');
+      alertify.error('• Save the template first');
+      document.getElementById("stores").value = "";
+    }
+  });
+
+  const storeTaxDelBtns = document.querySelectorAll('.storeTax-del');
+
+  storeTaxDelBtns.forEach(span => {
+    span.addEventListener('click', (event) => {
+      event.preventDefault(); // Prevent the default behavior of the button click
+    // Construct the URL with the confirmation code as a query parameter
+    var queryString = window.location.search;
+    // Create a new instance of URLSearchParams with the query string
+    var searchParams = new URLSearchParams(queryString);
+    // Get the value of the "param" query parameter
+    var orgId = searchParams.get('id');
+    var taxId = searchParams.get('tempid');
+    
+    li = span.parentElement
+    var storeId = li.dataset.storeId;
+    
+
+    const url = `/manage/my_products/organizations/tax_info/delete_store_tax/${encodeURIComponent(orgId)}/${encodeURIComponent(taxId)}/${storeId}`;
+
+    // Make an asynchronous request to delete the product from the server
+    fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response data
+        // For example, display a success message or update the cart UI
+        if (data.success) {
+          // Handle the success response
+          li.remove()
+          alertify.set('notifier', 'position', 'top-center');
+          alertify.error(data.message);
+        }
+        })
+    
+      .catch(error => {
+        // Handle any errors that occurred during the request
+        console.error(error);
+      });
+  });
+  });
+</script> 
+{% comment %} ---------------------------------------------------------------------------------------------- {% endcomment %}
+<script>
+  // Function to remove a specific query parameter from the URL
+  taxesEl = document.getElementById('taxTemp')
+          var anchorElements = taxesEl.querySelectorAll('a');
+          var numberOfElements = anchorElements.length;
+          console.log(numberOfElements)
+          if (numberOfElements === 0){
+            document.getElementById('noTax').style.display = 'block'
+          }
+
+
+  function removeQueryParam(parameterKey) {
+    const url = new URL(window.location.href);
+    url.searchParams.delete(parameterKey);
+    history.replaceState({}, document.title, url.href);
+  }
+
+  // Call the function to remove a specific query parameter
+  removeQueryParam('tempid');
+  document.getElementById('taxAdd').style.display = 'block'
+var taxAmount = document.getElementById('taxAmount')
+console.log(taxAmount)
+</script>
+{% comment %} ------------------------------------------------------------------------------------------------- {% endcomment %}
+<script>
+const taxDelButton = document.getElementById('taxDel');
+  // Attach an event listener to the delete button
+  taxDelButton.addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent the default behavior of the button click
+
+    var queryString = window.location.search;
+    // Create a new instance of URLSearchParams with the query string
+    var searchParams = new URLSearchParams(queryString);
+    var tempId = searchParams.get('tempid')
+
+    // Construct the URL with the confirmation code as a query parameter
+    const url = `/manage/my_products/organizations/tax_info/delete/${tempId}`;
+
+    // Make an asynchronous request to delete the product from the server
+    fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response data
+        // For example, display a success message or update the cart UI
+        if (data.success) {
+          // Handle the success response
+          document.getElementById('taxInfo').style.display = 'none'
+          document.getElementById('emptyTemp').style.display = 'block'
+          const divToolsElements = document.querySelectorAll('.commands');
+          // Iterate over each element and set the display property to 'block'
+          divToolsElements.forEach(element => {
+              element.style.display = 'none';
+          });
+
+          taxesEl = document.getElementById('taxTemp')
+          var anchorElements = taxesEl.querySelectorAll('a');
+          var numberOfElements = anchorElements.length;
+          if (numberOfElements === 1){
+            var emptyTag = document.createElement("h3");
+            var txt = document.createTextNode("No templates available");
+            emptyTag.appendChild(txt)
+            emptyTag.style.cssText = 'color:grey;margin-top:6px;padding-bottom: 40px;'
+            emptyTag.id = 'noTax'
+            taxesEl.appendChild(emptyTag) 
+          }
+          document.getElementById(`tax${tempId}`).remove()
+          alertify.set('notifier', 'position', 'top-center');
+          alertify.error(data.message);
+        } else if (data.error) {
+          alertify.set('notifier', 'position', 'top-center');
+          alertify.error(data.message);
+        }
+      })
+      .catch(error => {
+        // Handle any errors that occurred during the request
+        console.error(error);
+      });
+  });
+</script>
+<script>
+  const taxAddButton = document.getElementById('taxAdd');
+  // Attach an event listener to the delete button
+  taxAddButton.addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent the default behavior of the button click
+    var currentUrl = new URL(window.location.href);
+    // Check if the query parameter exists
+    if (currentUrl.searchParams.has('tempid')) {
+        // Remove the query parameter
+        currentUrl.searchParams.delete('tempid');
+        // Update the URL without reloading the page
+        window.history.replaceState({}, document.title, currentUrl.href);
+    }
+    linkedStoresEl = document.getElementById('mystoresUL');
+    var myForm = document.getElementById('tax-form');
+    myForm.reset();
+    linkedStoresEl.innerHTML = '';
+    document.getElementById("stores").value = "";
+    document.getElementById('taxInfo').style.display = 'block'
+    document.getElementById('emptyTemp').style.display = 'none'
+    document.getElementById('taxAdd').style.display = 'none'
+    const divToolsElements = document.querySelectorAll('.commands');
+    // Iterate over each element and set the display property to 'block'
+    divToolsElements.forEach(element => {
+        element.style.display = 'none';
+    });
+    
+  });
+</script>
+<script>
+   const taxCopyButton = document.getElementById('taxCopy');
+  // Attach an event listener to the delete button
+  taxCopyButton.addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent the default behavior of the button click
+    var currentUrl = new URL(window.location.href);
+    // Check if the query parameter exists
+    if (currentUrl.searchParams.has('tempid')) {
+        // Remove the query parameter
+        currentUrl.searchParams.delete('tempid');
+        // Update the URL without reloading the page
+        window.history.replaceState({}, document.title, currentUrl.href);
+    }
+    linkedStoresEl = document.getElementById('mystoresUL');
+    document.getElementById('salestaxDesc').value = ''
+    //var myForm = document.getElementById('tax-form');
+    //myForm.reset();
+
+    linkedStoresEl.innerHTML = '';
+    document.getElementById("stores").value = "";
+    document.getElementById('taxInfo').style.display = 'block'
+    document.getElementById('emptyTemp').style.display = 'none'
+    document.getElementById('taxAdd').style.display = 'none'
+    const divToolsElements = document.querySelectorAll('.commands');
+    // Iterate over each element and set the display property to 'block'
+    divToolsElements.forEach(element => {
+        element.style.display = 'none';
+    });
+    alertify.set('notifier', 'position', 'top-center');
+    alertify.success('• Template copied');
+  });
+</script>  
+{% comment %} ----------------------------------------------------------------------- {% endcomment %}
+<script>
+  {% comment %} const taxForm = document.getElementById('tax-form'); {% endcomment %}
+  const taxPrintButton = document.getElementById('taxPrint');
+ 
+  taxPrintButton.addEventListener('click', function (event) {
+      event.preventDefault(); // Prevent the default button action
+
+      // Retrieve specific form field values
+      const tax_title_field = document.getElementById('salestaxDesc').value;
+      const tax_include_field = document.getElementById('Taxincluded').value;
+      const default_field = document.getElementById('Default').value;
+      const disable_field = document.getElementById('Disable').value;
+      const min_amount_field = document.getElementById('mintaxAmount').value;
+      const max_amount_field = document.getElementById('maxtaxAmount').value;
+      const tax_type_field = document.getElementById('taxType').value;
+      const tax_amount_field = document.getElementById('taxAmount').value;
+      const rate_field = document.getElementById('taxRate').value;
+      const amount_field = document.getElementById('fixedAmount').value;
+      // Add more fields as needed...
+
+      // Create an object with the desired form data
+      const formData = {
+        tax_title: tax_title_field,
+        tax_include: tax_include_field,
+        default: default_field,
+        disable: disable_field,
+        min_amount: min_amount_field,
+        max_amount: max_amount_field,
+        tax_type: tax_type_field,
+        tax_amount: tax_amount_field,
+        rate: rate_field,
+        amount: amount_field,
+
+          // Add more fields as needed...
+      };
+      console.log(formData)
+      var url = `/manage/pdf_view/`;
+
+      $.ajax({
+          type: 'POST',
+          url: url,
+          data: JSON.stringify(formData),
+          contentType: 'application/json',
+          headers: {
+              'X-CSRFToken': getCookie('csrftoken'), // Include the CSRF token
+          },
+          success: function (data) {
+            // Open the PDF in a new tab and trigger print
+            //var blob = new Blob([data], { type: 'application/pdf' });
+            //var url = URL.createObjectURL(blob);
+            //var newWindow = window.open(url);
+        },
+          error: function (error) {
+              // Handle any errors that occurred during the request
+              console.error('Error:', error);
+          }
+      });
+  });
+ 
+  function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+</script>
+<script>
+  const departAddButton = document.getElementById('DepAddBtn');
+  // Attach an event listener to the delete button
+  departAddButton.addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent the default behavior of the button click
+    //var depname = addButton.dataset.departmentName;
+    var li = document.createElement("li");
+    var code = document.getElementById("DepCode").value;
+    var name = document.getElementById("DepName").value;
+    li.className = "orgDepartment"; 
+    li.setAttribute("data-department-name", `${code}-${name}`);
+    var t = document.createTextNode(code +"-"+name);
+    li.appendChild(t);
+  
+    var ul = document.getElementById("DepUL");
+    var lis = ul.getElementsByTagName("li");
+    var specifiedName = `${code}-${name}`;
+    
+    var span = document.createElement("span");
+    var txt = document.createTextNode("\u00D7");
+    //span.setAttribute("data-day-name", `${day}`);
+    span.className = "closeLI department-del-js";
+    span.appendChild(txt);
+    li.appendChild(span);
+
+    console.log(li)
+    if (code === ""){
+      alertify.set('notifier', 'position', 'top-center');
+      alertify.error("Please add a code!");
+      return;
+    }
+    if(name === ""){
+      alertify.set('notifier', 'position', 'top-center');
+      alertify.error("Please add a name!");
+      return;
+    }
+    if (/[a-zA-Z]/.test(code)) {
+      alertify.set('notifier', 'position', 'top-center');
+      alertify.error("Code should only contain numbers!");
+      return;
+    }
+    // Check if name contains any numbers
+    if (/\d/.test(name)) {
+        alertify.set('notifier', 'position', 'top-center');
+        alertify.error("Name should only contain letters!");
+        return;
+    }
+
+    for (var i = 0; i < lis.length; i++) {
+      var lii = lis[i];
+      var liId = lii.getAttribute("id");
+      console.log(liId)
+      if (liId.toLowerCase() === specifiedName.toLowerCase()) {
+        alertify.set('notifier', 'position', 'top-center');
+        alertify.error("Name already exists!");
+        return;
+      }
+    }
+    console.log('2')
+    ul.appendChild(li);
+
+    var queryString = window.location.search;
+    // Create a new instance of URLSearchParams with the query string
+    var searchParams = new URLSearchParams(queryString);
+    // Get the value of the "param" query parameter
+    var orgId = searchParams.get('id');
+
+    const url = `/manage/my_products/organizations/departments/add_dep/${orgId}/${code}/${name}`;
+
+    // Make an asynchronous request to delete the product from the server
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response data
+        // For example, display a success message or update the cart UI
+        if (data.success) {
+          document.getElementById("DepCode").value = '';
+          document.getElementById("DepName").value = '';
+          document.getElementById('depEmptyTag').style.display = 'none'
+          alertify.set('notifier', 'position', 'top-center');
+          alertify.success(data.message);
+          li.setAttribute("data-department-id", data.dep_id);
+          li.onclick = function() {
+            addDepParam(data.dep_id);
+          };
+          li.id = data.dep_id
+          
+        } else if (data.error) {
+          alertify.set('notifier', 'position', 'top-center');
+          alertify.error(data.message);
+        }
+      })
+      .catch(error => {
+        // Handle any errors that occurred during the request
+        console.error(error);
+      });
+
+
+    var newDelButtons = document.querySelectorAll('.department-del-js');
+    for (var i = 0; i < newDelButtons.length; i++) {
+      newDelButtons[i].onclick = function(event) {
+        event.stopPropagation();
+        var span = event.target;
+        var li = span.parentElement;
+        var departmentId = li.dataset.departmentId; // Retrieve the module name from the parent li element
+        li.remove();
+        var queryString = window.location.search;
+        // Create a new instance of URLSearchParams with the query string
+        var searchParams = new URLSearchParams(queryString);
+        // Get the value of the "param" query parameter
+        var depId = searchParams.get('dep-id');
+  
+        const url = `/manage/my_products/organizations/departments/delete_dep/${orgId}/${departmentId}`;
+        // Make an asynchronous request to delete the product from the server
+        fetch(url, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+          },
+        })
+          .then(response => response.json())
+          .then(data => {
+            // Handle the response data
+            // For example, display a success message or update the cart UI
+            if (data.success) {
+              // Handle the success response
+              departmentsEl = document.getElementById('DepUL')
+              var listElements = departmentsEl.querySelectorAll('li');
+              var numberOfElements = listElements.length;
+              if (numberOfElements === 0){
+                document.getElementById('depEmptyTag').style.display = 'block'
+                document.getElementById('depEmptyTag').style.paddingTop = '40px'
+              }
+              if(depId){
+                if (depId === departmentId){
+                  var categoriesEl = document.getElementById('CatUL');
+                  var liElements = categoriesEl.querySelectorAll('li');
+                  liElements.forEach(function(li) {
+                      depCategories.removeChild(li);
+                  });
+                  document.getElementById('noDepSelected').innerHTML = "No department selected";
+                  document.getElementById('noDepSelected').style.display = 'block';
+                  document.getElementById('CatAdd').style.visibility = 'hidden';
+                }
+              }
+              alertify.set('notifier', 'position', 'top-center');
+              alertify.error(data.message);
+            }
+            })
+        
+          .catch(error => {
+            // Handle any errors that occurred during the request
+            console.error(error);
+          });
+  
+  
+        };
+      }
+
+  });
+
+  //--------------delete the department when refreshed----------------------------------
+  const departmentRemoveButtons = document.querySelectorAll('.department-del');
+
+  // Attach an event listener to the delete button
+  departmentRemoveButtons.forEach(span => {
+    span.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation(); // Prevent the default behavior of the button click
+    // Construct the URL with the confirmation code as a query parameter
+    var queryString = window.location.search;
+    // Create a new instance of URLSearchParams with the query string
+    var searchParams = new URLSearchParams(queryString);
+    // Get the value of the "param" query parameter
+    var orgId = searchParams.get('id');
+
+    li = span.parentElement
+    const departmentId = li.dataset.departmentId;
+
+    const url = `/manage/my_products/organizations/departments/delete_dep/${orgId}/${departmentId}`;
+
+    // Make an asynchronous request to delete the product from the server
+    fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response data
+        // For example, display a success message or update the cart UI
+        if (data.success) {
+          // Handle the success response
+          li.remove()
+
+          var queryString = window.location.search;
+          // Create a new instance of URLSearchParams with the query string
+          var searchParams = new URLSearchParams(queryString);
+          // Get the value of the "param" query parameter
+          var depId = searchParams.get('dep-id');
+          if(depId){
+            if (depId === departmentId){
+              var categoriesEl = document.getElementById('CatUL');
+              var liElements = categoriesEl.querySelectorAll('li');
+              liElements.forEach(function(li) {
+                  depCategories.removeChild(li);
+              });
+              document.getElementById('noDepSelected').innerHTML = "No department selected";
+              document.getElementById('noDepSelected').style.display = 'block';
+              document.getElementById('CatAdd').style.visibility = 'hidden';
+            }
+          }
+          departmentsEl = document.getElementById('DepUL')
+          var listElements = departmentsEl.querySelectorAll('li');
+          var numberOfElements = listElements.length;
+          if (numberOfElements === 0){
+            document.getElementById('depEmptyTag').style.display = 'block'
+          }
+          alertify.set('notifier', 'position', 'top-center');
+          alertify.error(data.message);
+        }
+        })
+    
+      .catch(error => {
+        // Handle any errors that occurred during the request
+        console.error(error);
+      });
+  });
+  });
+
+</script>
+<script>
+  const depCreateButton = document.getElementById('DepAdd');
+  // Attach an event listener to the delete button
+  depCreateButton.addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent the default behavior of the button click
+    createDepEl = document.getElementById('addDepEl')
+
+    if (depCreateButton.innerHTML === '&nbsp;&nbsp; create &nbsp;&nbsp;' ){
+      createDepEl.style.display = 'block'
+      depCreateButton.innerHTML = '&nbsp;&nbsp; done &nbsp;&nbsp;'
+    }else {
+      createDepEl.style.display = 'none'
+      depCreateButton.innerHTML = '&nbsp;&nbsp; create &nbsp;&nbsp;'
+    }
+  });
+</script>
+
+{% comment %} -------------------------------------------------------------------------------------------------------- {% endcomment %}
+<script>
+  departmentsEl = document.getElementById('DepUL')
+  var listElements = departmentsEl.querySelectorAll('li');
+  var numberOfElements = listElements.length;
+  if (numberOfElements === 0){
+    document.getElementById('depEmptyTag').style.display = 'block'
+  }
+  removeQueryParam('dep-id');
+
+</script>
+{% comment %} -------------------------------------------------------------------------------------------------------- {% endcomment %}
+<script>
+  function addDepParam(depId) {
+    // Get the current URL
+    var currentUrl = new URL(window.location.href);
+    
+    if (currentUrl.searchParams.has('dep-id')) {
+      // Remove the existing 'tempid' query parameter
+      currentUrl.searchParams.delete('dep-id');
+    }
+
+    // Append the new query parameter
+    currentUrl.searchParams.set('dep-id', encodeURIComponent(depId));
+
+    // Update the URL
+    window.history.replaceState({}, document.title, currentUrl.href);
+
+    // Fetch and update the form dynamically
+    document.getElementById('addCatEl').style.display = 'none'
+    document.getElementById('CatAdd').innerHTML = '&nbsp;&nbsp; create &nbsp;&nbsp;'
+    const departs = document.querySelectorAll('.orgDepartment');
+    // Iterate over each element and set the display property to 'block'
+    departs.forEach(element => {
+        element.style.removeProperty('background-color');
+    });
+    
+    showDepCategories();
+  }
+
+  function showDepCategories() {
+    var depId = new URLSearchParams(window.location.search).get('dep-id');
+
+    if (depId) {
+      document.getElementById(`${depId}`).style.backgroundColor="#A9A9A9"
+      document.getElementById('CatAdd').style.visibility = 'visible';
+      document.getElementById('noDepSelected').style.display = 'none'
+      // Make an AJAX request to get the form data
+      $.ajax({
+        url: `/manage/org_dep_categories/${depId}`,  // Replace with your actual backend endpoint
+        method: 'GET',
+        success: function (data) {
+          
+          // Update other fields accordingly
+          depCategories = document.getElementById('CatUL');
+          var liElements = depCategories.querySelectorAll('li');
+          liElements.forEach(function(li) {
+              depCategories.removeChild(li);
+          });
+          var noCatAvailable = true;
+          //linkedStoresEl.innerHTML = '';
+          for (var category of data.dep_categories) {
+         
+            var li = document.createElement("li");
+            li.id = category.id;
+            var t = document.createTextNode(`${category.code}-${category.name}`);
+            li.appendChild(t);
+
+            var span = document.createElement("span");
+            var txt = document.createTextNode("\u00D7");
+            span.className = "closeLI catDel-Btn";
+            span.appendChild(txt);
+            span.setAttribute("data-cat-id", `${category.id}`);
+            li.appendChild(span);
+            //li.setAttribute("data-store-id", `${store.id}`);
+            //li.setAttribute("data-store-name", `${store.name}`);
+            depCategories.appendChild(li)
+            var noCatAvailable = false;
+          }
+          if(noCatAvailable){
+            
+            document.getElementById('noDepSelected').style.display = 'block'
+            document.getElementById('noDepSelected').textContent = "No categories available"
+          }
+
+          const catSpans = document.querySelectorAll('.catDel-Btn');
+          // Iterate over each element and set the display property to 'block'
+          catSpans.forEach(element => {
+            console.log(element)
+            var elId = element.getAttribute('data-cat-id');
+            element.onclick = function() {
+              delCat(elId);
+            };
+          });
+
+          
+          function delCat(depId) {
+            const url = `/manage/my_products/organizations/departments/categories/delete/${depId}`;
+
+            // Make an asynchronous request to delete the product from the server
+            fetch(url, {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+              },
+            })
+              .then(response => response.json())
+              .then(data => {
+                // Handle the response data
+                // For example, display a success message or update the cart UI
+                if (data.success) {
+                  // Handle the success response
+                  document.getElementById(`${depId}`).remove()
+                  var listElements = depCategories.querySelectorAll('li');
+                  var numberOfElements = listElements.length;
+                  if (numberOfElements === 0){
+                    document.getElementById('noDepSelected').style.display = 'block'
+                  }
+                  alertify.set('notifier', 'position', 'top-center');
+                  alertify.error(data.message);
+                }
+                })
+            
+              .catch(error => {
+                // Handle any errors that occurred during the request
+                console.error(error);
+              });
+
+          }
+          
+        },
+        error: function () {
+          console.error('Failed to fetch form data.');
+        },
+      });
+    }
+  }
+  
+  const catAddButton = document.getElementById('CatAddBtn');
+  // Attach an event listener to the delete button
+  catAddButton.addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent the default behavior of the button click
+    //var depname = addButton.dataset.departmentName;
+    var li = document.createElement("li");
+    var catCode = document.getElementById("CatCode").value;
+    var catName = document.getElementById("CatName").value;
+    li.id = `${catCode}-${catName}`;
+    li.setAttribute("data-category-name", `${catCode}-${catName}`);
+    var t = document.createTextNode(catCode +"-"+catName);
+    li.appendChild(t);
+  
+    var categoriesEl = document.getElementById("CatUL");
+    var lis = categoriesEl.getElementsByTagName("li");
+    var specifiedName = `${CatCode}-${catName}`;
+    
+    var span = document.createElement("span");
+    var txt = document.createTextNode("\u00D7");
+    //span.setAttribute("data-day-name", `${day}`);
+    span.className = "closeLI";
+    span.appendChild(txt);
+    li.appendChild(span);
+
+    console.log(li)
+    if (catCode === ""){
+      alertify.set('notifier', 'position', 'top-center');
+      alertify.error("Please add a code!");
+      return;
+    }
+    if(catName === ""){
+      alertify.set('notifier', 'position', 'top-center');
+      alertify.error("Please add a name!");
+      return;
+    }
+    if (/[a-zA-Z]/.test(catCode)) {
+      alertify.set('notifier', 'position', 'top-center');
+      alertify.error("Code should only contain numbers!");
+      return;
+    }
+    // Check if name contains any numbers
+    if (/\d/.test(catName)) {
+        alertify.set('notifier', 'position', 'top-center');
+        alertify.error("Name should only contain letters!");
+        return;
+    }
+
+    for (var i = 0; i < lis.length; i++) {
+      var lii = lis[i];
+      var liId = lii.getAttribute("id");
+      
+      if (liId.toLowerCase() === specifiedName.toLowerCase()) {
+        alertify.set('notifier', 'position', 'top-center');
+        alertify.error("Name already exists!");
+        return;
+      }
+    }
+    document.getElementById('noDepSelected').style.display = 'none'
+    categoriesEl.appendChild(li);
+
+    var queryString = window.location.search;
+    // Create a new instance of URLSearchParams with the query string
+    var searchParams = new URLSearchParams(queryString);
+    // Get the value of the "param" query parameter
+    var depId = searchParams.get('dep-id');
+
+    const url = `/manage/my_products/organizations/departments/categories/add_cat/${depId}/${catCode}/${catName}`;
+
+    // Make an asynchronous request to delete the product from the server
+    fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response data
+        // For example, display a success message or update the cart UI
+        if (data.success) {
+          document.getElementById("CatCode").value = '';
+          document.getElementById("CatName").value = '';
+          //document.getElementById('depEmptyTag').style.display = 'none'
+          alertify.set('notifier', 'position', 'top-center');
+          alertify.success(data.message);
+          //li.setAttribute("data-department-id", data.dep_id);
+          span.onclick = function() {
+            delCat(data.cat_id);
+          };
+          console.log(span)
+          
+        } else if (data.error) {
+          alertify.set('notifier', 'position', 'top-center');
+          alertify.error(data.message);
+        }
+      })
+      .catch(error => {
+        // Handle any errors that occurred during the request
+        console.error(error);
+      });
+      function delCat(depId) {
+        const url = `/manage/my_products/organizations/departments/categories/delete/${depId}`;
+
+        // Make an asynchronous request to delete the product from the server
+        fetch(url, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}' // Include the CSRF token
+          },
+        })
+          .then(response => response.json())
+          .then(data => {
+            // Handle the response data
+            // For example, display a success message or update the cart UI
+            if (data.success) {
+              // Handle the success response
+              li.remove()
+              var listElements = categoriesEl.querySelectorAll('li');
+              var numberOfElements = listElements.length;
+              if (numberOfElements === 0){
+                document.getElementById('noDepSelected').style.display = 'block'
+              }
+              alertify.set('notifier', 'position', 'top-center');
+              alertify.error(data.message);
+            }
+            })
+        
+          .catch(error => {
+            // Handle any errors that occurred during the request
+            console.error(error);
+          });
+
+      }
+    });
+
+</script>
+<script>
+  const catCreateButton = document.getElementById('CatAdd');
+  // Attach an event listener to the delete button
+  catCreateButton.addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent the default behavior of the button click
+    createCatEl = document.getElementById('addCatEl')
+
+    if (catCreateButton.innerHTML === '&nbsp;&nbsp; create &nbsp;&nbsp;' ){
+      createCatEl.style.display = 'block'
+      catCreateButton.innerHTML = '&nbsp;&nbsp; done &nbsp;&nbsp;'
+    }else {
+      createCatEl.style.display = 'none'
+      catCreateButton.innerHTML = '&nbsp;&nbsp; create &nbsp;&nbsp;'
+    }
+  });
+</script>
+{% comment %} ---------------------------------------------------------------------------------------------------------- {% endcomment %}
+   {% endblock additional %}
+

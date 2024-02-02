@@ -132,9 +132,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 
 
                         <div class="cart">
-                            {% if request.user.user_Type == s_a %}<button id="cart-btn" onclick="openrightNav('cartNav')" class="cartbtn dropbtn"><span class="price" style="color:black"><img src="{% static 'files_images/cart-orange.png' %}" draggable="false" width="25" height="30"></span><p id="in-cart" style="color:black;">{{in_cart}}</p>
+                            <button id="cart-btn" onclick="openrightNav('cartNav')" class="cartbtn dropbtn"><span class="price" style="color:black"><img src="{% static 'files_images/cart-orange.png' %}" draggable="false" width="25" height="30"></span><p id="in-cart" style="color:black;">{{in_cart}}</p>
                               {% comment %} <i style="color:black" class="fa fa-caret-down"></i> {% endcomment %}
-                            </button>{% endif %} 
+                            </button> 
                               
                         </div>
                         <div class="dropdown" >
@@ -153,8 +153,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                   <div class="smallcontainer" style="display:block;">
                                     <a style = "cursor: pointer" onclick="openprofileNav()" >Profile</a>
                                     <a id = 'pass-btn' style = "cursor: pointer" onclick="openpasswordNav()" >Password</a>
-                                    {% if request.user.user_Type == s_a %}<a href="{% url 'my_products' %}">My Products</a>{% endif %}
-                                    {% if request.user.user_Type == s_u %}{% if su_basic_sub and su_user_sub and su_org_sub and su_store_sub %}<a style = "cursor: pointer" onclick="window.location.href='http://192.168.1.11:9000/'" >App</a>{% endif %}{% endif %}
+                                    <a href="{% url 'my_products' %}">My Products</a>
+                                    {% comment %} {% if request.user.user_Type == s_u %}{% if su_basic_sub and su_user_sub and su_org_sub and su_store_sub %}<a style = "cursor: pointer" onclick="window.location.href='http://192.168.1.11:9000/'" >App</a>{% endif %}{% endif %} {% endcomment %}
                                     <a style = "color: red;" href="{% url 'logout' %}"><strong>Logout</strong></a>
                                 </div>
                               </div> 

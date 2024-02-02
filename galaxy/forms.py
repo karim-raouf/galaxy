@@ -1,5 +1,6 @@
 from django import forms
 from .models import *
+from management.models import *
 from django.forms import widgets
 from django.contrib.auth.hashers import make_password
 import re
@@ -89,7 +90,7 @@ class SystemUserForm(forms.ModelForm):
             user.password = make_password(password)
         else:
             # Retrieve existing password from the database
-            existing_user = User.objects.get(pk=user.pk)
+            existing_user = System_User.objects.using('app').get(pk=user.pk)
             user.password = existing_user.password
         if commit:
             user.save()
@@ -97,19 +98,19 @@ class SystemUserForm(forms.ModelForm):
     
     
     class Meta:
-        model = User
-        fields = ['first_name' , 'last_name' , 'username' , 'avatar' , 'email' , 'Language' , 'Telephone' , 'Gender' , 'Birth_Date' , 'user_Type' , 'system_user_active' , 'password']
+        model = System_User
+        fields = ['first_name' , 'last_name' , 'username' , 'avatar' , 'email' , 'Language' , 'Telephone' , 'Gender' , 'Birth_Date' , 'system_user_active' , 'password', 'user_Type'] 
         
     def __init__(self, *args, **kwargs):
         user_id = kwargs.pop('user_id', None)
         super().__init__(*args, **kwargs)
         if user_id:
             try:
-                user = User.objects.get(pk=user_id)
+                user = System_User.objects.using('app').get(pk=user_id)
                 self.instance = user
                 if user.password:
                     self.fields['password'].required = False
-            except User.DoesNotExist:
+            except System_User.DoesNotExist:
                 pass
         self.fields['Language'].choices = sorted(
             [(choice.id, choice.language) for choice in Language.objects.all()],
